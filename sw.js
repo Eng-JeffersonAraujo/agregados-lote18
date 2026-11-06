@@ -1,6 +1,6 @@
 /* Agregados · Lote 18 — service worker
    A cada publicação, aumente VERSAO (e APP_VERSION no index.html) para os celulares receberem a atualização. */
-const VERSAO = "1.3.0";
+const VERSAO = "1.4.0";
 const CACHE = "agr18-app-" + VERSAO;
 const FONTES = "agr18-fontes";
 const ARQUIVOS = ["./", "index.html", "qrcode.js", "manifest.webmanifest", "icons/icon-192.png", "icons/icon-512.png", "icons/maskable-512.png", "icons/apple-touch-icon.png"];
@@ -70,20 +70,25 @@ let enviando = null;
 function enviarPendentes() {
   if (enviando) return enviando;
   enviando = (async () => {
-    let ok = 0, falha = 0;
+    let ok = 0, falha = 0, erroCadastro = false;
     for (const k of await bdChaves("mail:")) {
-      const m = await bdGet(k); if (!m || !m.url) continue;
+      const m = await bdGet(k); if (!m || !m.url || m.bloqueado) continue;
       try {
-        const img = await bdGet("img:" + m.id), fotos = (await bdGet("p:" + m.id)) || [];
-        const corpo = JSON.stringify(Object.assign({}, m.dados, { imagem: img ? await base64(img) : "", fotos: await Promise.all(fotos.map(base64)) }));
+        const pdf = await bdGet("pdf:" + m.id), previa = await bdGet("prev:" + m.id);
+        const corpo = JSON.stringify(Object.assign({}, m.dados, { pdf: pdf ? await base64(pdf) : "", previa: previa ? await base64(previa) : "" }));
         const r = await fetch(m.url, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: corpo, redirect: "follow" });
         const j = await r.json().catch(() => null);
         if (r.ok && j && j.ok) { await bdSet("mailok:" + m.id, Date.now()); await bdDel(k); ok++; }
-        else { m.erro = (j && j.erro) || ("HTTP " + r.status); m.tentativas = (m.tentativas || 0) + 1; await bdSet(k, m); falha++; }
+        else {
+          m.erro = (j && j.erro) || ("HTTP " + r.status); m.tentativas = (m.tentativas || 0) + 1;
+          if (m.erro === "cadastro") { m.bloqueado = true; erroCadastro = true; }
+          await bdSet(k, m); falha++;
+        }
       } catch (err) { falha++; }
     }
-    const pendentes = (await bdChaves("mail:")).length;
-    (await self.clients.matchAll({ includeUncontrolled: true })).forEach(c => c.postMessage({ tipo: "email", ok, falha, pendentes }));
+    let pendentes = 0;
+    for (const k of await bdChaves("mail:")) { const m = await bdGet(k); if (m && !m.bloqueado) pendentes++; }
+    (await self.clients.matchAll({ includeUncontrolled: true })).forEach(c => c.postMessage({ tipo: "email", ok, falha, pendentes, erroCadastro }));
     return { ok, falha, pendentes };
   })().finally(() => { enviando = null; });
   return enviando;

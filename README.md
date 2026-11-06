@@ -2,16 +2,17 @@
 
 Aplicativo de celular para os empreiteiros do **Consórcio Universaliza Lote 18** pedirem agregados (areia, pó de pedra, britas, BGS, rachão, solo etc.).
 
+- Cadastro por empresa: na 1ª abertura, o empreiteiro informa o código de acesso da empresa (fornecido pela coordenação), o nome e o telefone. Os pedidos saem sempre em nome dessa empresa, e o serviço da coordenação confere cada pedido.
 - Instala pelo link, sem loja: Android (Chrome → **Instalar**) e iPhone (Safari → Compartilhar → **Adicionar à Tela de Início**).
 - Funciona sem sinal: depois da 1ª abertura com internet (aparece "Funciona sem internet neste celular"), abre, gera a imagem e guarda os pedidos e fotos sem rede; avisa quando der para enviar.
 - GPS sem internet: escuta o GPS por até 1 minuto, fica com a melhor leitura e para sozinho ao chegar a ±10 m; um toque usa o ponto atual.
 - Localização pelo GPS do celular, até 3 fotos do local e calculadora de cubagem (vala com tubo, área × espessura, caixas e PVs).
-- O pedido sai como **imagem** no padrão do Consórcio Universaliza Lote 18, junto com as fotos do local e uma mensagem curta com o link do mapa, para o WhatsApp da coordenação (José Arimateia, +55 11 94154-3604).
+- O pedido sai como **PDF** no padrão do Consórcio Universaliza Lote 18 (página do pedido + páginas com as fotos do local), com uma mensagem curta e o link do mapa, para o WhatsApp da coordenação (José Arimateia, +55 11 94154-3604). O mesmo PDF vai sozinho por e-mail.
 - A imagem traz um QR com o código do pedido (formato `AGR3`). A coordenação envia a imagem na aba Gestão do formulário de controle e o pedido é registrado.
 
 ## E-mail automático
 
-Quando há sinal, o app também envia cada pedido (imagem + fotos) para jose.arimateia@lote18.com.br por um serviço do Google Apps Script da coordenação, que pode gravar uma cópia de segurança numa planilha Google. Sem sinal, o envio espera na fila do celular e sai sozinho quando a conexão volta.
+Quando há sinal, o app também envia cada pedido (o PDF) para jose.arimateia@lote18.com.br por um serviço do Google Apps Script da coordenação, que pode gravar uma cópia de segurança numa planilha Google. Sem sinal, o envio espera na fila do celular e sai sozinho quando a conexão volta.
 
 ## Privacidade
 

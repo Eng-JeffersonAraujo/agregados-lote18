@@ -61,6 +61,8 @@ svg.i{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-widt
 .ph p.okoff svg{width:15px;height:15px}
 .mark-eb{white-space:nowrap}
 @media (max-width:420px){.mark-eb{font-size:9px;letter-spacing:.08em}.mark-nm{font-size:20px}.chip{font-size:10.5px;padding:3px 8px}.band .wrap{gap:var(--space-2)}}
+.cadbox{display:flex;align-items:center;justify-content:space-between;gap:var(--space-2);min-height:44px;padding:4px 4px 4px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface-raised)}
+.cadbox b{font-weight:600}
 .btn-busca{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-ink)}
 .addfoto{width:96px;height:96px;border:1px dashed var(--border-strong);border-radius:var(--radius-sm);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:12px;color:var(--accent-ink);cursor:pointer;background:var(--surface)}
 .addfoto input{display:none}
@@ -258,7 +260,26 @@ details.help ol{margin:var(--space-2) 0 0;padding-left:20px}
     <div id="avisos"></div>
   </div>
 
-  <div class="tabs"><div class="seg" role="tablist" id="tabs">
+  <!-- ============ CADASTRO ============ -->
+  <section id="v-cad" class="hidden">
+    <div class="card">
+      <div class="card-h"><span class="step">ID</span><h2>Cadastro do empreiteiro</h2></div>
+      <div class="callout warn hidden" id="cadBloq"><svg class="i" viewBox="0 0 24 24"><path d="M12 9v4m0 4h.01M10.3 3.9 2 18a2 2 0 0 0 1.7 3h16.6a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg><p><b>Cadastro desativado.</b> O código da sua empresa foi desativado ou trocado pela coordenação. Peça o código atualizado e cadastre-se de novo.</p></div>
+      <p class="hint" style="margin:0">Para fazer pedidos, cadastre-se com o <b>código de acesso da sua empresa</b>, fornecido pela coordenação do Lote 18. É feito uma vez só, com internet. Depois, os pedidos saem sempre em nome da sua empresa.</p>
+      <div class="grid g2" style="margin-top:16px">
+        <div class="f span2"><label for="cadCod">Código de acesso da empresa <span class="req">*</span></label>
+          <input class="in mono" id="cadCod" autocapitalize="characters" autocomplete="off" spellcheck="false" placeholder="Ex.: ABC-12XYZ"></div>
+        <div class="f"><label for="cadNome">Seu nome <span class="req">*</span></label>
+          <input class="in" id="cadNome" autocomplete="name"></div>
+        <div class="f"><label for="cadTel">Telefone / WhatsApp <span class="req">*</span></label>
+          <input class="in num" id="cadTel" type="tel" inputmode="tel" autocomplete="tel" placeholder="(15) 99999-9999"></div>
+      </div>
+      <p class="hint" id="cadHint" style="margin:10px 0 0"></p>
+      <div class="row" style="margin-top:14px"><button class="btn btn-p" id="btnCad" type="button">Cadastrar</button></div>
+    </div>
+  </section>
+
+  <div class="tabs" id="tabsBox"><div class="seg" role="tablist" id="tabs">
     <button data-tab="novo" aria-pressed="true">Novo pedido</button>
     <button data-tab="meus" aria-pressed="false">Meus pedidos <span class="cnt num" id="cntMeus">0</span></button>
   </div></div>
@@ -271,8 +292,9 @@ details.help ol{margin:var(--space-2) 0 0;padding-left:20px}
       <div class="card">
         <div class="card-h"><span class="step">01</span><h2>Solicitante</h2></div>
         <div class="grid g2">
-          <div class="f"><label for="emp">Empreiteiro <span class="req">*</span></label>
-            <select class="in" id="emp" name="emp" required></select></div>
+          <div class="f"><span class="lbl">Empreiteiro (pelo cadastro)</span>
+            <div class="cadbox"><b id="cadEmp">—</b><button class="btn btn-g btn-sm" type="button" id="btnTrocaCad">Trocar cadastro</button></div>
+            <select class="in hidden" id="emp" name="emp" required tabindex="-1" aria-hidden="true"></select></div>
           <div class="f hidden" id="empOutroF"><label for="empOutro">Nome do empreiteiro <span class="req">*</span></label>
             <input class="in" id="empOutro" name="empOutro"></div>
           <div class="f"><label for="resp">Responsável pelo pedido <span class="req">*</span></label>
@@ -282,7 +304,7 @@ details.help ol{margin:var(--space-2) 0 0;padding-left:20px}
           <div class="f"><label for="equipe">Equipe</label>
             <input class="in" id="equipe" name="equipe" placeholder="Ex.: VCA 12"></div>
         </div>
-        <p class="hint" style="margin:12px 0 0">Esses dados ficam lembrados neste aparelho para os próximos pedidos.</p>
+        <p class="hint" style="margin:12px 0 0">A empresa vem do cadastro e não pode ser trocada no pedido. Responsável, telefone e equipe ficam lembrados neste celular.</p>
       </div>
 
       <div class="card">
@@ -408,12 +430,12 @@ details.help ol{margin:var(--space-2) 0 0;padding-left:20px}
 <script src="qrcode.js"></script>
 <script>
 /* ===== configuração ===== */
-const APP_VERSION = "1.3.0";
+const APP_VERSION = "1.4.0";
 const CONFIG = {
   // número que recebe os pedidos (só dígitos, com 55 + DDD). Vazio = o WhatsApp pergunta o contato.
   whatsDestino: "5511941543604",   // José Arimateia — +55 11 94154-3604
   // e-mail automático: endereço do serviço do Google (Apps Script) e a mesma chave que está nele. Vazio = desligado.
-  emailUrl: "https://script.google.com/macros/s/AKfycbzw2Oa4K_CdoFJ5zYM6YdEsjCqjy29mQP7HlNWI-AuXCojrjCIKI2f6gf6bNnl9v3Txfg/exec",
+  emailUrl: "https://script.google.com/macros/s/AKfycbwEMwqVzG8ecEmp85oT4XMTmIWoKa2YmvcAsGRV3r8a21fTHOjJoG_c0cFWDMARSZNK4Q/exec",
   emailChave: "tpNvtBVPP6RLQNnuGp0OJUalG8kv",
   emailDestino: "jose.arimateia@lote18.com.br",
   versao: 2
@@ -459,10 +481,13 @@ const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt
 const fmt = (v, d=1) => Number(v||0).toLocaleString("pt-BR",{minimumFractionDigits:0,maximumFractionDigits:d});
 const fdata = iso => { if(!iso) return "—"; const [y,m,d] = iso.slice(0,10).split("-"); return `${d}/${m}/${y}`; };
 const fdh = ts => { const d = new Date(ts); return d.toLocaleDateString("pt-BR") + " " + d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}); };
+let cad = null;   // cadastro do empreiteiro (lido logo abaixo, depois do store)
 const store = {
   get(k, def){ try{ const v = localStorage.getItem("agr18:"+k); return v ? JSON.parse(v) : def; }catch(e){ return def; } },
   set(k, v){ try{ localStorage.setItem("agr18:"+k, JSON.stringify(v)); }catch(e){} }
 };
+cad = store.get("cadastro", null);
+
 function toast(msg){ const t = document.createElement("div"); t.className="toast"; t.textContent=msg; document.body.appendChild(t); setTimeout(()=>t.remove(), 2600); }
 function ico(p){ return `<svg class="i" viewBox="0 0 24 24">${p}</svg>`; }
 const IC = {
@@ -717,7 +742,12 @@ function val(name){ const el = document.querySelector(`input[name="${name}"]:che
 function setRadio(name, v){ const el = document.querySelector(`input[name="${name}"][value="${CSS.escape(v||"")}"]`); if(el) el.checked = true; }
 
 /* ===== preenchimento inicial ===== */
-$("#emp").innerHTML = `<option value="">Selecione</option>` + EMPREITEIROS.map(e => `<option>${esc(e)}</option>`).join("") + `<option value="__outro">Outro</option>`;
+function travaEmpresa(){
+  const e = cad && cad.empresa ? cad.empresa : "";
+  $("#emp").innerHTML = e ? `<option>${esc(e)}</option>` : `<option value=""></option>`;
+  $("#emp").value = e; $("#cadEmp").textContent = e || "—"; $("#empOutroF").classList.add("hidden");
+}
+travaEmpresa();
 $("#dlNuc").innerHTML = NUCLEOS.map(n => `<option value="${esc(n)}">`).join("");
 function hoje(off=0){ const d = new Date(); d.setDate(d.getDate()+off); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; }   // data local (não UTC)
 $("#data").min = hoje(0);
@@ -738,7 +768,7 @@ function lerForm(){
   };
 }
 function aplicaForm(p){
-  if(EMPREITEIROS.includes(p.emp)) $("#emp").value = p.emp; else if(p.emp){ $("#emp").value = "__outro"; $("#empOutro").value = p.emp; }
+  travaEmpresa();
   ["resp","tel","equipe","mun","nuc","rua","numr","frente","ref","contLocal","just","obs"].forEach(k => { if(p[k] != null) $("#"+k).value = p[k]; });
   $("#coord").value = p.coordTxt || "";
   if(p.prec && p.coordTxt){ gps.txt = p.coordTxt; gps.prec = p.prec; }
@@ -796,7 +826,7 @@ function validar(p){
   const erros = [];
   const marca = (id, ok, msg) => { const el = $("#"+id); if(el) el.classList.toggle("err", !ok); if(!ok) erros.push({id, msg}); };
   $$(".in.err").forEach(x => x.classList.remove("err"));
-  marca("emp", !!$("#emp").value, "Escolha o empreiteiro.");
+  marca("emp", !!$("#emp").value && !!cad, "Faça o cadastro da empresa.");
   if($("#emp").value === "__outro") marca("empOutro", !!p.emp, "Informe o nome do empreiteiro.");
   marca("resp", !!p.resp, "Informe o responsável.");
   marca("tel", p.tel.replace(/\D/g,"").length >= 10, "Informe um telefone com DDD.");
@@ -875,8 +905,8 @@ function renderMeus(){
       <div class="ped-h"><span class="ped-t">${esc(p.nuc)} · ${esc(p.rua)}</span><span class="badge ${st.t ? "b-"+st.t : ""}">${st.n}</span></div>
       <div class="ped-m"><span class="mono">${esc(p.id)}</span> · entrega ${fdata(p.data)} ${esc(p.periodo||"")} · feito em ${fdh(p.criadoEm)}</div>
       <ul>${p.itens.map(i => `<li>${esc(i.nome)} — ${esc(qtdTxt(i))}</li>`).join("")}</ul>
-      ${p.nFotos ? `<p class="hint" style="margin:0 0 6px">${p.nFotos} ${p.nFotos===1?"foto":"fotos"} · ${p.fotosEnv ? "enviadas" : "ainda não enviadas"}</p>` : ""}
-      ${p.mail ? `<p class="hint ${p.mail === "enviado" ? "ok" : "warn"}" style="margin:0 0 10px">E-mail para o José: ${p.mail === "enviado" ? "enviado" + (p.mailEm ? " em " + fdh(p.mailEm) : "") : "aguardando sinal"}</p>` : ""}
+      ${p.nFotos ? `<p class="hint" style="margin:0 0 6px">PDF com ${p.nFotos} ${p.nFotos===1?"foto":"fotos"} do local</p>` : ""}
+      ${p.mail ? `<p class="hint ${p.mail === "enviado" ? "ok" : p.mail === "bloqueado" ? "bad" : "warn"}" style="margin:0 0 10px">E-mail para o José: ${p.mail === "enviado" ? "enviado" + (p.mailEm ? " em " + fdh(p.mailEm) : "") : p.mail === "bloqueado" ? "bloqueado — cadastro da empresa inválido" : "aguardando sinal"}</p>` : ""}
       <div class="row">
         <button class="btn btn-sm ${p.local==="fila"?"btn-wa":""}" data-act="enviar" data-id="${esc(p.id)}">${ico(IC.wa)}${p.local==="fila"?"Enviar":"Reenviar"}</button>
         <button class="btn btn-sm" data-act="repetir" data-id="${esc(p.id)}">${ico(IC.rep)}Repetir pedido</button>
@@ -889,7 +919,7 @@ $("#listaMeus").addEventListener("click", e => {
   const p = meus.find(x => x.id === b.dataset.id); if(!p) return;
   if(b.dataset.act === "enviar") abrirEnvio(p);
   if(b.dataset.act === "repetir"){ aplicaForm({...p, data:"", coordTxt:p.coordTxt}); setTab("novo"); window.scrollTo(0,0); toast("Dados copiados. Ajuste a data e revise."); }
-  if(b.dataset.act === "excluir") confirmar(`Excluir o pedido ${p.id} deste aparelho?`, "Excluir", () => { meus = meus.filter(x => x.id !== p.id); salvaMeus(); ["p:", "img:", "mail:", "mailok:"].forEach(k => idb.del(k + p.id).catch(() => {})); });
+  if(b.dataset.act === "excluir") confirmar(`Excluir o pedido ${p.id} deste aparelho?`, "Excluir", () => { meus = meus.filter(x => x.id !== p.id); salvaMeus(); ["p:", "img:", "pdf:", "prev:", "mail:", "mailok:"].forEach(k => idb.del(k + p.id).catch(() => {})); });
 });
 
 /* ===== revisão e envio ===== */
@@ -914,9 +944,11 @@ function abrirRevisao(p){
     </div>`);
   $("#mVolta").onclick = fecharModal;
   $("#mConf").onclick = async () => {
+    const bc = $("#mConf"); bc.disabled = true; bc.lastChild.textContent = "Gerando o PDF…";
     pedePersistencia();
     p.nFotos = fotosAtual.length; p.fotosEnv = false;
     if(p.nFotos){ try{ await idb.set("p:" + p.id, fotosAtual.map(f => f.blob)); }catch(e){ p.nFotos = 0; toast("Não foi possível guardar as fotos neste celular."); } }
+    try{ await guardaRelatorio(p); }catch(e){}
     if(CONFIG.emailUrl) await prepararEmail(p);
     meus.push(p); salvaMeus();
     if(CONFIG.emailUrl) pedirEnvioEmail();
@@ -931,35 +963,33 @@ function abrirEnvio(p){
   const online = navigator.onLine, nf = p.nFotos || 0;
   modal(`<h3>Enviar pedido</h3><p class="muted mono" style="margin:0 0 12px">${esc(p.id)}</p>
     ${online ? "" : `<div class="callout warn">${ico('<path d="M12 9v4m0 4h.01M10.3 3.9 2 18a2 2 0 0 0 1.7 3h16.6a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>')}<p><b>Sem sinal agora.</b> O pedido já está salvo neste celular. Deixe na fila e envie quando o sinal voltar — o aplicativo avisa — ou envie mesmo assim: o WhatsApp guarda e manda sozinho quando conectar.</p></div>`}
-    <div class="prev" id="mPrev"><span class="hint">Gerando a imagem do pedido…</span></div>
+    <div class="prev" id="mPrev"><span class="hint">Preparando o PDF do pedido…</span></div>
     <div class="actions">
       <button class="btn btn-wa" id="mShare" disabled>${ico(IC.wa)}Enviar pelo WhatsApp</button>
       <button class="btn" id="mCopy">${ico(IC.copy)}Copiar texto</button>
       <button class="btn btn-g" id="mFecha">${p.local === "fila" ? "Deixar na fila" : "Fechar"}</button>
     </div>
-    <p class="hint" style="margin-top:12px">Vai a imagem do pedido${nf ? ` e ${nf} ${nf===1?"foto":"fotos"} do local` : ""}, com uma mensagem curta e o link do mapa. No WhatsApp, escolha a conversa do <b>José Arimateia</b> (11 94154-3604).${CONFIG.emailUrl ? `<br>O e-mail para ${esc(CONFIG.emailDestino)} sai sozinho${p.mail === "enviado" ? " — já enviado." : ", assim que houver sinal."}` : ""}</p>
+    <p class="hint" style="margin-top:12px">Vai o <b>PDF do pedido</b>${nf ? ` com ${nf} ${nf===1?"foto":"fotos"} do local dentro` : ""} e uma mensagem curta com o link do mapa. No WhatsApp, escolha a conversa do <b>José Arimateia</b> (11 94154-3604).${CONFIG.emailUrl ? `<br>O mesmo PDF vai por e-mail para ${esc(CONFIG.emailDestino)} sozinho${p.mail === "enviado" ? " — já enviado." : ", assim que houver sinal."}` : ""}</p>
     <div id="mAlt"></div>`);
   $("#mCopy").onclick = async () => { try{ await navigator.clipboard.writeText(textoPedido(p)); toast("Texto copiado."); }catch(e){ toast("Não foi possível copiar."); } };
   $("#mFecha").onclick = () => { fecharModal(); setTab("meus"); };
   (async () => {
-    let img;
-    try{ img = (await idb.get("img:" + p.id).catch(() => null)) || await gerarImagem(p); }
-    catch(e){ $("#mPrev").innerHTML = `<span class="hint bad">Não foi possível gerar a imagem.</span>`; altTexto(p); return; }
+    let rel;
+    try{ rel = await relatorioGuardado(p); }
+    catch(e){ $("#mPrev").innerHTML = `<span class="hint bad">Não foi possível gerar o PDF.</span>`; altTexto(p); return; }
     if(!$("#mPrev")) return;
-    const url = URL.createObjectURL(img);
-    $("#mPrev").innerHTML = `<img src="${url}" alt="Imagem do pedido ${esc(p.id)}">`;
-    let fotos = [];
-    if(nf){ try{ fotos = (await idb.get("p:" + p.id)) || []; }catch(e){} }
-    const files = [new File([img], `${p.id}.png`, {type:"image/png"}), ...fotos.map((b, k) => new File([b], `${p.id}-foto${k+1}.jpg`, {type:"image/jpeg"}))];
+    const urlPrev = URL.createObjectURL(rel.previa), urlPdf = URL.createObjectURL(rel.pdf);
+    const pags = 1 + Math.ceil(nf / 2);
+    $("#mPrev").innerHTML = `<img src="${urlPrev}" alt="Página 1 do pedido ${esc(p.id)}"><p class="hint" style="margin:8px 0 2px">PDF · ${pags} ${pags === 1 ? "página" : "páginas"} · ${Math.max(1, Math.round(rel.pdf.size / 1024))} KB</p>`;
+    const files = [new File([rel.pdf], `Pedido ${p.id}.pdf`, {type:"application/pdf"})];
     const pode = navigator.canShare && navigator.canShare({files});
     const bs = $("#mShare");
-    if(!pode){ bs.classList.add("hidden"); altTexto(p, url); return; }
+    if(!pode){ bs.classList.add("hidden"); altTexto(p, urlPdf); return; }
     bs.disabled = false;
     bs.onclick = async () => {
       try{
         await navigator.share({files, text: textoResumo(p)});
         marcaLocal(p.id, "whats");
-        const q = meus.find(x => x.id === p.id); if(q && nf){ q.fotosEnv = true; salvaMeus(); }
         fecharModal(); toast("Pedido enviado.");
       }catch(e){ if(e && e.name !== "AbortError") toast("Não foi possível compartilhar. Tente de novo."); }
     };
@@ -968,9 +998,9 @@ function abrirEnvio(p){
 function altTexto(p, url){
   const box = $("#mAlt"); if(!box) return;
   const wa = `https://wa.me/${CONFIG.whatsDestino.replace(/\D/g,"")}?text=${encodeURIComponent(textoPedido(p))}`;
-  box.innerHTML = `<div class="callout warn" style="margin-top:12px">${ico('<circle cx="12" cy="12" r="9"/><path d="M12 8v4m0 4h.01"/>')}<p>Este aparelho não envia imagens direto pelo aplicativo. ${url ? `Baixe a imagem e envie para o José, ou mande o pedido em texto.` : `Mande o pedido em texto.`}</p></div>
+  box.innerHTML = `<div class="callout warn" style="margin-top:12px">${ico('<circle cx="12" cy="12" r="9"/><path d="M12 8v4m0 4h.01"/>')}<p>Este aparelho não envia arquivos direto pelo aplicativo. ${url ? `Baixe o PDF e envie para o José, ou mande o pedido em texto.` : `Mande o pedido em texto.`}</p></div>
     <div class="actions">
-      ${url ? `<a class="btn" href="${url}" download="${esc(p.id)}.png">${ico('<path d="M12 4v11m-4-4 4 4 4-4M5 20h14"/>')}Baixar imagem</a>` : ""}
+      ${url ? `<a class="btn" href="${url}" download="Pedido ${esc(p.id)}.pdf">${ico('<path d="M12 4v11m-4-4 4 4 4-4M5 20h14"/>')}Baixar PDF</a>` : ""}
       <a class="btn btn-wa" id="mWaTxt" href="${wa}" target="_blank" rel="noopener">${ico(IC.wa)}Enviar em texto</a>
     </div>`;
   $("#mWaTxt").onclick = () => marcaLocal(p.id, "whats");
@@ -1031,7 +1061,7 @@ async function codigoPedido(p){
 }
 
 /* ===== imagem do pedido (padrão Consórcio Universaliza Lote 18) ===== */
-async function gerarImagem(p){
+async function gerarImagem(p, comoCanvas){
   const FD = '"Barlow Semi Condensed","Arial Narrow",sans-serif', FS = '"Barlow","Segoe UI",Arial,sans-serif', FM = '"JetBrains Mono",Consolas,monospace';
   try{ await Promise.race([Promise.all([`600 48px ${FD}`,`400 26px ${FS}`,`600 26px ${FS}`,`500 18px ${FM}`].map(f => document.fonts.load(f))), new Promise(r => setTimeout(r, 2500))]); }catch(e){}
   const K = {brand:"#1f262d",accent:"#0a7ea4",accInk:"#066282",accSoft:"#dcf1f8",accOnBrand:"#2ec4e6",gold:"#9c7a26",goldOnBrand:"#d4af55",surf:"#f3f5f7",raised:"#ffffff",sunk:"#e7ebef",ink:"#12171c",muted:"#55606b",border:"#d3dae0",danger:"#b42318"};
@@ -1108,7 +1138,8 @@ async function gerarImagem(p){
     {l:"Logradouro", v: p.rua + (p.numr ? ", " + p.numr : ""), full:true, font:`600 26px ${FS}`},
     {l:"Ponto de referência", v: p.ref, full:true},
     {l:"Coordenada" + (p.prec ? ` · GPS ±${p.prec} m` : ""), v: p.gms || (p.link ? "Link do mapa na mensagem" : ""), font:`500 24px ${FM}`},
-    {l:"Item da PST", v: p.frente, font:`500 24px ${FM}`}
+    {l:"Item da PST", v: p.frente, font:`500 24px ${FM}`},
+    {l:"Fotos do local", v: p.nFotos ? `${p.nFotos} ${p.nFotos === 1 ? "foto" : "fotos"} nas páginas seguintes` : "", full:true}
   ], y);
 
   // materiais
@@ -1167,6 +1198,7 @@ async function gerarImagem(p){
   tx(`Consórcio Universaliza Lote 18 · app ${APP_VERSION}`, W - P, y + 44, `400 21px ${FS}`, K.muted, "right");
   const H = y + 80;
   const out = document.createElement("canvas"); out.width = W; out.height = H; out.getContext("2d").drawImage(c, 0, 0);
+  if(comoCanvas) return out;
   return await new Promise((res, rej) => out.toBlob(b => b ? res(b) : rej(new Error("imagem")), "image/png"));
 }
 function marcaLocal(id, st){ const p = meus.find(x => x.id === id); if(p && p.local !== "registrado"){ p.local = st; p.enviadoEm = Date.now(); salvaMeus(); } }
@@ -1179,7 +1211,20 @@ document.addEventListener("keydown", e => { if(e.key === "Escape") fecharModal()
 function confirmar(msg, ok, fn){ modal(`<h3>Confirmar</h3><p>${esc(msg)}</p><div class="actions"><button class="btn btn-d" id="cOk">${esc(ok)}</button><button class="btn" id="cNo">Cancelar</button></div>`); $("#cOk").onclick = () => { fecharModal(); fn(); }; $("#cNo").onclick = fecharModal; }
 
 /* ===== abas ===== */
+function temCadastro(){ return !!(cad && cad.empresa && cad.codigo && !cad.bloqueado); }
+function aplicaCadastro(){
+  const ok = temCadastro();
+  $("#v-cad").classList.toggle("hidden", ok);
+  $("#cadBloq").classList.toggle("hidden", !(cad && cad.bloqueado));
+  $("#tabsBox").classList.toggle("hidden", !ok);
+  if(!ok){ ["novo","meus"].forEach(v => $("#v-"+v).classList.add("hidden")); $("#bar").classList.add("hidden"); if(cad && !$("#cadNome").value){ $("#cadNome").value = cad.nome || ""; $("#cadTel").value = cad.tel || ""; } return; }
+  travaEmpresa();
+  if(!$("#resp").value) $("#resp").value = cad.nome || "";
+  if(!$("#tel").value) $("#tel").value = cad.tel || "";
+  setTab(location.hash === "#meus" ? "meus" : "novo");
+}
 function setTab(t){
+  if(!temCadastro()){ aplicaCadastro(); return; }
   if(t === "gestao" && !gestor) t = "novo";
   $$("#tabs button").forEach(b => b.setAttribute("aria-pressed", b.dataset.tab === t));
   ["novo","meus"].forEach(v => $("#v-"+v).classList.toggle("hidden", v !== t));
@@ -1295,13 +1340,12 @@ function linhaPlanilha(p){
 }
 async function prepararEmail(p){
   try{
-    const img = await gerarImagem(p);
-    await idb.set("img:" + p.id, img);
     const T = totais(p);
     const assunto = `${p.prio === "Urgente" ? "[URGENTE] " : ""}Pedido de agregados ${p.id} · ${p.emp} · ${p.nuc} · ${fmt(T.m3)} m³ · ${fdata(p.data).slice(0,5)}`;
     await idb.set("mail:" + p.id, {id:p.id, url:CONFIG.emailUrl, criado:Date.now(), dados:{
       chave:CONFIG.emailChave, id:p.id, assunto, texto:textoPedido(p), resumo:textoResumo(p), mapa:mapsUrl(p),
-      urgente:p.prio === "Urgente", motivo:p.just || "", linha:linhaPlanilha(p)}});
+      urgente:p.prio === "Urgente", motivo:p.just || "", linha:linhaPlanilha(p),
+      empresa:p.emp, cad: cad ? {codigo:cad.codigo, nome:cad.nome, tel:cad.tel} : null}});
     p.mail = "fila";
   }catch(e){ p.mail = ""; }
 }
@@ -1315,15 +1359,160 @@ async function pedirEnvioEmail(){
   }catch(e){}
 }
 async function atualizaStatusEmail(){
-  let mudou = false;
+  let mudou = false, enviados = 0;
   for(const p of meus){
-    if(p.mail !== "fila") continue;
+    if(p.mail !== "fila" && p.mail !== "bloqueado") continue;
     const em = await idb.get("mailok:" + p.id).catch(() => null);
-    if(em){ p.mail = "enviado"; p.mailEm = em; mudou = true; }
+    if(em){ p.mail = "enviado"; p.mailEm = em; mudou = true; enviados++; continue; }
+    const m = await idb.get("mail:" + p.id).catch(() => null);
+    const st = m && m.bloqueado ? "bloqueado" : "fila";
+    if(p.mail !== st){ p.mail = st; mudou = true; }
   }
-  if(mudou){ salvaMeus(); toast("Pedido enviado por e-mail para o José."); }
+  if(mudou) salvaMeus();
+  if(enviados) toast(enviados === 1 ? "Pedido enviado por e-mail para o José." : `${enviados} pedidos enviados por e-mail para o José.`);
 }
-if("serviceWorker" in navigator) navigator.serviceWorker.addEventListener("message", e => { if(e.data && e.data.tipo === "email") atualizaStatusEmail(); });
+if("serviceWorker" in navigator) navigator.serviceWorker.addEventListener("message", e => {
+  if(!e.data || e.data.tipo !== "email") return;
+  atualizaStatusEmail();
+  if(e.data.erroCadastro && cad && !cad.bloqueado){ cad.bloqueado = true; store.set("cadastro", cad); aplicaCadastro(); }
+});
+
+/* ===== cadastro do empreiteiro ===== */
+async function atualizaFilaCadastro(){
+  // depois de um novo cadastro, os pedidos da mesma empresa que estavam bloqueados voltam para a fila
+  try{
+    for(const k of await idb.chaves("mail:")){
+      const m = await idb.get(k); if(!m || !m.dados || m.dados.empresa !== cad.empresa) continue;
+      m.dados.cad = {codigo:cad.codigo, nome:cad.nome, tel:cad.tel}; delete m.bloqueado; delete m.erro;
+      await idb.set(k, m);
+    }
+  }catch(e){}
+  atualizaStatusEmail(); pedirEnvioEmail();
+}
+$("#btnCad").onclick = async () => {
+  const cod = $("#cadCod").value.trim().toUpperCase(), nome = $("#cadNome").value.trim(), tel = $("#cadTel").value.trim(), h = $("#cadHint");
+  h.className = "hint bad";
+  if(!cod){ h.textContent = "Informe o código de acesso da empresa."; $("#cadCod").focus(); return; }
+  if(nome.length < 3){ h.textContent = "Informe o seu nome."; $("#cadNome").focus(); return; }
+  if(tel.replace(/\D/g, "").length < 10){ h.textContent = "Informe o telefone com DDD."; $("#cadTel").focus(); return; }
+  if(!navigator.onLine){ h.textContent = "Sem sinal. O cadastro precisa de internet só desta vez — tente quando tiver conexão."; return; }
+  if(!CONFIG.emailUrl){ h.textContent = "Cadastro indisponível. Fale com a coordenação."; return; }
+  const b = $("#btnCad"); b.disabled = true; h.className = "hint"; h.textContent = "Conferindo o código…";
+  try{
+    const r = await fetch(CONFIG.emailUrl, {method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, redirect:"follow",
+      body: JSON.stringify({chave:CONFIG.emailChave, acao:"cadastro", codigo:cod, nome, telefone:tel})});
+    const j = await r.json();
+    if(j && j.ok && j.empresa){
+      const antes = cad && cad.empresa;
+      cad = {empresa:j.empresa, codigo:cod, nome, tel, em:Date.now()}; store.set("cadastro", cad);
+      if(antes && antes !== cad.empresa){ $("#resp").value = ""; $("#tel").value = ""; }
+      $("#cadCod").value = ""; h.textContent = "";
+      aplicaCadastro(); atualizaFilaCadastro(); window.scrollTo(0, 0);
+      toast(`Cadastro feito: ${j.empresa}.`);
+    } else {
+      h.className = "hint bad";
+      h.textContent = ({codigo:"Código não encontrado ou empresa desativada. Confira o código com a coordenação.", dados:"Preencha o nome e o telefone com DDD.", limite:"Muitas tentativas. Tente de novo daqui a 1 hora."})[j && j.erro] || "Não foi possível fazer o cadastro agora. Tente de novo.";
+    }
+  }catch(e){ h.className = "hint bad"; h.textContent = "Não foi possível conferir o código. Verifique a internet e tente de novo."; }
+  b.disabled = false;
+};
+$("#cadCod").addEventListener("input", e => { const v = e.target.value.toUpperCase(); if(v !== e.target.value) e.target.value = v; });
+$("#btnTrocaCad").onclick = () => confirmar(`Trocar o cadastro? Para pedir de novo será preciso o código de acesso da empresa e internet.`, "Trocar cadastro", () => { if(cad){ delete cad.codigo; store.set("cadastro", cad); } aplicaCadastro(); });
+
+/* ===== relatório do pedido em PDF (página do pedido + fotos), gerado no celular ===== */
+async function relatorioGuardado(p){
+  let pdf = await idb.get("pdf:" + p.id).catch(() => null), previa = await idb.get("prev:" + p.id).catch(() => null);
+  if(!pdf || !previa){ const r = await guardaRelatorio(p); pdf = r.pdf; previa = r.previa; }
+  return {pdf, previa};
+}
+async function guardaRelatorio(p){
+  const r = await gerarRelatorio(p);
+  await idb.set("pdf:" + p.id, r.pdf); await idb.set("prev:" + p.id, r.previa);
+  return r;
+}
+const jpeg = (c, q) => new Promise((res, rej) => c.toBlob(b => b ? res(b) : rej(new Error("jpeg")), "image/jpeg", q));
+async function gerarRelatorio(p){
+  const c1 = await gerarImagem(p, true);
+  const fotos = p.nFotos ? ((await idb.get("p:" + p.id).catch(() => null)) || []) : [];
+  const pags = [c1, ...(await paginasFotos(p, fotos))];
+  const imgs = [];
+  for(let i = 0; i < pags.length; i++){ const b = await jpeg(pags[i], i === 0 ? 0.92 : 0.86); imgs.push({jpg:new Uint8Array(await b.arrayBuffer()), w:pags[i].width, h:pags[i].height}); }
+  return {pdf: montaPDF(imgs, "Pedido " + p.id), previa: await jpeg(c1, 0.8)};
+}
+async function paginasFotos(p, blobs){
+  if(!blobs.length) return [];
+  const FD = '"Barlow Semi Condensed","Arial Narrow",sans-serif', FS = '"Barlow","Segoe UI",Arial,sans-serif', FM = '"JetBrains Mono",Consolas,monospace';
+  const K = {brand:"#1f262d",accent:"#0a7ea4",accInk:"#066282",accOnBrand:"#2ec4e6",gold:"#9c7a26",goldOnBrand:"#d4af55",surf:"#f3f5f7",raised:"#ffffff",sunk:"#e7ebef",ink:"#12171c",muted:"#55606b",border:"#d3dae0"};
+  const W = 1240, H = 1754, P = 64, CW = W - 2*P, total = Math.ceil(blobs.length / 2), out = [];
+  for(let pg = 0; pg < total; pg++){
+    const c = document.createElement("canvas"); c.width = W; c.height = H; const g = c.getContext("2d");
+    const ls = v => { if("letterSpacing" in g) g.letterSpacing = v; };
+    const rr = (x, y, w, h, r) => { g.beginPath(); if(g.roundRect) g.roundRect(x, y, w, h, r); else g.rect(x, y, w, h); };
+    const ln = (x1, y1, x2, y2, col, wd) => { g.strokeStyle = col; g.lineWidth = wd; g.lineCap = "round"; g.beginPath(); g.moveTo(x1, y1); g.lineTo(x2, y2); g.stroke(); };
+    const tx = (t, x, y, font, col, al) => { g.font = font; g.fillStyle = col; g.textAlign = al || "left"; g.textBaseline = "alphabetic"; g.fillText(String(t), x, y); };
+    g.fillStyle = K.surf; g.fillRect(0, 0, W, H);
+    const BH = 150; g.fillStyle = K.brand; g.fillRect(0, 0, W, BH);
+    g.save(); g.translate(P, 32);
+    rr(0, 0, 86, 86, 18); g.strokeStyle = "rgba(255,255,255,.35)"; g.lineWidth = 2; g.stroke();
+    g.strokeStyle = "#fff"; g.lineWidth = 6.5; g.lineCap = "round"; g.beginPath(); g.moveTo(15, 19); g.lineTo(15, 41); g.arc(27, 41, 12, Math.PI, 0, true); g.lineTo(39, 19); g.stroke();
+    g.fillStyle = K.accOnBrand; g.beginPath(); g.arc(47, 54, 4.6, 0, 2*Math.PI); g.fill();
+    tx("L18", 53, 60, `700 17px ${FD}`, "#fff"); ln(15, 71, 71, 71, K.goldOnBrand, 2.5);
+    g.restore();
+    ls("2.5px"); tx("CONSÓRCIO UNIVERSALIZA", P + 108, 70, `500 18px ${FM}`, K.accOnBrand); ls("0px");
+    tx("Lote 18 · Fotos do local", P + 108, 114, `600 44px ${FD}`, "#fff");
+    ls("1.5px"); tx("PEDIDO DE AGREGADOS", W - P, 66, `500 16px ${FM}`, K.accOnBrand, "right"); ls("0px");
+    tx(p.id, W - P, 102, `500 25px ${FM}`, "#fff", "right");
+    tx(`Página ${pg + 2} de ${total + 1}`, W - P, 130, `400 20px ${FS}`, "rgba(255,255,255,.78)", "right");
+    ln(P, BH - 1, P + 72, BH - 1, K.accOnBrand, 7); ln(P + 90, BH - 1, W - P, BH - 1, K.goldOnBrand, 3);
+    tx(`${p.nuc} · ${p.rua}${p.numr ? ", " + p.numr : ""}`, P, BH + 70, `600 34px ${FD}`, K.ink);
+    tx(`${p.emp}${p.gms ? " · " + p.gms : ""}`, P, BH + 106, `400 22px ${FS}`, K.muted);
+    const slotTop = BH + 140, slotH = (H - slotTop - 120 - 24) / 2;
+    for(let k = 0; k < 2; k++){
+      const idx = pg*2 + k; if(idx >= blobs.length) break;
+      const y = slotTop + k*(slotH + 24);
+      g.fillStyle = K.raised; rr(P, y, CW, slotH, 18); g.fill(); g.strokeStyle = K.border; g.lineWidth = 2; g.stroke();
+      try{
+        const bmp = await createImageBitmap(blobs[idx]);
+        const mw = CW - 40, mh = slotH - 90, f = Math.min(mw / bmp.width, mh / bmp.height);
+        const iw = bmp.width * f, ih = bmp.height * f, ix = P + (CW - iw)/2, iy = y + 20 + (mh - ih)/2;
+        g.save(); rr(ix, iy, iw, ih, 10); g.clip(); g.drawImage(bmp, ix, iy, iw, ih); g.restore();
+      }catch(e){ tx("Foto indisponível", P + CW/2, y + slotH/2, `400 24px ${FS}`, K.muted, "center"); }
+      ls("1.5px"); tx(`FOTO ${idx + 1} DE ${blobs.length}`, P + 24, y + slotH - 32, `500 17px ${FM}`, K.accInk); ls("0px");
+      ln(P + 24, y + slotH - 20, P + 52, y + slotH - 20, K.accent, 4);
+    }
+    const fy = H - 96; ln(P, fy, W - P, fy, K.gold, 2.5);
+    tx("Controle: ", P, fy + 42, `400 21px ${FS}`, K.muted); g.font = `400 21px ${FS}`;
+    tx("J.S. Araújo Engenharia", P + g.measureText("Controle: ").width, fy + 42, `600 21px ${FS}`, K.ink);
+    tx(`Consórcio Universaliza Lote 18 · app ${APP_VERSION}`, W - P, fy + 42, `400 21px ${FS}`, K.muted, "right");
+    out.push(c);
+  }
+  return out;
+}
+/* PDF simples: cada página é uma imagem JPEG (DCTDecode). Largura A4 (595 pt); altura proporcional à imagem. */
+function montaPDF(paginas, titulo){
+  const enc = new TextEncoder(), partes = [], offs = [];
+  let pos = 0;
+  const add = x => { const b = typeof x === "string" ? enc.encode(x) : x; partes.push(b); pos += b.length; };
+  const obj = (id, corpo) => { offs[id] = pos; add(`${id} 0 obj\n`); corpo(); add("\nendobj\n"); };
+  add("%PDF-1.4\n"); add(new Uint8Array([0x25, 0xE2, 0xE3, 0xCF, 0xD3, 0x0A]));
+  const n = paginas.length;
+  obj(1, () => add("<< /Type /Catalog /Pages 2 0 R >>"));
+  obj(2, () => add(`<< /Type /Pages /Kids [${paginas.map((_, i) => `${3 + 3*i} 0 R`).join(" ")}] /Count ${n} >>`));
+  paginas.forEach((pg, i) => {
+    const Wp = 595.28, Hp = +(Wp * pg.h / pg.w).toFixed(2), pid = 3 + 3*i, cid = 4 + 3*i, iid = 5 + 3*i;
+    obj(pid, () => add(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${Wp} ${Hp}] /Resources << /XObject << /Im${i} ${iid} 0 R >> >> /Contents ${cid} 0 R >>`));
+    const cs = `q ${Wp} 0 0 ${Hp} 0 0 cm /Im${i} Do Q`;
+    obj(cid, () => { add(`<< /Length ${cs.length} >>\nstream\n`); add(cs); add("\nendstream"); });
+    obj(iid, () => { add(`<< /Type /XObject /Subtype /Image /Width ${pg.w} /Height ${pg.h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${pg.jpg.length} >>\nstream\n`); add(pg.jpg); add("\nendstream"); });
+  });
+  const info = 3 + 3*n;
+  obj(info, () => add(`<< /Title (${String(titulo).replace(/[^\x20-\x7E]/g, "").replace(/([()\\])/g, "\\$1")}) /Producer (Agregados L18 ${APP_VERSION}) >>`));
+  const xref = pos, tot = info + 1;
+  let x = `xref\n0 ${tot}\n0000000000 65535 f \n`;
+  for(let i = 1; i < tot; i++) x += String(offs[i]).padStart(10, "0") + " 00000 n \n";
+  add(x); add(`trailer\n<< /Size ${tot} /Root 1 0 R /Info ${info} 0 R >>\nstartxref\n${xref}\n%%EOF\n`);
+  return new Blob(partes, {type:"application/pdf"});
+}
 
 /* ===== aplicativo: preparo para uso sem internet ===== */
 async function pedePersistencia(){
@@ -1349,7 +1538,7 @@ window.addEventListener("appinstalled", () => { promptInstalar = null; renderAvi
 function renderAvisos(){
   const box = $("#avisos"); if(!box) return;
   const H = [];
-  if("serviceWorker" in navigator && location.protocol !== "file:" && !navigator.serviceWorker.controller) H.push(`<div class="notice"><span><b>Preparando para uso sem internet…</b> Mantenha o sinal até aparecer "Funciona sem internet" no topo.</span></div>`);
+  if("serviceWorker" in navigator && location.protocol !== "file:" && !navigator.serviceWorker.controller) H.push(`<div class="notice"><span><b>Preparando para uso sem internet…</b> Mantenha o sinal até aparecer "Funciona sem internet neste celular".</span></div>`);
   if(novaVersao) H.push(`<div class="notice"><span><b>Nova versão do aplicativo.</b> Atualize para receber as melhorias.</span><button class="btn btn-p btn-sm" id="avAtual">Atualizar</button></div>`);
   const fila = meus.filter(p => p.local === "fila").length;
   if(fila) H.push(`<div class="notice q"><span><b>${fila} ${fila===1?"pedido":"pedidos"} para enviar pelo WhatsApp.</b> ${navigator.onLine ? "Há sinal: envie agora." : "Envie quando houver sinal."}</span><button class="btn btn-sm ${navigator.onLine ? "btn-wa" : ""}" id="avFila">Ver pedidos</button></div>`);
@@ -1388,7 +1577,7 @@ if("serviceWorker" in navigator && location.protocol !== "file:"){
   setTimeout(() => { atualizaStatusEmail(); pedirEnvioEmail(); }, 2000);
   if(standalone()) pedePersistencia();
   renderMeus(); updNet();
-  if(location.hash === "#meus") setTab("meus");
+  aplicaCadastro();
   $("#appVer").textContent = APP_VERSION;
 })();
 </script>
