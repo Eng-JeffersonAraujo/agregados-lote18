@@ -57,6 +57,11 @@ svg.i{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-widt
 .foto img{width:100%;height:100%;object-fit:cover;display:block}
 .foto button{position:absolute;top:4px;right:4px;width:28px;height:28px;border-radius:50%;border:0;background:rgba(18,23,28,.75);color:#fff;display:grid;place-items:center;cursor:pointer}
 .foto button svg{width:14px;height:14px}
+.ph p.okoff{display:inline-flex;align-items:center;gap:6px;margin:var(--space-3) 0 0;padding:4px 12px 4px 8px;border-radius:var(--radius-pill);background:var(--surface-raised);border:1px solid var(--border);font-size:13px;line-height:18px;font-weight:600;color:var(--success)}
+.ph p.okoff svg{width:15px;height:15px}
+.mark-eb{white-space:nowrap}
+@media (max-width:420px){.mark-eb{font-size:9px;letter-spacing:.08em}.mark-nm{font-size:20px}.chip{font-size:10.5px;padding:3px 8px}.band .wrap{gap:var(--space-2)}}
+.btn-busca{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-ink)}
 .addfoto{width:96px;height:96px;border:1px dashed var(--border-strong);border-radius:var(--radius-sm);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:12px;color:var(--accent-ink);cursor:pointer;background:var(--surface)}
 .addfoto input{display:none}
 .prev{margin:0 0 14px;border:1px solid var(--border);border-radius:var(--radius-md);background:var(--surface-sunken);max-height:46vh;overflow:auto;padding:8px;text-align:center}
@@ -234,7 +239,7 @@ details.help ol{margin:var(--space-2) 0 0;padding-left:20px}
 <header class="band">
   <div class="wrap">
     <div class="mark">
-      <svg viewBox="0 0 48 48" aria-hidden="true"><rect x="1.5" y="1.5" width="45" height="45" rx="10" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="1.5"/><path d="M10 13v12a7 7 0 0 0 14 0V13" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round"/><circle cx="29" cy="31" r="2.6" fill="#2ec4e6"/><text x="33" y="35" font-family="Barlow Semi Condensed,Arial Narrow,sans-serif" font-weight="700" font-size="11" fill="#fff">L18</text><path d="M10 40h28" stroke="#d4af55" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <svg viewBox="0 0 48 48" aria-hidden="true"><rect x="1.5" y="1.5" width="45" height="45" rx="10" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="1.5"/><path d="M9 13v12a6.5 6.5 0 0 0 13 0V13" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round"/><circle cx="26.5" cy="31" r="2.4" fill="#2ec4e6"/><text x="30.5" y="35" font-family="Barlow Semi Condensed,Arial Narrow,sans-serif" font-weight="700" font-size="9.5" fill="#fff">L18</text><path d="M10 40h28" stroke="#d4af55" stroke-width="1.5" stroke-linecap="round"/></svg>
       <div><div class="mark-eb">Consórcio Universaliza</div><div class="mark-nm">Lote 18</div></div>
     </div>
     <div class="chips">
@@ -249,6 +254,7 @@ details.help ol{margin:var(--space-2) 0 0;padding-left:20px}
     <p class="eyebrow">Suprimentos · Agregados</p>
     <h1>Solicitação de agregados</h1>
     <p>Preencha o destino, o material e a data de entrega. O pedido fica salvo neste celular, mesmo sem sinal, e sai pelo WhatsApp da coordenação quando houver conexão.</p>
+    <p class="okoff hidden" id="offChip"><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Funciona sem internet neste celular</p>
     <div id="avisos"></div>
   </div>
 
@@ -402,7 +408,7 @@ details.help ol{margin:var(--space-2) 0 0;padding-left:20px}
 <script src="qrcode.js"></script>
 <script>
 /* ===== configuração ===== */
-const APP_VERSION = "1.1.0";
+const APP_VERSION = "1.2.0";
 const CONFIG = {
   // número que recebe os pedidos (só dígitos, com 55 + DDD). Vazio = o WhatsApp pergunta o contato.
   whatsDestino: "5511941543604",   // José Arimateia — +55 11 94154-3604
@@ -709,7 +715,7 @@ function setRadio(name, v){ const el = document.querySelector(`input[name="${nam
 /* ===== preenchimento inicial ===== */
 $("#emp").innerHTML = `<option value="">Selecione</option>` + EMPREITEIROS.map(e => `<option>${esc(e)}</option>`).join("") + `<option value="__outro">Outro</option>`;
 $("#dlNuc").innerHTML = NUCLEOS.map(n => `<option value="${esc(n)}">`).join("");
-function hoje(off=0){ const d = new Date(); d.setDate(d.getDate()+off); return d.toISOString().slice(0,10); }
+function hoje(off=0){ const d = new Date(); d.setDate(d.getDate()+off); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; }   // data local (não UTC)
 $("#data").min = hoje(0);
 
 function lerForm(){
@@ -731,6 +737,7 @@ function aplicaForm(p){
   if(EMPREITEIROS.includes(p.emp)) $("#emp").value = p.emp; else if(p.emp){ $("#emp").value = "__outro"; $("#empOutro").value = p.emp; }
   ["resp","tel","equipe","mun","nuc","rua","numr","frente","ref","contLocal","just","obs"].forEach(k => { if(p[k] != null) $("#"+k).value = p[k]; });
   $("#coord").value = p.coordTxt || "";
+  if(p.prec && p.coordTxt){ gps.txt = p.coordTxt; gps.prec = p.prec; }
   if(p.data && p.data >= hoje(0)) $("#data").value = p.data;
   setRadio("periodo", p.periodo); setRadio("veic", p.veic); setRadio("desc", p.desc); setRadio("prio", p.prio);
   $$("#restr input").forEach(x => x.checked = (p.restr||[]).includes(x.value));
@@ -902,6 +909,7 @@ function abrirRevisao(p){
     </div>`);
   $("#mVolta").onclick = fecharModal;
   $("#mConf").onclick = async () => {
+    pedePersistencia();
     p.nFotos = fotosAtual.length; p.fotosEnv = false;
     if(p.nFotos){ try{ await idb.set("p:" + p.id, fotosAtual.map(f => f.blob)); }catch(e){ p.nFotos = 0; toast("Não foi possível guardar as fotos neste celular."); } }
     meus.push(p); salvaMeus();
@@ -1178,6 +1186,7 @@ function updNet(){
   const on = navigator.onLine; $("#netChip").classList.toggle("off", !on); $("#netTxt").textContent = on ? "Online" : "Sem sinal";
   if(on){ const fila = meus.filter(p => p.local === "fila").length; if(fila) toast(`Sinal de volta — ${fila} ${fila===1?"pedido":"pedidos"} na fila para enviar.`); }
   renderAvisos();
+  if(on && navigator.serviceWorker && navigator.serviceWorker.controller){ try{ navigator.serviceWorker.controller.postMessage("fontes"); }catch(e){} setTimeout(checaOffline, 4000); }
 }
 window.addEventListener("online", updNet); window.addEventListener("offline", updNet);
 
@@ -1220,23 +1229,59 @@ $("#fotos").addEventListener("click", e => {
 });
 async function carregaFotosRascunho(){ try{ const bl = (await idb.get("rascunho")) || []; fotosAtual = bl.map(b => ({blob:b, url:URL.createObjectURL(b)})); }catch(e){ fotosAtual = []; } renderFotos(); }
 
-/* ===== aplicativo: GPS ===== */
+/* ===== aplicativo: GPS =====
+   Sem internet o celular não tem a ajuda da rede (A-GPS): o primeiro ponto pode demorar e vir impreciso.
+   Por isso o app escuta o GPS por até 60 s, fica com a melhor leitura e para sozinho ao chegar a ±10 m. */
 const gps = {txt:"", prec:null};
+let gpsWatch = null, gpsMelhor = null, gpsFim = null, gpsIni = 0;
+function gpsAplica(pos){
+  const {latitude, longitude, accuracy} = pos.coords, v = `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
+  $("#coord").value = v; gps.txt = v; gps.prec = Math.round(accuracy); updCoord(); salvaRascunho();
+}
+function gpsPara(motivo){
+  if(gpsWatch !== null) navigator.geolocation.clearWatch(gpsWatch);
+  gpsWatch = null; clearTimeout(gpsFim);
+  const bt = $("#btnGps"), tx = $("#gpsTxt"); bt.classList.add("btn-p"); bt.classList.remove("btn-busca");
+  if(gpsMelhor){
+    gpsAplica(gpsMelhor); tx.textContent = "Atualizar localização (GPS)";
+    toast(gps.prec > 30 ? `Ponto salvo com precisão baixa (±${gps.prec} m). Se puder, vá para céu aberto e atualize.` : `Localização salva (±${gps.prec} m).`);
+  } else {
+    tx.textContent = "Usar minha localização (GPS)";
+    if(motivo) toast(motivo);
+  }
+}
 $("#btnGps").onclick = () => {
   if(!navigator.geolocation){ toast("Este celular não oferece localização ao aplicativo. Cole a coordenada do Google Maps."); return; }
-  const bt = $("#btnGps"), tx = $("#gpsTxt"); bt.disabled = true; tx.textContent = "Buscando sinal de GPS…";
-  navigator.geolocation.getCurrentPosition(pos => {
-    const {latitude, longitude, accuracy} = pos.coords;
-    const v = `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
-    $("#coord").value = v; gps.txt = v; gps.prec = Math.round(accuracy);
-    bt.disabled = false; tx.textContent = "Atualizar localização (GPS)";
-    updCoord(); salvaRascunho();
-    toast(gps.prec > 50 ? `Precisão baixa (±${gps.prec} m). Vá para céu aberto e tente de novo.` : `Localização capturada (±${gps.prec} m).`);
+  if(gpsWatch !== null){ gpsPara(gpsMelhor ? "" : "Ainda sem sinal de GPS."); return; }   // segundo toque: usa a melhor leitura até agora
+  const bt = $("#btnGps"), tx = $("#gpsTxt");
+  gpsMelhor = null; gpsIni = Date.now(); bt.classList.remove("btn-p"); bt.classList.add("btn-busca");
+  tx.textContent = navigator.onLine ? "Buscando GPS…" : "Buscando GPS sem internet (pode levar até 1 min)…";
+  gpsWatch = navigator.geolocation.watchPosition(pos => {
+    if(!gpsMelhor || pos.coords.accuracy < gpsMelhor.coords.accuracy) gpsMelhor = pos;
+    const a = Math.round(gpsMelhor.coords.accuracy), seg = Math.round((Date.now() - gpsIni) / 1000);
+    tx.textContent = `±${a} m · ${seg} s · toque para usar este ponto`;
+    if(a <= 10) gpsPara();
   }, err => {
-    bt.disabled = false; tx.textContent = "Usar minha localização (GPS)";
-    toast(err.code === 1 ? "Permita o acesso à localização nas configurações do celular." : err.code === 3 ? "O GPS demorou a responder. Tente em céu aberto." : "Não foi possível obter a localização.");
-  }, {enableHighAccuracy:true, timeout:25000, maximumAge:0});
+    if(err.code === 1){ gpsMelhor = null; gpsPara("Permita o acesso à localização nas configurações do celular."); }
+    else if(err.code === 2 && !gpsMelhor) tx.textContent = "Sem sinal de GPS ainda… vá para céu aberto";
+  }, {enableHighAccuracy:true, maximumAge:0, timeout:60000});
+  gpsFim = setTimeout(() => gpsPara(gpsMelhor ? "" : "O GPS não respondeu em 1 minuto. Tente em céu aberto ou cole a coordenada."), 60000);
 };
+
+/* ===== aplicativo: preparo para uso sem internet ===== */
+async function pedePersistencia(){
+  try{ if(navigator.storage && navigator.storage.persist && !(await navigator.storage.persisted())) await navigator.storage.persist(); }catch(e){}
+}
+async function checaOffline(){
+  const chip = $("#offChip"); if(!chip || !("caches" in window)) return;
+  try{
+    const nomes = await caches.keys(), app = nomes.find(n => n.startsWith("agr18-app-"));
+    let fontes = false; if(nomes.includes("agr18-fontes")){ const c = await caches.open("agr18-fontes"); fontes = !!(await c.match("fontes-ok")); }
+    const ok = !!app && !!navigator.serviceWorker.controller;
+    chip.classList.toggle("hidden", !ok);
+    chip.title = ok ? `Aplicativo guardado neste celular${fontes ? "" : " (fontes serão guardadas na próxima abertura com sinal)"}` : "";
+  }catch(e){}
+}
 
 /* ===== aplicativo: avisos, instalação e atualização ===== */
 let promptInstalar = null, novaVersao = null, recarregar = false;
@@ -1247,6 +1292,7 @@ window.addEventListener("appinstalled", () => { promptInstalar = null; renderAvi
 function renderAvisos(){
   const box = $("#avisos"); if(!box) return;
   const H = [];
+  if("serviceWorker" in navigator && location.protocol !== "file:" && !navigator.serviceWorker.controller) H.push(`<div class="notice"><span><b>Preparando para uso sem internet…</b> Mantenha o sinal até aparecer "Funciona sem internet" no topo.</span></div>`);
   if(novaVersao) H.push(`<div class="notice"><span><b>Nova versão do aplicativo.</b> Atualize para receber as melhorias.</span><button class="btn btn-p btn-sm" id="avAtual">Atualizar</button></div>`);
   const fila = meus.filter(p => p.local === "fila").length;
   if(fila) H.push(`<div class="notice q"><span><b>${fila} ${fila===1?"pedido":"pedidos"} na fila.</b> ${navigator.onLine ? "Há sinal: envie agora." : "Envie quando houver sinal."}</span><button class="btn btn-sm ${navigator.onLine ? "btn-wa" : ""}" id="avFila">Ver pedidos</button></div>`);
@@ -1266,13 +1312,14 @@ function renderAvisos(){
   };
 }
 if("serviceWorker" in navigator && location.protocol !== "file:"){
+  navigator.serviceWorker.ready.then(() => setTimeout(() => { checaOffline(); renderAvisos(); }, 1500));
   navigator.serviceWorker.register("sw.js").then(reg => {
     const vigia = w => w && w.addEventListener("statechange", () => { if(w.state === "installed" && navigator.serviceWorker.controller){ novaVersao = w; renderAvisos(); } });
     if(reg.waiting && navigator.serviceWorker.controller){ novaVersao = reg.waiting; renderAvisos(); }
     reg.addEventListener("updatefound", () => vigia(reg.installing));
     document.addEventListener("visibilitychange", () => { if(document.visibilityState === "visible") reg.update().catch(() => {}); });
   }).catch(() => {});
-  navigator.serviceWorker.addEventListener("controllerchange", () => { if(recarregar){ recarregar = false; location.reload(); } });
+  navigator.serviceWorker.addEventListener("controllerchange", () => { if(recarregar){ recarregar = false; location.reload(); } else setTimeout(() => { checaOffline(); renderAvisos(); }, 1500); });
 }
 
 /* ===== início ===== */
@@ -1281,6 +1328,7 @@ if("serviceWorker" in navigator && location.protocol !== "file:"){
   if(r && (r.rua || (r.itens||[]).some(i => i.mat))){ aplicaForm(r); $("#draftNote").classList.remove("hidden"); }
   else aplicaForm({...s, itens:[]});
   carregaFotosRascunho();
+  if(standalone()) pedePersistencia();
   renderMeus(); updNet();
   if(location.hash === "#meus") setTab("meus");
   $("#appVer").textContent = APP_VERSION;

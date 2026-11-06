@@ -3,7 +3,8 @@
 Aplicativo de celular para os empreiteiros do **Consórcio Universaliza Lote 18** pedirem agregados (areia, pó de pedra, britas, BGS, rachão, solo etc.).
 
 - Instala pelo link, sem loja: Android (Chrome → **Instalar**) e iPhone (Safari → Compartilhar → **Adicionar à Tela de Início**).
-- Funciona sem sinal: o pedido fica salvo no celular e o aplicativo avisa quando der para enviar.
+- Funciona sem sinal: depois da 1ª abertura com internet (aparece "Funciona sem internet neste celular"), abre, gera a imagem e guarda os pedidos e fotos sem rede; avisa quando der para enviar.
+- GPS sem internet: escuta o GPS por até 1 minuto, fica com a melhor leitura e para sozinho ao chegar a ±10 m; um toque usa o ponto atual.
 - Localização pelo GPS do celular, até 3 fotos do local e calculadora de cubagem (vala com tubo, área × espessura, caixas e PVs).
 - O pedido sai como **imagem** no padrão do Consórcio Universaliza Lote 18, junto com as fotos do local e uma mensagem curta com o link do mapa, para o WhatsApp da coordenação (José Arimateia, +55 11 94154-3604).
 - A imagem traz um QR com o código do pedido (formato `AGR3`). A coordenação envia a imagem na aba Gestão do formulário de controle e o pedido é registrado.
