@@ -380,7 +380,7 @@ details.help ol{margin:var(--space-2) 0 0;padding-left:20px}
 
   <!-- ============ MEUS PEDIDOS ============ -->
   <section id="v-meus" class="hidden">
-    <div class="callout"><svg class="i" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg><p>Pedidos feitos neste aparelho. Os que estão <b>na fila</b> ainda não foram enviados: toque em <b>Enviar</b> quando houver sinal.</p></div>
+    <div class="callout"><svg class="i" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg><p>Pedidos feitos neste celular. Os que estão com <b>WhatsApp pendente</b> ainda não foram mandados ao José: toque em <b>Enviar</b> quando houver sinal.</p></div>
     <div id="listaMeus"></div>
   </section>
 
@@ -408,10 +408,14 @@ details.help ol{margin:var(--space-2) 0 0;padding-left:20px}
 <script src="qrcode.js"></script>
 <script>
 /* ===== configuração ===== */
-const APP_VERSION = "1.2.0";
+const APP_VERSION = "1.3.0";
 const CONFIG = {
   // número que recebe os pedidos (só dígitos, com 55 + DDD). Vazio = o WhatsApp pergunta o contato.
   whatsDestino: "5511941543604",   // José Arimateia — +55 11 94154-3604
+  // e-mail automático: endereço do serviço do Google (Apps Script) e a mesma chave que está nele. Vazio = desligado.
+  emailUrl: "https://script.google.com/macros/s/AKfycbzw2Oa4K_CdoFJ5zYM6YdEsjCqjy29mQP7HlNWI-AuXCojrjCIKI2f6gf6bNnl9v3Txfg/exec",
+  emailChave: "tpNvtBVPP6RLQNnuGp0OJUalG8kv",
+  emailDestino: "jose.arimateia@lote18.com.br",
   versao: 2
 };
 const EMPREITEIROS = ["Andrada","Aqualine","DF Tech","Everest","Freire","IF Melo","IGVI","JLV","Kalikaline","M Sanity","MFT Drill","Perímetro","PH Ambiental","Saneserv","Speedline","Vox Patris"];
@@ -446,7 +450,7 @@ const STATUS = [
   {id:"entregue",n:"Entregue",t:"success"},
   {id:"recusado",n:"Recusado",t:"danger"}
 ];
-const LOCAL_ST = {rascunho:{n:"Rascunho",t:""},fila:{n:"Na fila",t:"warning"},whats:{n:"Enviado pelo WhatsApp",t:"info"},registrado:{n:"Registrado no sistema",t:"success"}};
+const LOCAL_ST = {rascunho:{n:"Rascunho",t:""},fila:{n:"WhatsApp pendente",t:"warning"},whats:{n:"Enviado pelo WhatsApp",t:"info"},registrado:{n:"Registrado no sistema",t:"success"}};
 
 /* ===== utilidades ===== */
 const $ = s => document.querySelector(s);
@@ -861,7 +865,7 @@ function salvaMeus(){ store.set("meus", meus); renderMeus(); }
 function renderMeus(){
   const fila = meus.filter(p => p.local === "fila").length;
   $("#cntMeus").textContent = meus.length;
-  const q = $("#qChip"); q.classList.toggle("hidden", !fila); q.textContent = `${fila} na fila`;
+  const q = $("#qChip"); q.classList.toggle("hidden", !fila); q.textContent = `${fila} p/ WhatsApp`;
   const box = $("#listaMeus");
   renderAvisos();
   if(!meus.length){ box.innerHTML = `<div class="empty">Nenhum pedido feito neste aparelho ainda.</div>`; return; }
@@ -871,7 +875,8 @@ function renderMeus(){
       <div class="ped-h"><span class="ped-t">${esc(p.nuc)} · ${esc(p.rua)}</span><span class="badge ${st.t ? "b-"+st.t : ""}">${st.n}</span></div>
       <div class="ped-m"><span class="mono">${esc(p.id)}</span> · entrega ${fdata(p.data)} ${esc(p.periodo||"")} · feito em ${fdh(p.criadoEm)}</div>
       <ul>${p.itens.map(i => `<li>${esc(i.nome)} — ${esc(qtdTxt(i))}</li>`).join("")}</ul>
-      ${p.nFotos ? `<p class="hint" style="margin:0 0 10px">${p.nFotos} ${p.nFotos===1?"foto":"fotos"} · ${p.fotosEnv ? "enviadas" : "ainda não enviadas"}</p>` : ""}
+      ${p.nFotos ? `<p class="hint" style="margin:0 0 6px">${p.nFotos} ${p.nFotos===1?"foto":"fotos"} · ${p.fotosEnv ? "enviadas" : "ainda não enviadas"}</p>` : ""}
+      ${p.mail ? `<p class="hint ${p.mail === "enviado" ? "ok" : "warn"}" style="margin:0 0 10px">E-mail para o José: ${p.mail === "enviado" ? "enviado" + (p.mailEm ? " em " + fdh(p.mailEm) : "") : "aguardando sinal"}</p>` : ""}
       <div class="row">
         <button class="btn btn-sm ${p.local==="fila"?"btn-wa":""}" data-act="enviar" data-id="${esc(p.id)}">${ico(IC.wa)}${p.local==="fila"?"Enviar":"Reenviar"}</button>
         <button class="btn btn-sm" data-act="repetir" data-id="${esc(p.id)}">${ico(IC.rep)}Repetir pedido</button>
@@ -884,7 +889,7 @@ $("#listaMeus").addEventListener("click", e => {
   const p = meus.find(x => x.id === b.dataset.id); if(!p) return;
   if(b.dataset.act === "enviar") abrirEnvio(p);
   if(b.dataset.act === "repetir"){ aplicaForm({...p, data:"", coordTxt:p.coordTxt}); setTab("novo"); window.scrollTo(0,0); toast("Dados copiados. Ajuste a data e revise."); }
-  if(b.dataset.act === "excluir") confirmar(`Excluir o pedido ${p.id} deste aparelho?`, "Excluir", () => { meus = meus.filter(x => x.id !== p.id); salvaMeus(); idb.del("p:" + p.id).catch(() => {}); });
+  if(b.dataset.act === "excluir") confirmar(`Excluir o pedido ${p.id} deste aparelho?`, "Excluir", () => { meus = meus.filter(x => x.id !== p.id); salvaMeus(); ["p:", "img:", "mail:", "mailok:"].forEach(k => idb.del(k + p.id).catch(() => {})); });
 });
 
 /* ===== revisão e envio ===== */
@@ -912,7 +917,9 @@ function abrirRevisao(p){
     pedePersistencia();
     p.nFotos = fotosAtual.length; p.fotosEnv = false;
     if(p.nFotos){ try{ await idb.set("p:" + p.id, fotosAtual.map(f => f.blob)); }catch(e){ p.nFotos = 0; toast("Não foi possível guardar as fotos neste celular."); } }
+    if(CONFIG.emailUrl) await prepararEmail(p);
     meus.push(p); salvaMeus();
+    if(CONFIG.emailUrl) pedirEnvioEmail();
     const s = {emp:p.emp, resp:p.resp, tel:p.tel, equipe:p.equipe, mun:p.mun, nuc:p.nuc};
     store.set("solicitante", s);
     const hist = store.get("ruas", {}); hist[p.nuc] = [...new Set([p.rua, ...(hist[p.nuc]||[])])].slice(0, 30); store.set("ruas", hist);
@@ -930,13 +937,13 @@ function abrirEnvio(p){
       <button class="btn" id="mCopy">${ico(IC.copy)}Copiar texto</button>
       <button class="btn btn-g" id="mFecha">${p.local === "fila" ? "Deixar na fila" : "Fechar"}</button>
     </div>
-    <p class="hint" style="margin-top:12px">Vai a imagem do pedido${nf ? ` e ${nf} ${nf===1?"foto":"fotos"} do local` : ""}, com uma mensagem curta e o link do mapa. No WhatsApp, escolha a conversa do <b>José Arimateia</b> (11 94154-3604).</p>
+    <p class="hint" style="margin-top:12px">Vai a imagem do pedido${nf ? ` e ${nf} ${nf===1?"foto":"fotos"} do local` : ""}, com uma mensagem curta e o link do mapa. No WhatsApp, escolha a conversa do <b>José Arimateia</b> (11 94154-3604).${CONFIG.emailUrl ? `<br>O e-mail para ${esc(CONFIG.emailDestino)} sai sozinho${p.mail === "enviado" ? " — já enviado." : ", assim que houver sinal."}` : ""}</p>
     <div id="mAlt"></div>`);
   $("#mCopy").onclick = async () => { try{ await navigator.clipboard.writeText(textoPedido(p)); toast("Texto copiado."); }catch(e){ toast("Não foi possível copiar."); } };
   $("#mFecha").onclick = () => { fecharModal(); setTab("meus"); };
   (async () => {
     let img;
-    try{ img = await gerarImagem(p); }
+    try{ img = (await idb.get("img:" + p.id).catch(() => null)) || await gerarImagem(p); }
     catch(e){ $("#mPrev").innerHTML = `<span class="hint bad">Não foi possível gerar a imagem.</span>`; altTexto(p); return; }
     if(!$("#mPrev")) return;
     const url = URL.createObjectURL(img);
@@ -1184,11 +1191,13 @@ $("#tabs").addEventListener("click", e => { const b = e.target.closest("button[d
 /* ===== conexão ===== */
 function updNet(){
   const on = navigator.onLine; $("#netChip").classList.toggle("off", !on); $("#netTxt").textContent = on ? "Online" : "Sem sinal";
-  if(on){ const fila = meus.filter(p => p.local === "fila").length; if(fila) toast(`Sinal de volta — ${fila} ${fila===1?"pedido":"pedidos"} na fila para enviar.`); }
+  if(on){ const fila = meus.filter(p => p.local === "fila").length; if(fila) toast(`Sinal de volta — ${fila} ${fila===1?"pedido":"pedidos"} para enviar pelo WhatsApp.`); }
   renderAvisos();
   if(on && navigator.serviceWorker && navigator.serviceWorker.controller){ try{ navigator.serviceWorker.controller.postMessage("fontes"); }catch(e){} setTimeout(checaOffline, 4000); }
 }
 window.addEventListener("online", updNet); window.addEventListener("offline", updNet);
+window.addEventListener("online", () => pedirEnvioEmail());
+document.addEventListener("visibilitychange", () => { if(document.visibilityState === "visible") pedirEnvioEmail(); });
 
 let dbPode = false, gestor = false;
 
@@ -1197,7 +1206,8 @@ const idb = (() => {
   let dbp;
   const open = () => dbp || (dbp = new Promise((res, rej) => { const r = indexedDB.open("agr18", 1); r.onupgradeneeded = () => r.result.createObjectStore("fotos"); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); }));
   const tx = async (mode, fn) => { const db = await open(); return new Promise((res, rej) => { const t = db.transaction("fotos", mode); const req = fn(t.objectStore("fotos")); t.oncomplete = () => res(req && req.result); t.onerror = () => rej(t.error); }); };
-  return { get: k => tx("readonly", s => s.get(k)), set: (k, v) => tx("readwrite", s => s.put(v, k)), del: k => tx("readwrite", s => s.delete(k)) };
+  return { get: k => tx("readonly", s => s.get(k)), set: (k, v) => tx("readwrite", s => s.put(v, k)), del: k => tx("readwrite", s => s.delete(k)),
+    chaves: pre => tx("readonly", s => s.getAllKeys(IDBKeyRange.bound(pre, pre + "\uffff"))) };
 })();
 let fotosAtual = [];
 function comprimir(file){
@@ -1268,6 +1278,53 @@ $("#btnGps").onclick = () => {
   gpsFim = setTimeout(() => gpsPara(gpsMelhor ? "" : "O GPS não respondeu em 1 minuto. Tente em céu aberto ou cole a coordenada."), 60000);
 };
 
+/* ===== aplicativo: e-mail automático para a coordenação =====
+   Na confirmação, a imagem do pedido é gerada e o pedido entra numa fila no celular (IndexedDB).
+   Quem envia é o service worker: quando o app abre, quando o sinal volta e, no Android, sozinho
+   em segundo plano (Background Sync), mesmo com o app fechado. O serviço do Google ignora repetidos. */
+function linhaPlanilha(p){
+  const T = totais(p), c = VEIC[p.veic || "nsei"];
+  return {"Protocolo":p.id, "Emitido em":fdh(p.criadoEm), "Urgente":p.prio === "Urgente" ? "SIM" : "", "Motivo da urgência":p.just || "",
+    "Empreiteiro":p.emp, "Equipe":p.equipe || "", "Responsável":p.resp, "Telefone":p.tel, "Município":p.mun, "Núcleo":p.nuc,
+    "Logradouro":p.rua, "Nº / trecho":p.numr || "", "Item da PST":p.frente || "", "Referência":p.ref || "",
+    "Latitude":p.lat ?? "", "Longitude":p.lon ?? "", "Coordenada (GMS)":p.gms || "", "Precisão GPS (m)":p.prec || "", "Mapa":mapsUrl(p),
+    "Materiais":p.itens.map(i => `${i.nome}: ${qtdTxt(i)} · ${i.fin}${i.calc ? " · cubagem " + memoCalc(i.calc) : ""}`).join(" | "),
+    "Volume total (m³)":+T.m3.toFixed(2), "Peso estimado (t)":+T.t.toFixed(2), "Viagens":T.v,
+    "Data de entrega":fdata(p.data), "Período":p.periodo || "", "Veículo máximo":c.n, "Descarga":p.desc || "", "Restrições":(p.restr || []).join(", "),
+    "Recebe no local":p.contLocal || "", "Observações":p.obs || "", "Fotos":p.nFotos || 0, "App":APP_VERSION};
+}
+async function prepararEmail(p){
+  try{
+    const img = await gerarImagem(p);
+    await idb.set("img:" + p.id, img);
+    const T = totais(p);
+    const assunto = `${p.prio === "Urgente" ? "[URGENTE] " : ""}Pedido de agregados ${p.id} · ${p.emp} · ${p.nuc} · ${fmt(T.m3)} m³ · ${fdata(p.data).slice(0,5)}`;
+    await idb.set("mail:" + p.id, {id:p.id, url:CONFIG.emailUrl, criado:Date.now(), dados:{
+      chave:CONFIG.emailChave, id:p.id, assunto, texto:textoPedido(p), resumo:textoResumo(p), mapa:mapsUrl(p),
+      urgente:p.prio === "Urgente", motivo:p.just || "", linha:linhaPlanilha(p)}});
+    p.mail = "fila";
+  }catch(e){ p.mail = ""; }
+}
+async function pedirEnvioEmail(){
+  if(!CONFIG.emailUrl || !("serviceWorker" in navigator) || location.protocol === "file:") return;
+  try{
+    const pend = await idb.chaves("mail:"); if(!pend.length) return;
+    const reg = await navigator.serviceWorker.ready;
+    if(reg.sync && reg.sync.register){ try{ await reg.sync.register("agr18-email"); }catch(e){} }
+    if(navigator.onLine && navigator.serviceWorker.controller) navigator.serviceWorker.controller.postMessage("email");
+  }catch(e){}
+}
+async function atualizaStatusEmail(){
+  let mudou = false;
+  for(const p of meus){
+    if(p.mail !== "fila") continue;
+    const em = await idb.get("mailok:" + p.id).catch(() => null);
+    if(em){ p.mail = "enviado"; p.mailEm = em; mudou = true; }
+  }
+  if(mudou){ salvaMeus(); toast("Pedido enviado por e-mail para o José."); }
+}
+if("serviceWorker" in navigator) navigator.serviceWorker.addEventListener("message", e => { if(e.data && e.data.tipo === "email") atualizaStatusEmail(); });
+
 /* ===== aplicativo: preparo para uso sem internet ===== */
 async function pedePersistencia(){
   try{ if(navigator.storage && navigator.storage.persist && !(await navigator.storage.persisted())) await navigator.storage.persist(); }catch(e){}
@@ -1295,7 +1352,7 @@ function renderAvisos(){
   if("serviceWorker" in navigator && location.protocol !== "file:" && !navigator.serviceWorker.controller) H.push(`<div class="notice"><span><b>Preparando para uso sem internet…</b> Mantenha o sinal até aparecer "Funciona sem internet" no topo.</span></div>`);
   if(novaVersao) H.push(`<div class="notice"><span><b>Nova versão do aplicativo.</b> Atualize para receber as melhorias.</span><button class="btn btn-p btn-sm" id="avAtual">Atualizar</button></div>`);
   const fila = meus.filter(p => p.local === "fila").length;
-  if(fila) H.push(`<div class="notice q"><span><b>${fila} ${fila===1?"pedido":"pedidos"} na fila.</b> ${navigator.onLine ? "Há sinal: envie agora." : "Envie quando houver sinal."}</span><button class="btn btn-sm ${navigator.onLine ? "btn-wa" : ""}" id="avFila">Ver pedidos</button></div>`);
+  if(fila) H.push(`<div class="notice q"><span><b>${fila} ${fila===1?"pedido":"pedidos"} para enviar pelo WhatsApp.</b> ${navigator.onLine ? "Há sinal: envie agora." : "Envie quando houver sinal."}</span><button class="btn btn-sm ${navigator.onLine ? "btn-wa" : ""}" id="avFila">Ver pedidos</button></div>`);
   if(!standalone() && (promptInstalar || ehIOS())) H.push(`<div class="notice"><span><b>Instale o aplicativo</b> para abrir pelo ícone e usar sem sinal.</span><button class="btn btn-sm" id="avInst">${promptInstalar ? "Instalar" : "Como instalar"}</button></div>`);
   box.innerHTML = H.join("");
   const a = $("#avAtual"); if(a) a.onclick = () => { recarregar = true; novaVersao.postMessage("skipWaiting"); };
@@ -1328,6 +1385,7 @@ if("serviceWorker" in navigator && location.protocol !== "file:"){
   if(r && (r.rua || (r.itens||[]).some(i => i.mat))){ aplicaForm(r); $("#draftNote").classList.remove("hidden"); }
   else aplicaForm({...s, itens:[]});
   carregaFotosRascunho();
+  setTimeout(() => { atualizaStatusEmail(); pedirEnvioEmail(); }, 2000);
   if(standalone()) pedePersistencia();
   renderMeus(); updNet();
   if(location.hash === "#meus") setTab("meus");

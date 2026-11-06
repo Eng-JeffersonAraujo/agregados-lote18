@@ -9,9 +9,13 @@ Aplicativo de celular para os empreiteiros do **Consórcio Universaliza Lote 18*
 - O pedido sai como **imagem** no padrão do Consórcio Universaliza Lote 18, junto com as fotos do local e uma mensagem curta com o link do mapa, para o WhatsApp da coordenação (José Arimateia, +55 11 94154-3604).
 - A imagem traz um QR com o código do pedido (formato `AGR3`). A coordenação envia a imagem na aba Gestão do formulário de controle e o pedido é registrado.
 
+## E-mail automático
+
+Quando há sinal, o app também envia cada pedido (imagem + fotos) para jose.arimateia@lote18.com.br por um serviço do Google Apps Script da coordenação, que pode gravar uma cópia de segurança numa planilha Google. Sem sinal, o envio espera na fila do celular e sai sozinho quando a conexão volta.
+
 ## Privacidade
 
-O aplicativo não tem servidor nem banco de dados: não acessa OneDrive, e-mail ou planilhas. Os pedidos e as fotos ficam só no celular de quem preencheu, até serem enviados pelo WhatsApp.
+O aplicativo não acessa OneDrive. Os pedidos e as fotos ficam no celular de quem preencheu e saem só pelo WhatsApp e pelo e-mail da coordenação.
 
 ## Arquivos
 
