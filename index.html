@@ -59,6 +59,8 @@ svg.i{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-widt
 .foto button svg{width:14px;height:14px}
 .addfoto{width:96px;height:96px;border:1px dashed var(--border-strong);border-radius:var(--radius-sm);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:12px;color:var(--accent-ink);cursor:pointer;background:var(--surface)}
 .addfoto input{display:none}
+.prev{margin:0 0 14px;border:1px solid var(--border);border-radius:var(--radius-md);background:var(--surface-sunken);max-height:46vh;overflow:auto;padding:8px;text-align:center}
+.prev img{width:100%;height:auto;display:block;border-radius:6px}
 .step-n{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--accent-soft);color:var(--accent-ink);font-family:var(--font-mono);font-size:11px;margin-right:4px}
 .band::after{content:"";position:absolute;left:var(--space-4);bottom:-2px;width:64px;height:4px;border-radius:var(--radius-pill);background:var(--accent-on-brand)}
 .band::before{content:"";position:absolute;left:calc(var(--space-4) + 72px);right:var(--space-4);bottom:-1px;height:2px;border-radius:var(--radius-pill);background:var(--gold-on-brand)}
@@ -397,9 +399,10 @@ details.help ol{margin:var(--space-2) 0 0;padding-left:20px}
 
 <div class="modal hidden" id="modal" role="dialog" aria-modal="true"><div class="sheet" id="sheet"></div></div>
 
+<script src="qrcode.js"></script>
 <script>
 /* ===== configuração ===== */
-const APP_VERSION = "1.0.0";
+const APP_VERSION = "1.1.0";
 const CONFIG = {
   // número que recebe os pedidos (só dígitos, com 55 + DDD). Vazio = o WhatsApp pergunta o contato.
   whatsDestino: "5511941543604",   // José Arimateia — +55 11 94154-3604
@@ -596,10 +599,10 @@ function memoCalc(c){
   const L = c.linhas || [];
   let base;
   if(c.modo === "vala"){
-    const d = L.length === 1 ? `${f2(nz(L[0].c))} m × ${f2(nz(L[0].l))} × ${f2(nz(L[0].h))} m` : `${L.length} trechos, ${fmt(c.ext)} m`;
+    const d = L.length === 1 && L[0].c ? `${f2(nz(L[0].c))} m × ${f2(nz(L[0].l))} × ${f2(nz(L[0].h))} m` : `${L.length} ${L.length === 1 ? "trecho" : "trechos"}, ${fmt(c.ext)} m`;
     base = `vala ${d}${c.de ? ` − tubo DE ${fmt(c.de,0)}` : ""}`;
   } else if(c.modo === "area"){
-    base = L.length === 1 ? `área ${f2(nz(L[0].c))} × ${f2(nz(L[0].l))} m × ${fmt(nz(L[0].h))} cm` : `área, ${L.length} trechos`;
+    base = L.length === 1 && L[0].c ? `área ${f2(nz(L[0].c))} × ${f2(nz(L[0].l))} m × ${fmt(nz(L[0].h))} cm` : `área, ${L.length} ${L.length === 1 ? "trecho" : "trechos"}`;
   } else base = `${fmt(c.ext,0)} ${c.ext === 1 ? "caixa/PV" : "caixas/PVs"}`;
   return `${base} = ${f2(c.geom)} m³ · empolamento ${f2(c.fator)} · perdas ${fmt(c.perdas)}% → ${fmt(c.pedir)} m³`;
 }
@@ -841,8 +844,6 @@ function textoPedido(p){
   if(p.restr && p.restr.length) L.push(`Acesso: ${p.restr.join(", ")}`);
   if(p.contLocal) L.push(`Recebe no local: ${p.contLocal}`);
   if(p.obs) L.push(`Obs.: ${p.obs}`);
-  L.push(``);
-  L.push(`#AGR1:${b64e(compacto(p))}`);
   return L.join("\n");
 }
 function compacto(p){ const o = {...p}; delete o.local; delete o.coordTxt; delete o.empOutro; return o; }
@@ -892,7 +893,7 @@ $("#btnRev").onclick = () => {
   abrirRevisao(p);
 };
 function abrirRevisao(p){
-  const txt = textoPedido(p).replace(/\n#AGR1:.*$/, "\n(código do pedido anexado ao final)");
+  const txt = textoPedido(p);
   modal(`<h3>Revisar pedido</h3><p class="muted mono" style="margin:0">${esc(p.id)}</p>
     <div class="pre">${esc(txt)}</div>
     <div class="actions">
@@ -912,36 +913,246 @@ function abrirRevisao(p){
   };
 }
 function abrirEnvio(p){
-  const texto = textoPedido(p);
-  const wa = `https://wa.me/${CONFIG.whatsDestino.replace(/\D/g,"")}?text=${encodeURIComponent(texto)}`;
   const online = navigator.onLine, nf = p.nFotos || 0;
   modal(`<h3>Enviar pedido</h3><p class="muted mono" style="margin:0 0 12px">${esc(p.id)}</p>
-    ${online ? "" : `<div class="callout warn">${ico('<path d="M12 9v4m0 4h.01M10.3 3.9 2 18a2 2 0 0 0 1.7 3h16.6a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>')}<p><b>Sem sinal agora.</b> O pedido já está salvo neste celular. Você pode deixar na fila e enviar quando o sinal voltar — o aplicativo avisa — ou tocar em Enviar mesmo assim: o WhatsApp guarda a mensagem e manda sozinho quando conectar.</p></div>`}
-    <p style="margin:0 0 12px;font-size:14px">O pedido vai para o WhatsApp do José Arimateia (coordenação). Não apague a última linha da mensagem: é o código que registra o pedido.</p>
+    ${online ? "" : `<div class="callout warn">${ico('<path d="M12 9v4m0 4h.01M10.3 3.9 2 18a2 2 0 0 0 1.7 3h16.6a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>')}<p><b>Sem sinal agora.</b> O pedido já está salvo neste celular. Deixe na fila e envie quando o sinal voltar — o aplicativo avisa — ou envie mesmo assim: o WhatsApp guarda e manda sozinho quando conectar.</p></div>`}
+    <div class="prev" id="mPrev"><span class="hint">Gerando a imagem do pedido…</span></div>
     <div class="actions">
-      <a class="btn btn-wa" id="mWa" href="${wa}" target="_blank" rel="noopener">${ico(IC.wa)}${nf ? '<span class="step-n">1</span>' : ""}Enviar pedido pelo WhatsApp</a>
-      ${nf ? `<button class="btn" id="mFotos">${ico('<rect x="3" y="6" width="18" height="14" rx="2"/><circle cx="12" cy="13" r="3.5"/><path d="M8 6l1.5-2h5L16 6"/>')}<span class="step-n">2</span>Enviar ${nf} ${nf===1?"foto":"fotos"}</button>` : ""}
+      <button class="btn btn-wa" id="mShare" disabled>${ico(IC.wa)}Enviar pelo WhatsApp</button>
       <button class="btn" id="mCopy">${ico(IC.copy)}Copiar texto</button>
       <button class="btn btn-g" id="mFecha">${p.local === "fila" ? "Deixar na fila" : "Fechar"}</button>
     </div>
-    ${nf ? `<p class="hint" style="margin-top:12px">Depois de enviar o pedido, volte aqui e toque em "Enviar fotos": escolha o WhatsApp e a conversa do José.</p>` : ""}
-    <p class="hint" style="margin-top:8px">Destino: José Arimateia · +55 11 94154-3604</p>`);
-  $("#mWa").onclick = () => { marcaLocal(p.id, "whats"); if(!nf) setTimeout(fecharModal, 300); };
-  $("#mCopy").onclick = async () => { try{ await navigator.clipboard.writeText(texto); toast("Texto copiado. Cole na conversa do José."); marcaLocal(p.id, "whats"); }catch(e){ toast("Não foi possível copiar. Use o botão do WhatsApp."); } };
+    <p class="hint" style="margin-top:12px">Vai a imagem do pedido${nf ? ` e ${nf} ${nf===1?"foto":"fotos"} do local` : ""}, com uma mensagem curta e o link do mapa. No WhatsApp, escolha a conversa do <b>José Arimateia</b> (11 94154-3604).</p>
+    <div id="mAlt"></div>`);
+  $("#mCopy").onclick = async () => { try{ await navigator.clipboard.writeText(textoPedido(p)); toast("Texto copiado."); }catch(e){ toast("Não foi possível copiar."); } };
   $("#mFecha").onclick = () => { fecharModal(); setTab("meus"); };
-  const bf = $("#mFotos"); if(bf) bf.onclick = () => enviarFotos(p);
+  (async () => {
+    let img;
+    try{ img = await gerarImagem(p); }
+    catch(e){ $("#mPrev").innerHTML = `<span class="hint bad">Não foi possível gerar a imagem.</span>`; altTexto(p); return; }
+    if(!$("#mPrev")) return;
+    const url = URL.createObjectURL(img);
+    $("#mPrev").innerHTML = `<img src="${url}" alt="Imagem do pedido ${esc(p.id)}">`;
+    let fotos = [];
+    if(nf){ try{ fotos = (await idb.get("p:" + p.id)) || []; }catch(e){} }
+    const files = [new File([img], `${p.id}.png`, {type:"image/png"}), ...fotos.map((b, k) => new File([b], `${p.id}-foto${k+1}.jpg`, {type:"image/jpeg"}))];
+    const pode = navigator.canShare && navigator.canShare({files});
+    const bs = $("#mShare");
+    if(!pode){ bs.classList.add("hidden"); altTexto(p, url); return; }
+    bs.disabled = false;
+    bs.onclick = async () => {
+      try{
+        await navigator.share({files, text: textoResumo(p)});
+        marcaLocal(p.id, "whats");
+        const q = meus.find(x => x.id === p.id); if(q && nf){ q.fotosEnv = true; salvaMeus(); }
+        fecharModal(); toast("Pedido enviado.");
+      }catch(e){ if(e && e.name !== "AbortError") toast("Não foi possível compartilhar. Tente de novo."); }
+    };
+  })();
 }
-async function enviarFotos(p){
-  let blobs = [];
-  try{ blobs = (await idb.get("p:" + p.id)) || []; }catch(e){}
-  if(!blobs.length){ toast("As fotos deste pedido não estão mais no celular."); return; }
-  const files = blobs.map((b, k) => new File([b], `${p.id}-foto${k+1}.jpg`, {type:"image/jpeg"}));
-  if(!(navigator.canShare && navigator.canShare({files}))){ toast("Este celular não permite enviar fotos pelo aplicativo. Envie pela galeria para o José."); return; }
-  try{
-    await navigator.share({files, text:`Fotos do pedido ${p.id} — ${p.nuc}, ${p.rua}`});
-    const q = meus.find(x => x.id === p.id); if(q){ q.fotosEnv = true; salvaMeus(); }
-    toast("Fotos enviadas.");
-  }catch(e){ if(e && e.name !== "AbortError") toast("Não foi possível compartilhar as fotos."); }
+function altTexto(p, url){
+  const box = $("#mAlt"); if(!box) return;
+  const wa = `https://wa.me/${CONFIG.whatsDestino.replace(/\D/g,"")}?text=${encodeURIComponent(textoPedido(p))}`;
+  box.innerHTML = `<div class="callout warn" style="margin-top:12px">${ico('<circle cx="12" cy="12" r="9"/><path d="M12 8v4m0 4h.01"/>')}<p>Este aparelho não envia imagens direto pelo aplicativo. ${url ? `Baixe a imagem e envie para o José, ou mande o pedido em texto.` : `Mande o pedido em texto.`}</p></div>
+    <div class="actions">
+      ${url ? `<a class="btn" href="${url}" download="${esc(p.id)}.png">${ico('<path d="M12 4v11m-4-4 4 4 4-4M5 20h14"/>')}Baixar imagem</a>` : ""}
+      <a class="btn btn-wa" id="mWaTxt" href="${wa}" target="_blank" rel="noopener">${ico(IC.wa)}Enviar em texto</a>
+    </div>`;
+  $("#mWaTxt").onclick = () => marcaLocal(p.id, "whats");
+}
+function textoResumo(p){
+  const T = totais(p), mu = mapsUrl(p);
+  const mats = p.itens.map(i => `${fmt(i.m3)} m³ ${i.nome.toLowerCase()}`).join(" + ");
+  return [`*Pedido de agregados · Lote 18*${p.prio === "Urgente" ? " — *URGENTE*" : ""}`,
+    `${p.id}`,
+    `${p.emp} → ${p.nuc} (${p.mun}) · ${p.rua}${p.numr ? ", " + p.numr : ""}`,
+    `${mats} · entrega ${fdata(p.data)} ${String(p.periodo||"").toLowerCase()}`,
+    mu ? `Mapa: ${mu}` : ""].filter(Boolean).join("\n");
+}
+
+/* ===== código do pedido (vai no QR da imagem) =====
+   Formato AGR3: JSON com chaves curtas e listas por índice, comprimido (deflate-raw) e em base64url.
+   As tabelas abaixo só podem CRESCER no fim (nunca reordenar), para os códigos antigos continuarem válidos. */
+const COD_T = {
+  mun: ["Ibiúna","Alumínio","Piedade","Salto de Pirapora"],
+  per: ["Manhã","Tarde","Qualquer horário"],
+  vei: ["toco","truck","carreta","nsei"],
+  des: ["Monte em ponto fixo","Espalhado ao longo da rua","Direto na vala"],
+  res: ["Rua estreita","Sem espaço para manobra","Rampa forte","Estrada de terra","Fiação baixa","Restrição de horário"],
+  fin: ["Berço e envoltória da tubulação","Reaterro de vala","Base / sub-base de pavimento","Recomposição de calçada","Caixas, PVs e ligações","Acesso / canteiro","Outra"],
+  mat: ["areia-media","areia-fina","po-pedra","pedrisco","brita1","brita2","brita3","brita4","bgs","bica","rachao","pedra-mao","solo","rcd","outro"],
+  mod: ["vala","area","caixa"]
+};
+const ix = (t, v) => { const k = COD_T[t].indexOf(v); return k < 0 ? v : k; };
+const vx = (t, v) => typeof v === "number" ? COD_T[t][v] : v;
+function compactar(p){
+  const o = {x:p.id, y:Math.round((p.criadoEm||Date.now())/1000), a:p.emp, b:p.resp, c:p.tel, d:p.equipe, e:ix("mun", p.mun), f:p.nuc, g:p.rua, h:p.numr, i:p.frente, j:p.ref,
+    k:p.prec, l:p.lat, m:p.lon, L:p.lat == null ? p.link : "",
+    n:(p.itens||[]).map(it => { const r = [ix("mat", it.mat), String(it.qtd), it.un === "t" ? 1 : 0, ix("fin", it.fin)];
+      if(it.mat === "outro") r[4] = it.outro || it.nome || "";
+      if(it.calc){ const c = it.calc; r[5] = [ix("mod", c.modo), c.geom, c.fator, c.perdas, c.pedir, c.de || 0, c.ext || 0, (c.linhas||[]).length]; }
+      return r; }),
+    o:String(p.data||"").replace(/-/g,""), p:ix("per", p.periodo), q:ix("vei", p.veic), r:ix("des", p.desc), s:(p.restr||[]).map(v => ix("res", v)),
+    t:p.contLocal, u:p.prio === "Urgente" ? 1 : 0, v:p.just, w:p.obs, z:3};
+  Object.keys(o).forEach(k => { const v = o[k]; if(v === "" || v == null || (Array.isArray(v) && !v.length) || (k === "u" && !v)) delete o[k]; });
+  return o;
+}
+function expandir(o){
+  const d = String(o.o||""), p = {id:o.x, criadoEm:(o.y||0)*1000, emp:o.a||"", resp:o.b||"", tel:o.c||"", equipe:o.d||"", mun:vx("mun", o.e)||"", nuc:o.f||"", rua:o.g||"", numr:o.h||"", frente:o.i||"", ref:o.j||"",
+    prec:o.k||null, lat:o.l ?? null, lon:o.m ?? null, link:o.L||"", data:d.length === 8 ? `${d.slice(0,4)}-${d.slice(4,6)}-${d.slice(6)}` : d,
+    periodo:vx("per", o.p)||"", veic:vx("vei", o.q)||"nsei", desc:vx("des", o.r)||"", restr:(o.s||[]).map(v => vx("res", v)), contLocal:o.t||"", prio:o.u ? "Urgente" : "Normal", just:o.v||"", obs:o.w||"", v:o.z};
+  p.gms = p.lat != null ? toGMS(p.lat, p.lon) : "";
+  p.itens = (o.n||[]).map(r => { const mat = vx("mat", r[0]), m = MATERIAIS.find(x => x.id === mat), q = parseFloat(String(r[1]).replace(",", ".")) || 0, un = r[2] ? "t" : "m3";
+    const dd = m ? m.d : 1.5, m3 = un === "t" ? q/dd : q, it = {mat, nome: mat === "outro" ? (r[4]||"Outro") : (m ? m.nome : String(mat)), outro:r[4]||"", qtd:String(r[1]), un, fin:vx("fin", r[3])||"", m3:+m3.toFixed(2), t:+(m3*dd).toFixed(2)};
+    if(r[5]){ const c = r[5]; it.calc = {modo:vx("mod", c[0]), geom:c[1], fator:c[2], perdas:c[3], pedir:c[4], de:c[5], ext:c[6], linhas:new Array(c[7]||1).fill({})}; }
+    return it; });
+  return p;
+}
+function b64bytes(u8){ let s = ""; for(let i = 0; i < u8.length; i += 0x8000) s += String.fromCharCode.apply(null, u8.subarray(i, i + 0x8000)); return btoa(s).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,""); }
+async function codigoPedido(p){
+  let bytes = new TextEncoder().encode(JSON.stringify(compactar(p))), tag = "AGR3u:";
+  if(window.CompressionStream){ try{ const st = new Blob([bytes]).stream().pipeThrough(new CompressionStream("deflate-raw")); bytes = new Uint8Array(await new Response(st).arrayBuffer()); tag = "AGR3:"; }catch(e){} }
+  return tag + b64bytes(bytes);
+}
+
+/* ===== imagem do pedido (padrão Consórcio Universaliza Lote 18) ===== */
+async function gerarImagem(p){
+  const FD = '"Barlow Semi Condensed","Arial Narrow",sans-serif', FS = '"Barlow","Segoe UI",Arial,sans-serif', FM = '"JetBrains Mono",Consolas,monospace';
+  try{ await Promise.race([Promise.all([`600 48px ${FD}`,`400 26px ${FS}`,`600 26px ${FS}`,`500 18px ${FM}`].map(f => document.fonts.load(f))), new Promise(r => setTimeout(r, 2500))]); }catch(e){}
+  const K = {brand:"#1f262d",accent:"#0a7ea4",accInk:"#066282",accSoft:"#dcf1f8",accOnBrand:"#2ec4e6",gold:"#9c7a26",goldOnBrand:"#d4af55",surf:"#f3f5f7",raised:"#ffffff",sunk:"#e7ebef",ink:"#12171c",muted:"#55606b",border:"#d3dae0",danger:"#b42318"};
+  const W = 1080, P = 56, CW = W - 2*P, c = document.createElement("canvas"); c.width = W; c.height = 4200;
+  const g = c.getContext("2d");
+  const ls = v => { if("letterSpacing" in g) g.letterSpacing = v; };
+  const rr = (x, y, w, h, r) => { g.beginPath(); if(g.roundRect) g.roundRect(x, y, w, h, r); else g.rect(x, y, w, h); };
+  const ln = (x1, y1, x2, y2, col, wd) => { g.strokeStyle = col; g.lineWidth = wd; g.lineCap = "round"; g.beginPath(); g.moveTo(x1, y1); g.lineTo(x2, y2); g.stroke(); };
+  const tx = (t, x, y, font, col, al) => { g.font = font; g.fillStyle = col; g.textAlign = al || "left"; g.textBaseline = "alphabetic"; g.fillText(String(t), x, y); };
+  const lab = (t, x, y, col, al) => { ls("1.5px"); tx(String(t).toUpperCase(), x, y, `500 17px ${FM}`, col || K.muted, al); ls("0px"); };
+  const wrap = (t, maxW, font) => { g.font = font; const out = []; String(t || "").split("\n").forEach(par => { let cur = ""; par.split(/\s+/).forEach(w => { const tt = cur ? cur + " " + w : w; if(g.measureText(tt).width > maxW && cur){ out.push(cur); cur = w; } else cur = tt; }); out.push(cur); }); return out; };
+  const card = (y, h) => { g.fillStyle = K.raised; rr(P, y, CW, h, 18); g.fill(); g.strokeStyle = K.border; g.lineWidth = 2; g.stroke(); };
+  g.fillStyle = K.surf; g.fillRect(0, 0, W, c.height);
+
+  // faixa grafite
+  const BH = 176; g.fillStyle = K.brand; g.fillRect(0, 0, W, BH);
+  g.save(); g.translate(P, 42);
+  rr(0, 0, 92, 92, 20); g.strokeStyle = "rgba(255,255,255,.35)"; g.lineWidth = 2; g.stroke();
+  g.strokeStyle = "#fff"; g.lineWidth = 7; g.lineCap = "round"; g.beginPath(); g.moveTo(16, 20); g.lineTo(16, 44); g.arc(29, 44, 13, Math.PI, 0, true); g.lineTo(42, 20); g.stroke();
+  g.fillStyle = K.accOnBrand; g.beginPath(); g.arc(50, 58, 5, 0, 2*Math.PI); g.fill();
+  tx("L18", 57, 64, `700 18px ${FD}`, "#fff");
+  ln(16, 76, 76, 76, K.goldOnBrand, 2.5);
+  g.restore();
+  ls("2.5px"); tx("CONSÓRCIO UNIVERSALIZA", P + 116, 80, `500 19px ${FM}`, K.accOnBrand); ls("0px");
+  tx("Lote 18", P + 116, 128, `600 48px ${FD}`, "#fff");
+  lab("Pedido de agregados", W - P, 78, K.accOnBrand, "right");
+  tx(p.id, W - P, 116, `500 27px ${FM}`, "#fff", "right");
+  tx(`Emitido em ${fdh(p.criadoEm)}`, W - P, 148, `400 21px ${FS}`, "rgba(255,255,255,.78)", "right");
+  ln(P, BH - 1, P + 72, BH - 1, K.accOnBrand, 7);
+  ln(P + 90, BH - 1, W - P, BH - 1, K.goldOnBrand, 3);
+
+  // título
+  let y = BH + 82;
+  lab("Solicitação de agregados", P, y - 34, K.accInk);
+  const tl = wrap(`${p.nuc} · ${p.mun}`, CW, `600 54px ${FD}`);
+  tl.forEach(l => { tx(l, P, y + 20, `600 54px ${FD}`, K.ink); y += 60; });
+  ln(P, y, P + 48, y, K.accent, 6); y += 34;
+  if(p.prio === "Urgente"){
+    const t = `URGENTE · ${p.just || ""}`, ws = wrap(t, CW - 60, `600 24px ${FS}`);
+    const h = 26 + ws.length * 32; g.fillStyle = "#fbe9e7"; rr(P, y, CW, h, h > 60 ? 18 : h/2); g.fill(); g.strokeStyle = K.danger; g.lineWidth = 2; g.stroke();
+    g.fillStyle = K.danger; g.beginPath(); g.arc(P + 28, y + 30, 7, 0, 2*Math.PI); g.fill();
+    ws.forEach((l, k) => tx(l, P + 48, y + 38 + k*32, `600 24px ${FS}`, K.danger)); y += h + 24;
+  }
+
+  // cartão de campos em 2 colunas
+  const campos = (titulo, fs, yy) => {
+    const IP = 32, colW = (CW - IP*2 - 32) / 2, VF = `400 26px ${FS}`;
+    const linhas = []; let col = 0, row = null;
+    fs.filter(f => f && f.v).forEach(f => {
+      const w = f.full ? CW - IP*2 : colW, vs = wrap(f.v, w, f.font || VF);
+      const it = {f, vs, h: 30 + vs.length * 34};
+      if(f.full || col === 0){ row = {items:[it], full:!!f.full}; linhas.push(row); col = f.full ? 0 : 1; }
+      else { row.items.push(it); col = 0; }
+    });
+    const hTot = 70 + linhas.reduce((a, r) => a + Math.max(...r.items.map(i => i.h)) + 18, 0) + 14;
+    card(yy, hTot);
+    lab(titulo, P + IP, yy + 46, K.accInk); ln(P + IP, yy + 60, P + IP + 28, yy + 60, K.accent, 4);
+    let cy = yy + 92;
+    linhas.forEach(r => {
+      r.items.forEach((it, k) => {
+        const x = P + IP + (k ? colW + 32 : 0);
+        lab(it.f.l, x, cy, K.muted);
+        it.vs.forEach((l, j) => tx(l, x, cy + 34 + j*34, it.f.font || VF, K.ink));
+      });
+      cy += Math.max(...r.items.map(i => i.h)) + 18;
+    });
+    return yy + hTot + 24;
+  };
+  y = campos("Solicitante", [
+    {l:"Empreiteiro", v: p.emp + (p.equipe ? " · " + p.equipe : ""), font:`600 26px ${FS}`},
+    {l:"Responsável", v: `${p.resp} · ${p.tel}`}
+  ], y);
+  y = campos("Destino do material", [
+    {l:"Logradouro", v: p.rua + (p.numr ? ", " + p.numr : ""), full:true, font:`600 26px ${FS}`},
+    {l:"Ponto de referência", v: p.ref, full:true},
+    {l:"Coordenada" + (p.prec ? ` · GPS ±${p.prec} m` : ""), v: p.gms || (p.link ? "Link do mapa na mensagem" : ""), font:`500 24px ${FM}`},
+    {l:"Item da PST", v: p.frente, font:`500 24px ${FM}`}
+  ], y);
+
+  // materiais
+  const IP = 32, T = totais(p), cap = VEIC[p.veic || "truck"];
+  const its = p.itens.map(i => { const memo = i.calc ? wrap("Cubagem: " + memoCalc(i.calc), CW - IP*2, `400 19px ${FS}`) : []; return {i, memo, h: 84 + memo.length * 26}; });
+  const hM = 92 + 46 + its.reduce((a, r) => a + r.h, 0) + 86;
+  card(y, hM);
+  lab("Materiais", P + IP, y + 46, K.accInk); ln(P + IP, y + 60, P + IP + 28, y + 60, K.accent, 4);
+  let my = y + 84;
+  g.fillStyle = K.sunk; g.fillRect(P + 2, my, CW - 4, 46);
+  const cQ = W - P - IP - 170, cT = W - P - IP;
+  lab("Material · uso na obra", P + IP, my + 30); lab("m³", cQ, my + 30, K.muted, "right"); lab("t (estim.)", cT, my + 30, K.muted, "right");
+  my += 46;
+  its.forEach(r => {
+    tx(r.i.nome, P + IP, my + 40, `600 27px ${FS}`, K.ink);
+    tx(r.i.fin, P + IP, my + 70, `400 20px ${FS}`, K.muted);
+    tx(fmt(r.i.m3), cQ, my + 48, `600 36px ${FD}`, K.ink, "right");
+    tx(fmt(r.i.t), cT, my + 48, `500 28px ${FD}`, K.muted, "right");
+    r.memo.forEach((l, k) => tx(l, P + IP, my + 98 + k*26, `400 19px ${FS}`, K.accInk));
+    my += r.h; g.strokeStyle = K.border; g.lineWidth = 1.5; g.beginPath(); g.moveTo(P + IP, my); g.lineTo(W - P - IP, my); g.stroke();
+  });
+  g.fillStyle = K.accSoft; rr(P + 2, my + 8, CW - 4, 70, 12); g.fill();
+  tx("Total", P + IP, my + 52, `600 26px ${FS}`, K.ink);
+  tx(`${T.v} ${T.v === 1 ? "viagem" : "viagens"} de ${cap.n.toLowerCase()}`, P + IP + 90, my + 52, `400 22px ${FS}`, K.muted);
+  tx(`${fmt(T.m3)} m³`, cQ, my + 56, `600 38px ${FD}`, K.ink, "right");
+  tx(`${fmt(T.t)} t`, cT, my + 56, `500 28px ${FD}`, K.muted, "right");
+  y += hM + 24;
+
+  y = campos("Entrega e acesso", [
+    {l:"Data desejada", v: `${fdata(p.data)} · ${p.periodo || ""}`, font:`600 26px ${FS}`},
+    {l:"Maior veículo no local", v: `${cap.n}${p.veic !== "nsei" ? ` · até ${cap.cap} m³` : ""}`},
+    {l:"Descarga", v: p.desc},
+    {l:"Quem recebe", v: p.contLocal},
+    {l:"Restrições de acesso", v: (p.restr || []).join(" · "), full:true},
+    {l:"Observações", v: p.obs, full:true}
+  ], y);
+
+  // QR do registro
+  const codigo = await codigoPedido(p);
+  const q = QRCodeGen.make(codigo, "L"), n = q.getModuleCount();
+  const mod = Math.max(7, Math.floor(460 / (n + 8))), qs = mod * (n + 8);
+  const hQ = Math.max(qs + 48, 200);
+  card(y, hQ);
+  const qx = W - P - 24 - qs, qy = y + 24;
+  g.fillStyle = "#fff"; g.fillRect(qx, qy, qs, qs); g.fillStyle = "#000";
+  for(let r = 0; r < n; r++) for(let k = 0; k < n; k++) if(q.isDark(r, k)) g.fillRect(qx + (k + 4)*mod, qy + (r + 4)*mod, mod, mod);
+  lab("Código do pedido", P + IP, y + 56, K.accInk); ln(P + IP, y + 70, P + IP + 28, y + 70, K.accent, 4);
+  wrap("Usado pela coordenação para registrar o pedido no controle do Lote 18. Não é preciso ler.", qx - P - IP - 40, `400 22px ${FS}`).forEach((l, k) => tx(l, P + IP, y + 110 + k*30, `400 22px ${FS}`, K.muted));
+  tx(p.id, P + IP, y + hQ - 32, `500 22px ${FM}`, K.ink);
+  y += hQ + 40;
+
+  // rodapé de controle
+  ln(P, y, W - P, y, K.gold, 2.5);
+  tx("Controle: ", P, y + 44, `400 21px ${FS}`, K.muted); g.font = `400 21px ${FS}`; const cw = g.measureText("Controle: ").width;
+  tx("J.S. Araújo Engenharia", P + cw, y + 44, `600 21px ${FS}`, K.ink);
+  tx(`Consórcio Universaliza Lote 18 · app ${APP_VERSION}`, W - P, y + 44, `400 21px ${FS}`, K.muted, "right");
+  const H = y + 80;
+  const out = document.createElement("canvas"); out.width = W; out.height = H; out.getContext("2d").drawImage(c, 0, 0);
+  return await new Promise((res, rej) => out.toBlob(b => b ? res(b) : rej(new Error("imagem")), "image/png"));
 }
 function marcaLocal(id, st){ const p = meus.find(x => x.id === id); if(p && p.local !== "registrado"){ p.local = st; p.enviadoEm = Date.now(); salvaMeus(); } }
 

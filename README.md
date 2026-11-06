@@ -5,7 +5,8 @@ Aplicativo de celular para os empreiteiros do **Consórcio Universaliza Lote 18*
 - Instala pelo link, sem loja: Android (Chrome → **Instalar**) e iPhone (Safari → Compartilhar → **Adicionar à Tela de Início**).
 - Funciona sem sinal: o pedido fica salvo no celular e o aplicativo avisa quando der para enviar.
 - Localização pelo GPS do celular, até 3 fotos do local e calculadora de cubagem (vala com tubo, área × espessura, caixas e PVs).
-- O pedido é enviado pelo WhatsApp da coordenação (José Arimateia, +55 11 94154-3604). A última linha da mensagem (`#AGR1:...`) é o código que registra o pedido na aba Gestão do formulário de controle.
+- O pedido sai como **imagem** no padrão do Consórcio Universaliza Lote 18, junto com as fotos do local e uma mensagem curta com o link do mapa, para o WhatsApp da coordenação (José Arimateia, +55 11 94154-3604).
+- A imagem traz um QR com o código do pedido (formato `AGR3`). A coordenação envia a imagem na aba Gestão do formulário de controle e o pedido é registrado.
 
 ## Privacidade
 
@@ -15,7 +16,8 @@ O aplicativo não tem servidor nem banco de dados: não acessa OneDrive, e-mail 
 
 | Arquivo | Para quê |
 |---|---|
-| `index.html` | O aplicativo inteiro (tela, regras e cálculos) |
+| `index.html` | O aplicativo inteiro (tela, regras, cálculos e a imagem do pedido) |
+| `qrcode.js` | Gerador de QR (Kazuhiko Arase, licença MIT), embutido para funcionar sem sinal |
 | `sw.js` | Faz o aplicativo abrir sem internet e receber atualizações |
 | `manifest.webmanifest` | Nome, cores e ícones para a instalação |
 | `icons/` | Ícones do selo U.L18 |
