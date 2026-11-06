@@ -1,0 +1,18 @@
+{
+  "name": "Agregados · Lote 18",
+  "short_name": "Agregados L18",
+  "description": "Solicitação de agregados dos empreiteiros do Consórcio Universaliza Lote 18.",
+  "lang": "pt-BR",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#1f262d",
+  "theme_color": "#1f262d",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

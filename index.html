@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Agregados · Lote 18</title>
+<meta name="description" content="Solicitação de agregados dos empreiteiros do Consórcio Universaliza Lote 18">
+<meta name="theme-color" content="#1f262d">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Agregados L18">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Identidade Consórcio Universaliza · Lote 18 */
+:root{
+  --brand:#1f262d;--brand-soft:#e3e8ed;--on-brand:#fff;--accent:#0a7ea4;--accent-ink:#066282;--accent-soft:#dcf1f8;--on-accent:#fff;--accent-on-brand:#2ec4e6;
+  --gold:#9c7a26;--gold-on-brand:#d4af55;--surface:#f3f5f7;--surface-raised:#fff;--surface-sunken:#e7ebef;--ink:#12171c;--ink-muted:#55606b;--border:#d3dae0;--border-strong:#7d8893;
+  --focus:var(--accent);--success:#237a3b;--warning:#8a5a00;--danger:#b42318;--info:#4357c9;
+  --font-display:"Barlow Semi Condensed","Arial Narrow",system-ui,sans-serif;--font-sans:"Barlow","Segoe UI",system-ui,sans-serif;--font-mono:"JetBrains Mono",Consolas,ui-monospace,monospace;
+  --space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;--space-6:24px;--space-8:32px;--space-12:48px;
+  --radius-sm:6px;--radius-md:10px;--radius-lg:16px;--radius-pill:999px;
+  --shadow-card:0 1px 0 rgba(18,23,28,.04),0 2px 8px rgba(18,23,28,.06);
+}
+@media (prefers-color-scheme:dark){:root{
+  --brand:#232c35;--brand-soft:#1f3340;--accent:#2ec4e6;--accent-ink:#62d4ee;--accent-soft:#0f3340;--on-accent:#04212b;--gold:#d4af55;
+  --surface:#0e1317;--surface-raised:#161d23;--surface-sunken:#0a0e11;--ink:#e8edf1;--ink-muted:#9aa6b1;--border:#26313a;--border-strong:#707d89;
+  --success:#5cc97a;--warning:#f0b44c;--danger:#f38b7f;--info:#93a8f4;--shadow-card:0 1px 2px rgba(0,0,0,.5);
+}}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:var(--font-sans);font-size:15px;line-height:24px;background:var(--surface);color:var(--ink);-webkit-text-size-adjust:100%}
+button,input,select,textarea{font:inherit;color:inherit}
+.wrap{max-width:860px;margin:0 auto;padding:0 var(--space-4)}
+.num{font-variant-numeric:tabular-nums}
+.mono{font-family:var(--font-mono);font-size:12.5px}
+.muted{color:var(--ink-muted)}
+.hidden{display:none!important}
+svg.i{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+
+/* faixa */
+.band{background:var(--brand);color:var(--on-brand);position:relative}
+.band .wrap{display:flex;align-items:center;justify-content:space-between;gap:var(--space-3);padding-top:calc(var(--space-4) + env(safe-area-inset-top));padding-bottom:var(--space-4)}
+.wrap{padding-left:max(var(--space-4), env(safe-area-inset-left));padding-right:max(var(--space-4), env(safe-area-inset-right))}
+/* faixa de avisos do app */
+.notice{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--space-2) var(--space-3);padding:var(--space-3) var(--space-4);border-radius:var(--radius-md);border:1px solid var(--border-strong);background:var(--surface-raised);margin:var(--space-4) 0 0;font-size:14px;line-height:20px}
+.notice b{font-weight:600}
+.notice.q{background:var(--accent-soft);border-color:var(--border)}
+/* fotos */
+.fotos{display:flex;flex-wrap:wrap;gap:var(--space-2);margin-top:var(--space-2)}
+.foto{position:relative;width:96px;height:96px;border-radius:var(--radius-sm);overflow:hidden;border:1px solid var(--border)}
+.foto img{width:100%;height:100%;object-fit:cover;display:block}
+.foto button{position:absolute;top:4px;right:4px;width:28px;height:28px;border-radius:50%;border:0;background:rgba(18,23,28,.75);color:#fff;display:grid;place-items:center;cursor:pointer}
+.foto button svg{width:14px;height:14px}
+.addfoto{width:96px;height:96px;border:1px dashed var(--border-strong);border-radius:var(--radius-sm);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:12px;color:var(--accent-ink);cursor:pointer;background:var(--surface)}
+.addfoto input{display:none}
+.step-n{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--accent-soft);color:var(--accent-ink);font-family:var(--font-mono);font-size:11px;margin-right:4px}
+.band::after{content:"";position:absolute;left:var(--space-4);bottom:-2px;width:64px;height:4px;border-radius:var(--radius-pill);background:var(--accent-on-brand)}
+.band::before{content:"";position:absolute;left:calc(var(--space-4) + 72px);right:var(--space-4);bottom:-1px;height:2px;border-radius:var(--radius-pill);background:var(--gold-on-brand)}
+.mark{display:flex;align-items:center;gap:var(--space-3);min-width:0}
+.mark svg{width:40px;height:40px;flex:none}
+.mark-eb{font-family:var(--font-mono);font-size:10px;line-height:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-on-brand)}
+.mark-nm{font-family:var(--font-display);font-weight:600;font-size:22px;line-height:24px}
+.chips{display:flex;gap:var(--space-2);flex-wrap:wrap;justify-content:flex-end}
+.chip{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:11px;letter-spacing:.04em;padding:3px 10px;border-radius:var(--radius-pill);border:1px solid rgba(255,255,255,.22);white-space:nowrap}
+.dot{width:8px;height:8px;border-radius:50%;background:#5cc97a}
+.chip.off .dot{background:#f0b44c}
+
+/* título */
+.ph{padding:var(--space-8) 0 var(--space-4)}
+.eyebrow{margin:0 0 var(--space-2);font-family:var(--font-mono);font-size:11px;line-height:16px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-ink)}
+h1{margin:0;font-family:var(--font-display);font-weight:600;font-size:clamp(28px,6vw,40px);line-height:1.1;text-wrap:balance}
+h1::after{content:"";display:block;width:40px;height:4px;border-radius:var(--radius-pill);background:var(--accent);margin-top:var(--space-3)}
+.ph p{margin:var(--space-3) 0 0;color:var(--ink-muted);font-size:14px;line-height:22px}
+
+/* abas */
+.seg{display:inline-flex;border:1px solid var(--border-strong);border-radius:var(--radius-pill);padding:2px;gap:2px;background:var(--surface-raised);max-width:100%;overflow-x:auto}
+.seg button{font-size:13px;font-weight:600;line-height:20px;padding:var(--space-2) var(--space-4);border:0;background:transparent;cursor:pointer;border-radius:var(--radius-pill);display:inline-flex;align-items:center;gap:var(--space-2);white-space:nowrap}
+.seg button:hover{background:var(--surface-sunken)}
+.seg button[aria-pressed="true"]{background:var(--brand);color:var(--on-brand)}
+.seg .cnt{font-size:12px;padding:0 7px;border-radius:var(--radius-pill);background:var(--surface-sunken);color:var(--ink-muted)}
+.seg button[aria-pressed="true"] .cnt{background:var(--accent-on-brand);color:#04212b}
+.seg-sm button{padding:var(--space-1) var(--space-3)}
+.tabs{margin-bottom:var(--space-6)}
+
+/* cartões */
+.card{background:var(--surface-raised);border:1px solid var(--border);border-radius:var(--radius-md);box-shadow:var(--shadow-card);padding:var(--space-6) var(--space-4);margin-bottom:var(--space-4)}
+@media (min-width:600px){.card{padding:var(--space-6)}}
+.card-h{display:flex;align-items:center;gap:var(--space-3);margin:0 0 var(--space-4)}
+.step{font-family:var(--font-mono);font-size:11px;font-weight:500;width:28px;height:28px;border-radius:var(--radius-pill);background:var(--accent-soft);color:var(--accent-ink);display:grid;place-items:center;flex:none}
+.card-h h2{margin:0;font-size:17px;line-height:24px;font-weight:600}
+.card-h .sub{font-size:13px;color:var(--ink-muted);margin-left:auto}
+.grid{display:grid;gap:var(--space-4);grid-template-columns:1fr}
+@media (min-width:600px){.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:1fr 1fr 1fr}}
+.span2{grid-column:1/-1}
+
+/* campos */
+.f{display:flex;flex-direction:column;gap:6px;min-width:0}
+.f label,.lbl{font-family:var(--font-mono);font-size:11px;line-height:16px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-muted)}
+.f label .req{color:var(--danger)}
+.in{width:100%;min-height:44px;padding:10px 12px;border:1px solid var(--border-strong);border-radius:var(--radius-sm);background:var(--surface-sunken);font-size:16px;line-height:22px}
+textarea.in{min-height:84px;resize:vertical}
+.in:focus,.btn:focus-visible,.seg button:focus-visible,.opt:focus-within{outline:2px solid var(--focus);outline-offset:2px}
+.in.err{border-color:var(--danger)}
+.hint{font-size:13px;line-height:19px;color:var(--ink-muted)}
+.hint.bad{color:var(--danger)}.hint.ok{color:var(--success)}.hint.warn{color:var(--warning)}
+.opts{display:flex;flex-wrap:wrap;gap:var(--space-2)}
+.opt{position:relative;display:inline-flex}
+.opt input{position:absolute;opacity:0;inset:0;cursor:pointer}
+.f label.opt{font-family:var(--font-sans);font-size:inherit;line-height:inherit;letter-spacing:0;text-transform:none;color:var(--ink)}
+.opt span{display:inline-flex;align-items:center;min-height:40px;padding:8px 14px;border:1px solid var(--border-strong);border-radius:var(--radius-pill);font-size:14px;font-weight:500;background:var(--surface-raised);cursor:pointer}
+.opt input:checked+span{background:var(--brand);border-color:var(--brand);color:var(--on-brand)}
+
+/* botões */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--space-2);min-height:44px;padding:0 var(--space-6);border-radius:var(--radius-md);border:1px solid var(--border-strong);background:var(--surface-raised);font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap;text-decoration:none;color:var(--ink)}
+.btn:hover{background:var(--surface-sunken)}
+.btn-p{background:var(--brand);border-color:var(--brand);color:var(--on-brand)}
+.btn-p:hover{background:var(--brand);filter:brightness(1.15)}
+.btn-wa{background:#1f7a45;border-color:#1f7a45;color:#fff}
+.btn-wa:hover{background:#1f7a45;filter:brightness(1.1)}
+.btn-g{border-color:transparent;background:transparent;color:var(--accent-ink)}
+.btn-g:hover{background:var(--accent-soft)}
+.btn-d{color:var(--danger);border-color:var(--danger)}
+.btn-sm{min-height:34px;padding:0 var(--space-3);font-size:13px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.row{display:flex;flex-wrap:wrap;gap:var(--space-2);align-items:center}
+
+/* itens de material */
+.item{border:1px solid var(--border);border-radius:var(--radius-md);padding:var(--space-4);margin-bottom:var(--space-3);background:var(--surface)}
+.item-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-3)}
+.item-h .mono{color:var(--accent-ink)}
+.item-calc{margin-top:var(--space-3);font-size:13px;color:var(--ink-muted)}
+.item-calc b{color:var(--ink);font-weight:600}
+.item-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--space-2);margin-top:var(--space-3)}
+.memo{margin-top:var(--space-2);font-size:13px;line-height:19px;color:var(--ink-muted);background:var(--accent-soft);border-radius:var(--radius-sm);padding:var(--space-2) var(--space-3)}
+.memo b{color:var(--accent-ink);font-family:var(--font-mono);font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;margin-right:6px}
+
+/* calculadora de cubagem */
+.crow{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-2);padding:var(--space-3);border:1px solid var(--border);border-radius:var(--radius-md);background:var(--surface);margin-bottom:var(--space-2);position:relative}
+.crow .f label{font-size:10px}
+.crow .in{min-height:40px;padding:8px 10px}
+.crow .full{grid-column:1/-1}
+.crow .rm{position:absolute;top:6px;right:6px}
+.crow .sub-r{grid-column:1/-1;font-size:12px;color:var(--ink-muted);text-align:right}
+@media (min-width:640px){.crow{grid-template-columns:1.5fr 1fr 1fr 1fr;padding-right:44px}.crow.cx{grid-template-columns:1.2fr .7fr 1fr 1fr 1fr}.crow .full{grid-column:auto}}
+.cres{border-radius:var(--radius-md);border:1px solid var(--border);background:var(--surface-raised);margin:var(--space-4) 0;overflow:hidden}
+.cres .ln{display:flex;justify-content:space-between;gap:var(--space-3);padding:8px 14px;font-size:14px;border-bottom:1px solid var(--border)}
+.cres .ln:last-child{border-bottom:0}
+.cres .ln span:last-child{font-variant-numeric:tabular-nums;font-weight:600}
+.cres .tot{background:var(--accent-soft)}
+.cres .tot span:first-child{font-weight:600}
+.cres .tot span:last-child{font-family:var(--font-display);font-size:26px;line-height:30px;color:var(--ink)}
+.cg{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3);margin-top:var(--space-3)}
+.cg3{grid-template-columns:1fr 1fr 1fr}
+@media (max-width:480px){.cg3{grid-template-columns:1fr 1fr}.cg3 .f:first-child{grid-column:1/-1}}
+
+/* aviso */
+.callout{display:flex;gap:var(--space-3);padding:var(--space-4);border-radius:var(--radius-md);background:var(--accent-soft);border:1px solid var(--border);font-size:14px;line-height:22px;margin-bottom:var(--space-4)}
+.callout svg{color:var(--accent-ink);margin-top:2px}
+.callout.warn{background:var(--surface-raised);border-color:var(--border-strong)}
+.callout.warn svg,.callout.warn b{color:var(--warning)}
+.callout p{margin:0}
+
+/* barra fixa */
+.bar{position:sticky;bottom:0;z-index:5;background:var(--surface-raised);border-top:1px solid var(--border);box-shadow:0 -2px 10px rgba(0,0,0,.06);padding:var(--space-3) 0 calc(var(--space-3) + env(safe-area-inset-bottom))}
+.bar .wrap{display:flex;align-items:center;justify-content:space-between;gap:var(--space-3)}
+.bar-k{font-family:var(--font-display);font-weight:600;font-size:22px;line-height:24px}
+.bar-s{font-size:12px;color:var(--ink-muted);line-height:16px}
+
+/* selos */
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:12px;line-height:16px;font-weight:600;padding:3px 10px 3px 8px;border-radius:var(--radius-pill);background:var(--surface-sunken);border:1px solid var(--border);color:var(--ink-muted);white-space:nowrap}
+.badge::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.b-success{color:var(--success)}.b-warning{color:var(--warning)}.b-danger{color:var(--danger)}.b-info{color:var(--info)}.b-accent{color:var(--accent-ink)}
+
+/* listas de pedidos */
+.ped{background:var(--surface-raised);border:1px solid var(--border);border-radius:var(--radius-md);padding:var(--space-4);margin-bottom:var(--space-3)}
+.ped-h{display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(--space-2);align-items:center}
+.ped-t{font-weight:600}
+.ped-m{font-size:13px;color:var(--ink-muted);margin:var(--space-1) 0 var(--space-3)}
+.ped ul{margin:0 0 var(--space-3);padding:0;list-style:none;display:flex;flex-direction:column;gap:4px;font-size:14px}
+.ped li{position:relative;padding-left:18px}
+.ped li::before{content:"";position:absolute;left:3px;top:9px;width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.empty{text-align:center;padding:var(--space-12) var(--space-4);color:var(--ink-muted);border:1px dashed var(--border-strong);border-radius:var(--radius-md)}
+
+/* KPIs */
+.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--space-3);margin-bottom:var(--space-4)}
+@media (min-width:700px){.kpis{grid-template-columns:repeat(4,1fr)}}
+.kpi{position:relative;background:var(--surface-raised);border:1px solid var(--border);border-radius:var(--radius-md);padding:var(--space-4)}
+.kpi.f1{box-shadow:inset 0 0 0 1px var(--gold);border-color:transparent}
+.kpi.f1::before{content:"";position:absolute;left:var(--space-4);top:-2px;width:40px;height:4px;border-radius:var(--radius-pill);background:var(--accent)}
+.kpi-l{font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-muted)}
+.kpi.f1 .kpi-l{color:var(--accent-ink)}
+.kpi-v{font-family:var(--font-display);font-weight:600;font-size:30px;line-height:36px;font-variant-numeric:tabular-nums}
+.kpi-v small{font-family:var(--font-sans);font-size:14px;font-weight:400;color:var(--ink-muted)}
+
+/* tabela */
+.tw{background:var(--surface-raised);border:1px solid var(--border);border-radius:var(--radius-md);overflow-x:auto;margin-bottom:var(--space-4)}
+table{width:100%;border-collapse:collapse;font-size:14px;line-height:20px}
+th{background:var(--surface-sunken);text-align:left;font-family:var(--font-mono);font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-muted);padding:8px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.r,th.r{text-align:right;font-variant-numeric:tabular-nums}
+.src{font-size:12px;color:var(--ink-muted);padding:8px 12px;border-top:1px solid var(--border)}
+
+/* diálogo */
+.modal{position:fixed;inset:0;z-index:20;background:rgba(10,14,17,.55);display:flex;align-items:flex-end;justify-content:center}
+@media (min-width:640px){.modal{align-items:center;padding:var(--space-6)}}
+.sheet{background:var(--surface-raised);width:100%;max-width:640px;max-height:92vh;overflow:auto;border-radius:var(--radius-lg) var(--radius-lg) 0 0;padding:var(--space-6) var(--space-4) calc(var(--space-6) + env(safe-area-inset-bottom))}
+@media (min-width:640px){.sheet{border-radius:var(--radius-lg);padding:var(--space-6)}}
+.sheet h3{margin:0 0 var(--space-1);font-family:var(--font-display);font-size:26px;line-height:30px;font-weight:600}
+.pre{white-space:pre-wrap;font-size:14px;line-height:21px;background:var(--surface-sunken);border:1px solid var(--border);border-radius:var(--radius-sm);padding:var(--space-4);margin:var(--space-4) 0;max-height:46vh;overflow:auto}
+.actions{display:flex;flex-direction:column;gap:var(--space-2)}
+@media (min-width:640px){.actions{flex-direction:row;flex-wrap:wrap}}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--brand);color:var(--on-brand);padding:10px 18px;border-radius:var(--radius-pill);font-size:14px;z-index:30;box-shadow:var(--shadow-card);max-width:92vw;text-align:center}
+
+/* rodapé */
+.foot{position:relative;display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(--space-2) var(--space-4);padding:var(--space-4) 0 var(--space-8);margin-top:var(--space-8);font-size:12px;line-height:16px;color:var(--ink-muted)}
+.foot::before{content:"";position:absolute;left:0;right:0;top:0;height:1.5px;border-radius:var(--radius-pill);background:var(--gold)}
+.foot strong{color:var(--ink);font-weight:600}
+details.help{font-size:13px;line-height:20px;color:var(--ink-muted)}
+details.help summary{cursor:pointer;color:var(--accent-ink);font-weight:600}
+details.help ol{margin:var(--space-2) 0 0;padding-left:20px}
+</style>
+</head>
+<body>
+
+<header class="band">
+  <div class="wrap">
+    <div class="mark">
+      <svg viewBox="0 0 48 48" aria-hidden="true"><rect x="1.5" y="1.5" width="45" height="45" rx="10" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="1.5"/><path d="M10 13v12a7 7 0 0 0 14 0V13" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round"/><circle cx="29" cy="31" r="2.6" fill="#2ec4e6"/><text x="33" y="35" font-family="Barlow Semi Condensed,Arial Narrow,sans-serif" font-weight="700" font-size="11" fill="#fff">L18</text><path d="M10 40h28" stroke="#d4af55" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <div><div class="mark-eb">Consórcio Universaliza</div><div class="mark-nm">Lote 18</div></div>
+    </div>
+    <div class="chips">
+      <span class="chip" id="netChip"><span class="dot"></span><span id="netTxt">Online</span></span>
+      <span class="chip hidden" id="qChip"></span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="ph">
+    <p class="eyebrow">Suprimentos · Agregados</p>
+    <h1>Solicitação de agregados</h1>
+    <p>Preencha o destino, o material e a data de entrega. O pedido fica salvo neste celular, mesmo sem sinal, e sai pelo WhatsApp da coordenação quando houver conexão.</p>
+    <div id="avisos"></div>
+  </div>
+
+  <div class="tabs"><div class="seg" role="tablist" id="tabs">
+    <button data-tab="novo" aria-pressed="true">Novo pedido</button>
+    <button data-tab="meus" aria-pressed="false">Meus pedidos <span class="cnt num" id="cntMeus">0</span></button>
+  </div></div>
+
+  <!-- ============ NOVO PEDIDO ============ -->
+  <section id="v-novo">
+    <div class="callout hidden" id="draftNote"><svg class="i" viewBox="0 0 24 24"><path d="M12 8v4l3 2"/><circle cx="12" cy="12" r="9"/></svg><p>Rascunho recuperado deste celular. <button class="btn btn-g btn-sm" id="btnLimpar" type="button">Começar do zero</button></p></div>
+
+    <form id="frm" novalidate autocomplete="on">
+      <div class="card">
+        <div class="card-h"><span class="step">01</span><h2>Solicitante</h2></div>
+        <div class="grid g2">
+          <div class="f"><label for="emp">Empreiteiro <span class="req">*</span></label>
+            <select class="in" id="emp" name="emp" required></select></div>
+          <div class="f hidden" id="empOutroF"><label for="empOutro">Nome do empreiteiro <span class="req">*</span></label>
+            <input class="in" id="empOutro" name="empOutro"></div>
+          <div class="f"><label for="resp">Responsável pelo pedido <span class="req">*</span></label>
+            <input class="in" id="resp" name="resp" autocomplete="name" required></div>
+          <div class="f"><label for="tel">Telefone / WhatsApp <span class="req">*</span></label>
+            <input class="in num" id="tel" name="tel" type="tel" inputmode="tel" autocomplete="tel" placeholder="(15) 99999-9999" required></div>
+          <div class="f"><label for="equipe">Equipe</label>
+            <input class="in" id="equipe" name="equipe" placeholder="Ex.: VCA 12"></div>
+        </div>
+        <p class="hint" style="margin:12px 0 0">Esses dados ficam lembrados neste aparelho para os próximos pedidos.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-h"><span class="step">02</span><h2>Destino do material</h2></div>
+        <div class="grid g2">
+          <div class="f"><label for="mun">Município <span class="req">*</span></label>
+            <select class="in" id="mun" name="mun" required>
+              <option value="">Selecione</option><option>Ibiúna</option><option>Alumínio</option><option>Piedade</option><option>Salto de Pirapora</option>
+            </select></div>
+          <div class="f"><label for="nuc">Núcleo / bairro <span class="req">*</span></label>
+            <input class="in" id="nuc" name="nuc" list="dlNuc" required placeholder="Digite ou escolha"></div>
+          <div class="f span2"><label for="rua">Logradouro <span class="req">*</span></label>
+            <input class="in" id="rua" name="rua" list="dlRua" required placeholder="Rua, estrada ou avenida"></div>
+          <div class="f"><label for="numr">Nº / estaca / trecho</label>
+            <input class="in" id="numr" name="numr" placeholder="Ex.: 230 ou EST 12+5"></div>
+          <div class="f"><label for="frente">Item da PST</label>
+            <input class="in mono" id="frente" name="frente" placeholder="Ex.: 1.4.27"></div>
+          <div class="f span2"><label for="ref">Ponto de referência</label>
+            <input class="in" id="ref" name="ref" placeholder="Ex.: em frente à escola, após a ponte"></div>
+          <div class="f span2"><label for="coord">Localização do ponto de descarga <span class="req">*</span></label>
+            <button type="button" class="btn btn-p" id="btnGps" style="margin-bottom:6px"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="7"/></svg><span id="gpsTxt">Usar minha localização (GPS)</span></button>
+            <input class="in" id="coord" name="coord" placeholder="Ou cole a coordenada / link do Google Maps">
+            <span class="hint" id="coordHint">Aceita -23.6543, -47.2345 · 23°39'15.5"S 47°14'04.2"W · link do Google Maps.</span>
+            <div class="row" id="coordLinks"></div>
+            <details class="help"><summary>Como pegar a coordenada no celular</summary>
+              <ol><li>Abra o Google Maps e toque e segure no ponto exato da descarga até aparecer o alfinete vermelho.</li>
+              <li>A coordenada aparece na barra de busca, no topo da tela. Toque nela para copiar.</li>
+              <li>Volte para cá e cole no campo acima. Se só tiver o link "Compartilhar", cole o link e informe também a referência.</li></ol>
+              <p style="margin:6px 0 0">Com o GPS: fique no ponto da descarga, ao ar livre, e toque em "Usar minha localização". Funciona sem internet.</p>
+            </details>
+          </div>
+          <div class="f span2"><span class="lbl">Fotos do local (até 3)</span>
+            <div class="fotos" id="fotos"></div>
+            <span class="hint">Ajudam o motorista a achar o ponto e a ver o acesso. São enviadas logo depois do pedido.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-h"><span class="step">03</span><h2>Materiais</h2><span class="sub num" id="itemsSub"></span></div>
+        <div id="items"></div>
+        <button type="button" class="btn btn-g" id="btnAddItem"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Adicionar outro material</button>
+        <p class="hint" style="margin:12px 0 0">Peso e número de viagens são estimativas (massa aparente média do material solto). A pedreira confirma na programação.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-h"><span class="step">04</span><h2>Entrega e acesso</h2></div>
+        <div class="grid g2">
+          <div class="f"><label for="data">Data desejada <span class="req">*</span></label>
+            <input class="in num" id="data" name="data" type="date" required>
+            <span class="hint" id="dataHint"></span></div>
+          <div class="f"><span class="lbl">Período</span>
+            <div class="opts" id="periodo">
+              <label class="opt"><input type="radio" name="periodo" value="Manhã" checked><span>Manhã</span></label>
+              <label class="opt"><input type="radio" name="periodo" value="Tarde"><span>Tarde</span></label>
+              <label class="opt"><input type="radio" name="periodo" value="Qualquer horário"><span>Qualquer</span></label>
+            </div></div>
+          <div class="f span2"><span class="lbl">Maior veículo que chega ao ponto <span class="req" style="color:var(--danger)">*</span></span>
+            <div class="opts" id="veic">
+              <label class="opt"><input type="radio" name="veic" value="toco"><span>Toco · até 6 m³</span></label>
+              <label class="opt"><input type="radio" name="veic" value="truck" checked><span>Truck · até 12 m³</span></label>
+              <label class="opt"><input type="radio" name="veic" value="carreta"><span>Carreta · até 20 m³</span></label>
+              <label class="opt"><input type="radio" name="veic" value="nsei"><span>Não sei</span></label>
+            </div></div>
+          <div class="f span2"><span class="lbl">Forma de descarga</span>
+            <div class="opts">
+              <label class="opt"><input type="radio" name="desc" value="Monte em ponto fixo" checked><span>Monte em ponto fixo</span></label>
+              <label class="opt"><input type="radio" name="desc" value="Espalhado ao longo da rua"><span>Espalhado ao longo da rua</span></label>
+              <label class="opt"><input type="radio" name="desc" value="Direto na vala"><span>Direto na vala</span></label>
+            </div></div>
+          <div class="f span2"><span class="lbl">Restrições no acesso</span>
+            <div class="opts" id="restr">
+              <label class="opt"><input type="checkbox" value="Rua estreita"><span>Rua estreita</span></label>
+              <label class="opt"><input type="checkbox" value="Sem espaço para manobra"><span>Sem espaço para manobra</span></label>
+              <label class="opt"><input type="checkbox" value="Rampa forte"><span>Rampa forte</span></label>
+              <label class="opt"><input type="checkbox" value="Estrada de terra"><span>Estrada de terra</span></label>
+              <label class="opt"><input type="checkbox" value="Fiação baixa"><span>Fiação baixa</span></label>
+              <label class="opt"><input type="checkbox" value="Restrição de horário"><span>Restrição de horário</span></label>
+            </div></div>
+          <div class="f"><label for="contLocal">Quem recebe no local</label>
+            <input class="in" id="contLocal" name="contLocal" placeholder="Nome e telefone, se for outra pessoa"></div>
+          <div class="f"><span class="lbl">Prioridade</span>
+            <div class="opts">
+              <label class="opt"><input type="radio" name="prio" value="Normal" checked><span>Normal</span></label>
+              <label class="opt"><input type="radio" name="prio" value="Urgente"><span>Urgente</span></label>
+            </div></div>
+          <div class="f span2 hidden" id="justF"><label for="just">Motivo da urgência <span class="req">*</span></label>
+            <input class="in" id="just" name="just" placeholder="Ex.: vala aberta aguardando berço"></div>
+          <div class="f span2"><label for="obs">Observações</label>
+            <textarea class="in" id="obs" name="obs" placeholder="Outras informações para a entrega"></textarea></div>
+        </div>
+      </div>
+    </form>
+  </section>
+
+  <!-- ============ MEUS PEDIDOS ============ -->
+  <section id="v-meus" class="hidden">
+    <div class="callout"><svg class="i" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg><p>Pedidos feitos neste aparelho. Os que estão <b>na fila</b> ainda não foram enviados: toque em <b>Enviar</b> quando houver sinal.</p></div>
+    <div id="listaMeus"></div>
+  </section>
+
+  <!-- ============ GESTÃO ============ -->
+
+  <footer class="foot">
+    <span class="foot-ctrl">Controle: <strong>J.S. Araújo Engenharia</strong></span>
+    <span>Consórcio Universaliza Lote 18 · Agregados · app <span id="appVer" class="num"></span></span>
+  </footer>
+</main>
+
+<div class="bar" id="bar">
+  <div class="wrap">
+    <div><div class="bar-k num" id="barK">0 m³</div><div class="bar-s num" id="barS">nenhum material</div></div>
+    <button class="btn btn-p" type="button" id="btnRev"><svg class="i" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>Revisar pedido</button>
+  </div>
+</div>
+
+<datalist id="dlNuc"></datalist>
+<datalist id="dlRua"></datalist>
+<datalist id="dlMat"></datalist>
+
+<div class="modal hidden" id="modal" role="dialog" aria-modal="true"><div class="sheet" id="sheet"></div></div>
+
+<script>
+/* ===== configuração ===== */
+const APP_VERSION = "1.0.0";
+const CONFIG = {
+  // número que recebe os pedidos (só dígitos, com 55 + DDD). Vazio = o WhatsApp pergunta o contato.
+  whatsDestino: "5511941543604",   // José Arimateia — +55 11 94154-3604
+  versao: 2
+};
+const EMPREITEIROS = ["Andrada","Aqualine","DF Tech","Everest","Freire","IF Melo","IGVI","JLV","Kalikaline","M Sanity","MFT Drill","Perímetro","PH Ambiental","Saneserv","Speedline","Vox Patris"];
+const NUCLEOS = ["Alto de Piedade","Alto do Itararé","Bairro dos Leites","Campininha","Campo Verde","Ciríaco","Cotianos","Delfin Moreira","Feital","Feital/Paiol","Gabriel","Geraldo Sarti","Granja Modelo","Lajeado do Salto","Lavapés","Miguel Russo","Moreiras","Piraporinha","Recanto Ferradura","Rio do Una de Baixo","Rio do Una de Cima","Tavares","Terras de Santa Rica","Vila Industrial - CBA"];
+// massa aparente média do material solto (t/m³) — estimativa
+const MATERIAIS = [
+  {id:"areia-media",nome:"Areia média",d:1.50},
+  {id:"areia-fina",nome:"Areia fina",d:1.45},
+  {id:"po-pedra",nome:"Pó de pedra",d:1.55},
+  {id:"pedrisco",nome:"Pedrisco (brita 0)",d:1.45},
+  {id:"brita1",nome:"Brita 1",d:1.45},
+  {id:"brita2",nome:"Brita 2",d:1.45},
+  {id:"brita3",nome:"Brita 3",d:1.45},
+  {id:"brita4",nome:"Brita 4",d:1.45},
+  {id:"bgs",nome:"BGS – brita graduada simples",d:1.80},
+  {id:"bica",nome:"Bica corrida",d:1.75},
+  {id:"rachao",nome:"Rachão",d:1.55},
+  {id:"pedra-mao",nome:"Pedra de mão",d:1.50},
+  {id:"solo",nome:"Solo / saibro para reaterro",d:1.60},
+  {id:"rcd",nome:"Agregado reciclado (RCD)",d:1.35},
+  {id:"outro",nome:"Outro (descrever)",d:1.50}
+];
+// fator de empolamento usado na cubagem: volume solto a pedir ÷ volume compactado na obra (estimativa, ajustável)
+const EMPOL = {"areia-media":1.20,"areia-fina":1.20,"po-pedra":1.25,"pedrisco":1.10,"brita1":1.10,"brita2":1.10,"brita3":1.10,"brita4":1.10,"bgs":1.30,"bica":1.30,"rachao":1.15,"pedra-mao":1.15,"solo":1.35,"rcd":1.30,"outro":1.20};
+const TUBOS = [63,90,110,160,200,250,315];
+const FINALIDADES = ["Berço e envoltória da tubulação","Reaterro de vala","Base / sub-base de pavimento","Recomposição de calçada","Caixas, PVs e ligações","Acesso / canteiro","Outra"];
+const VEIC = {toco:{n:"Toco",cap:6},truck:{n:"Truck",cap:12},carreta:{n:"Carreta",cap:20},nsei:{n:"Não informado",cap:12}};
+const STATUS = [
+  {id:"recebido",n:"Recebido",t:"info"},
+  {id:"aprovado",n:"Aprovado",t:"accent"},
+  {id:"programado",n:"Programado",t:"warning"},
+  {id:"entregue",n:"Entregue",t:"success"},
+  {id:"recusado",n:"Recusado",t:"danger"}
+];
+const LOCAL_ST = {rascunho:{n:"Rascunho",t:""},fila:{n:"Na fila",t:"warning"},whats:{n:"Enviado pelo WhatsApp",t:"info"},registrado:{n:"Registrado no sistema",t:"success"}};
+
+/* ===== utilidades ===== */
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt = (v, d=1) => Number(v||0).toLocaleString("pt-BR",{minimumFractionDigits:0,maximumFractionDigits:d});
+const fdata = iso => { if(!iso) return "—"; const [y,m,d] = iso.slice(0,10).split("-"); return `${d}/${m}/${y}`; };
+const fdh = ts => { const d = new Date(ts); return d.toLocaleDateString("pt-BR") + " " + d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}); };
+const store = {
+  get(k, def){ try{ const v = localStorage.getItem("agr18:"+k); return v ? JSON.parse(v) : def; }catch(e){ return def; } },
+  set(k, v){ try{ localStorage.setItem("agr18:"+k, JSON.stringify(v)); }catch(e){} }
+};
+function toast(msg){ const t = document.createElement("div"); t.className="toast"; t.textContent=msg; document.body.appendChild(t); setTimeout(()=>t.remove(), 2600); }
+function ico(p){ return `<svg class="i" viewBox="0 0 24 24">${p}</svg>`; }
+const IC = {
+  pin:'<path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>',
+  wa:'<path d="M4 20l1.3-4A8 8 0 1 1 8 18.7z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1-1.5-2-1-1 .8c-.9-.4-1.6-1.1-2-2l.8-1-1-2z"/>',
+  copy:'<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/>',
+  db:'<ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3"/>',
+  trash:'<path d="M4 7h16M9 7V4h6v3m-8 0 1 13h8l1-13"/>',
+  rep:'<path d="M4 12a8 8 0 0 1 14-5.3L20 9M20 4v5h-5M20 12a8 8 0 0 1-14 5.3L4 15m0 5v-5h5"/>',
+  x:'<path d="M6 6l12 12M18 6 6 18"/>',
+  calc:'<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 12h.01M12 12h.01M16 12h.01M8 16h.01M12 16h.01M16 16h.01"/>'
+};
+
+/* ===== coordenadas ===== */
+function parseCoord(raw){
+  const s = String(raw||"").trim(); if(!s) return null;
+  let m;
+  // link do Google Maps: !3dLAT!4dLON, @LAT,LON, q=LAT,LON, ll=, destination=
+  if((m = s.match(/!3d(-?\d+(?:\.\d+)?)!4d(-?\d+(?:\.\d+)?)/))) return chk(+m[1], +m[2], s);
+  if((m = s.match(/[@=](-?\d{1,2}\.\d+),\s*(-?\d{1,3}\.\d+)/))) return chk(+m[1], +m[2], s);
+  // GMS: 23°45'41.6"S 47°15'57.7"W
+  const gms = /(\d{1,3})\s*[°º]\s*(\d{1,2})\s*['’′]\s*(\d{1,2}(?:[.,]\d+)?)?\s*(?:["”″]|'')?\s*([NSLOWE])?/gi;
+  const parts = [...s.matchAll(gms)];
+  if(parts.length >= 2){
+    const conv = (p, isLat) => { let v = +p[1] + (+p[2])/60 + (+(String(p[3]||"0").replace(",", ".")))/3600; const h = (p[4]||"").toUpperCase(); if(h==="S"||h==="W"||h==="O"||(!h)) v = -v; return v; };
+    return chk(conv(parts[0], true), conv(parts[1], false), null);
+  }
+  // decimal: "-23,6543 -47,2345" ou "-23.6543, -47.2345"
+  const nums = s.replace(/(\d),(\d)/g, "$1.$2").match(/-?\d{1,3}\.\d+/g);
+  if(nums && nums.length >= 2){
+    let a = +nums[0], b = +nums[1];
+    if(a > 0 && a < 30 && b > 30) { a = -a; b = -b; } // sem sinal = S/W
+    return chk(a, b, null);
+  }
+  if(/^https?:\/\//i.test(s)) return {link:s, lat:null, lon:null};
+  return {erro:"Não consegui ler a coordenada."};
+}
+function chk(lat, lon, link){
+  if(!isFinite(lat) || !isFinite(lon) || Math.abs(lat) > 90 || Math.abs(lon) > 180) return {erro:"Coordenada inválida."};
+  const fora = !(lat > -24.4 && lat < -23.2 && lon > -48.0 && lon < -46.8);
+  return {lat:+lat.toFixed(6), lon:+lon.toFixed(6), gms:toGMS(lat, lon), link, fora};
+}
+function toGMS(lat, lon){
+  const f = (v, pos, neg) => { const h = v < 0 ? neg : pos; const ds = Math.round(Math.abs(v) * 36000); const g = Math.floor(ds / 36000); const mi = Math.floor((ds % 36000) / 600); const se = ((ds % 600) / 10).toFixed(1); return `${g}°${String(mi).padStart(2,"0")}'${se.padStart(4,"0")}"${h}`; };
+  return f(lat, "N", "S") + " " + f(lon, "E", "W");
+}
+const mapsUrl = c => c && c.lat != null ? `https://www.google.com/maps?q=${c.lat},${c.lon}` : (c && c.link) || "";
+
+/* ===== estado do formulário ===== */
+let items = [];
+function novoItem(){ return {mat:"", outro:"", qtd:"", un:"m3", fin:FINALIDADES[0]}; }
+function matDe(id){ return MATERIAIS.find(m => m.id === id); }
+function itemCalc(it){
+  const m = matDe(it.mat); const q = parseFloat(String(it.qtd).replace(",", ".")) || 0;
+  if(!m || !q) return {m3:0, t:0};
+  return it.un === "t" ? {t:q, m3:q/m.d} : {m3:q, t:q*m.d};
+}
+
+function renderItems(){
+  const box = $("#items");
+  box.innerHTML = items.map((it, i) => `
+    <div class="item" data-i="${i}">
+      <div class="item-h"><span class="mono">MATERIAL ${String(i+1).padStart(2,"0")}</span>
+        ${items.length > 1 ? `<button type="button" class="btn btn-g btn-sm" data-del="${i}" aria-label="Remover material">${ico(IC.trash)}Remover</button>` : ""}</div>
+      <div class="grid g2">
+        <div class="f span2"><label>Tipo de agregado <span class="req">*</span></label>
+          <select class="in" data-k="mat"><option value="">Selecione</option>${MATERIAIS.map(m => `<option value="${m.id}" ${m.id===it.mat?"selected":""}>${esc(m.nome)}</option>`).join("")}</select></div>
+        <div class="f span2 ${it.mat==="outro"?"":"hidden"}"><label>Qual material <span class="req">*</span></label>
+          <input class="in" data-k="outro" value="${esc(it.outro)}" placeholder="Descreva o material"></div>
+        <div class="f"><label>Quantidade <span class="req">*</span></label>
+          <input class="in num" data-k="qtd" inputmode="decimal" value="${esc(it.qtd)}" placeholder="0"></div>
+        <div class="f"><span class="lbl">Unidade</span>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="un${i}" data-k="un" value="m3" ${it.un==="m3"?"checked":""}><span>m³</span></label>
+            <label class="opt"><input type="radio" name="un${i}" data-k="un" value="t" ${it.un==="t"?"checked":""}><span>toneladas</span></label>
+          </div></div>
+        <div class="f span2"><label>Uso na obra</label>
+          <select class="in" data-k="fin">${FINALIDADES.map(f => `<option ${f===it.fin?"selected":""}>${esc(f)}</option>`).join("")}</select></div>
+      </div>
+      <div class="item-foot">
+        <div class="item-calc num" data-calc style="margin:0"></div>
+        <button type="button" class="btn btn-sm" data-cub="${i}">${ico(IC.calc)}${it.calc ? "Refazer cubagem" : "Calcular cubagem"}</button>
+      </div>
+      ${it.calc ? `<div class="memo num" data-memo></div>` : ""}
+    </div>`).join("");
+  updCalc();
+}
+function ajustado(it){ const q = parseFloat(String(it.qtd).replace(",", ".")) || 0; return it.calc && (it.un !== "m3" || Math.abs(q - it.calc.pedir) > 0.01); }
+function updCalc(){
+  const cap = VEIC[val("veic")||"truck"].cap;
+  let tm3 = 0, tt = 0, tv = 0, n = 0;
+  items.forEach((it, i) => {
+    const c = itemCalc(it); const el = $(`.item[data-i="${i}"] [data-calc]`);
+    const v = c.m3 ? Math.ceil(c.m3 / cap - 1e-9) : 0;
+    if(c.m3){ n++; tm3 += c.m3; tt += c.t; tv += v; }
+    const mm = $(`.item[data-i="${i}"] [data-memo]`); if(mm && it.calc) mm.innerHTML = `<b>Cubagem</b>${esc(memoCalc(it.calc))}${ajustado(it) ? " · quantidade ajustada à mão" : ""}`;
+    if(el) el.innerHTML = c.m3 ? `≈ <b>${fmt(c.m3)} m³</b> · <b>${fmt(c.t)} t</b> · ${v} ${v===1?"viagem":"viagens"} de ${VEIC[val("veic")||"truck"].n.toLowerCase()}` : "";
+  });
+  $("#barK").textContent = fmt(tm3) + " m³";
+  $("#barS").textContent = n ? `${n} ${n===1?"material":"materiais"} · ≈ ${fmt(tt)} t · ${tv} ${tv===1?"viagem":"viagens"}` : "nenhum material";
+  $("#itemsSub").textContent = n ? `${fmt(tm3)} m³` : "";
+}
+$("#items").addEventListener("input", e => {
+  const box = e.target.closest(".item"); if(!box) return;
+  const i = +box.dataset.i, k = e.target.dataset.k; if(!k) return;
+  items[i][k] = e.target.value;
+  if(k === "mat"){ renderItems(); }
+  else updCalc();
+  salvaRascunho();
+});
+$("#items").addEventListener("change", e => { if(e.target.dataset.k === "un"){ const i = +e.target.closest(".item").dataset.i; items[i].un = e.target.value; updCalc(); salvaRascunho(); } });
+$("#items").addEventListener("click", e => {
+  const b = e.target.closest("[data-del]"); if(b){ items.splice(+b.dataset.del, 1); renderItems(); salvaRascunho(); return; }
+  const c = e.target.closest("[data-cub]"); if(c) abrirCubagem(+c.dataset.cub);
+});
+
+/* ===== calculadora de cubagem ===== */
+const MODOS = {
+  vala: {n:"Vala com tubo", d:"Berço, envoltória ou reaterro: comprimento × largura × altura da camada, descontando o tubo."},
+  area: {n:"Área × espessura", d:"Base ou sub-base, recomposição de calçada, acesso ou canteiro."},
+  caixa:{n:"Caixas e PVs", d:"Material por caixa ou poço (base, berço ou envolvimento) × quantidade."}
+};
+const nz = v => { const x = parseFloat(String(v ?? "").replace(",", ".")); return isFinite(x) && x > 0 ? x : 0; };
+const f2 = v => Number(v||0).toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2});
+function modoPadrao(fin){ if(/Caixas/.test(fin)) return "caixa"; if(/Base|calçada|Acesso/.test(fin)) return "area"; return "vala"; }
+function linhaNova(modo){ return modo === "caixa" ? {tipo:"ret", q:"", a:"", b:"", h:""} : {desc:"", c:"", l:"", h:""}; }
+function volLinha(modo, r, tuboM2){
+  if(modo === "vala"){ const c = nz(r.c); return Math.max(0, c * nz(r.l) * nz(r.h) - c * tuboM2); }
+  if(modo === "area") return nz(r.c) * nz(r.l) * nz(r.h) / 100;
+  const q = nz(r.q); if(r.tipo === "circ"){ const d = nz(r.a); return q * Math.PI * d * d / 4 * nz(r.h); } return q * nz(r.a) * nz(r.b) * nz(r.h);
+}
+function calcCub(cs){
+  const de = cs.modo === "vala" && cs.desconta ? (cs.de === "outro" ? nz(cs.deOutro) : nz(cs.de)) : 0;
+  const tuboM2 = de ? Math.PI * Math.pow(de / 1000, 2) / 4 : 0;
+  const vols = cs.linhas.map(r => volLinha(cs.modo, r, tuboM2));
+  const geom = vols.reduce((a, b) => a + b, 0);
+  const fator = nz(cs.fator) || 1, perdas = Math.max(0, parseFloat(String(cs.perdas).replace(",", ".")) || 0);
+  const bruto = geom * fator * (1 + perdas / 100);
+  const pedir = bruto ? Math.ceil(bruto * 2 - 1e-9) / 2 : 0;   // arredonda para cima, de 0,5 em 0,5 m³
+  const ext = cs.modo === "caixa" ? cs.linhas.reduce((a, r) => a + nz(r.q), 0) : cs.linhas.reduce((a, r) => a + nz(r.c), 0);
+  return {vols, geom, fator, perdas, bruto, pedir, de, ext};
+}
+function memoCalc(c){
+  const L = c.linhas || [];
+  let base;
+  if(c.modo === "vala"){
+    const d = L.length === 1 ? `${f2(nz(L[0].c))} m × ${f2(nz(L[0].l))} × ${f2(nz(L[0].h))} m` : `${L.length} trechos, ${fmt(c.ext)} m`;
+    base = `vala ${d}${c.de ? ` − tubo DE ${fmt(c.de,0)}` : ""}`;
+  } else if(c.modo === "area"){
+    base = L.length === 1 ? `área ${f2(nz(L[0].c))} × ${f2(nz(L[0].l))} m × ${fmt(nz(L[0].h))} cm` : `área, ${L.length} trechos`;
+  } else base = `${fmt(c.ext,0)} ${c.ext === 1 ? "caixa/PV" : "caixas/PVs"}`;
+  return `${base} = ${f2(c.geom)} m³ · empolamento ${f2(c.fator)} · perdas ${fmt(c.perdas)}% → ${fmt(c.pedir)} m³`;
+}
+let cs = null;
+function abrirCubagem(i){
+  const it = items[i];
+  if(!it.mat){ toast("Escolha primeiro o tipo de agregado."); const s = $(`.item[data-i="${i}"] [data-k="mat"]`); s && s.focus(); return; }
+  const prev = it.calc;
+  const modo = prev ? prev.modo : modoPadrao(it.fin);
+  cs = prev ? JSON.parse(JSON.stringify({modo:prev.modo, linhas:prev.linhas, de:prev.deSel || "", deOutro:prev.deOutro || "", desconta:prev.desconta !== false, fator:String(prev.fator).replace(".", ","), perdas:String(prev.perdas).replace(".", ",")}))
+           : {modo, linhas:[linhaNova(modo)], de:"", deOutro:"", desconta:true, fator:String(EMPOL[it.mat] || 1.2).replace(".", ","), perdas:"5"};
+  cs.i = i; cs.salvo = {};
+  const m = matDe(it.mat);
+  modal(`<h3>Calculadora de cubagem</h3>
+    <p class="muted" style="margin:0 0 14px;font-size:14px"><span class="mono">MATERIAL ${String(i+1).padStart(2,"0")}</span> · ${esc(it.mat === "outro" ? (it.outro || "Outro") : m.nome)} · ${esc(it.fin)}</p>
+    <div class="seg seg-sm" id="cModo">${Object.entries(MODOS).map(([k, v]) => `<button type="button" data-m="${k}" aria-pressed="${k===cs.modo}">${v.n}</button>`).join("")}</div>
+    <p class="hint" id="cDesc" style="margin:8px 0 12px"></p>
+    <div id="cTubo"></div>
+    <div id="cLinhas"></div>
+    <button type="button" class="btn btn-g btn-sm" id="cAdd">${ico('<path d="M12 5v14M5 12h14"/>')}<span id="cAddTxt">Adicionar trecho</span></button>
+    <div class="cg">
+      <div class="f"><label for="cFator">Empolamento (solto ÷ compactado)</label><input class="in num" id="cFator" inputmode="decimal" value="${esc(cs.fator)}"></div>
+      <div class="f"><label for="cPerdas">Perdas (%)</label><input class="in num" id="cPerdas" inputmode="decimal" value="${esc(cs.perdas)}"></div>
+    </div>
+    <p class="hint" style="margin:6px 0 0">Empolamento sugerido para ${esc(m.nome.toLowerCase())}: ${f2(EMPOL[it.mat] || 1.2)}. Ajuste se o projeto ou a pedreira indicar outro valor.</p>
+    <div class="cres" id="cRes"></div>
+    <div class="actions">
+      <button type="button" class="btn btn-p" id="cUsar">${ico('<path d="M5 12l5 5 9-10"/>')}<span id="cUsarTxt">Usar no pedido</span></button>
+      ${prev ? `<button type="button" class="btn btn-d" id="cTirar">${ico(IC.trash)}Remover cubagem</button>` : ""}
+      <button type="button" class="btn" id="cCancel">Cancelar</button>
+    </div>`);
+  renderCubForm(); renderCubRes();
+  $("#cModo").onclick = e => { const b = e.target.closest("[data-m]"); if(!b || b.dataset.m === cs.modo) return; cs.salvo[cs.modo] = cs.linhas; cs.modo = b.dataset.m; cs.linhas = cs.salvo[cs.modo] || [linhaNova(cs.modo)]; $$("#cModo button").forEach(x => x.setAttribute("aria-pressed", x.dataset.m === cs.modo)); renderCubForm(); renderCubRes(); };
+  $("#cAdd").onclick = () => { cs.linhas.push(linhaNova(cs.modo)); renderCubForm(); renderCubRes(); const r = $$("#cLinhas .crow").pop(); r && r.querySelector("input").focus(); };
+  $("#cFator").oninput = e => { cs.fator = e.target.value; renderCubRes(); };
+  $("#cPerdas").oninput = e => { cs.perdas = e.target.value; renderCubRes(); };
+  $("#cCancel").onclick = () => { cs = null; fecharModal(); };
+  const tirar = $("#cTirar"); if(tirar) tirar.onclick = () => { delete items[i].calc; cs = null; fecharModal(); renderItems(); salvaRascunho(); };
+  $("#cUsar").onclick = () => {
+    const r = calcCub(cs);
+    if(!r.pedir){ toast("Preencha as medidas de pelo menos um trecho."); return; }
+    const linhas = cs.linhas.filter((ln, k) => r.vols[k] > 0);
+    items[i].calc = {modo:cs.modo, linhas, deSel:cs.de, deOutro:cs.deOutro, desconta:cs.desconta, de:r.de, fator:+r.fator.toFixed(3), perdas:r.perdas, geom:+r.geom.toFixed(3), pedir:r.pedir, ext:r.ext};
+    items[i].qtd = String(r.pedir).replace(".", ","); items[i].un = "m3";
+    cs = null; fecharModal(); renderItems(); salvaRascunho();
+    toast(`${fmt(r.pedir)} m³ lançados no material ${i+1}.`);
+  };
+}
+function renderCubForm(){
+  $("#cDesc").textContent = MODOS[cs.modo].d;
+  $("#cAddTxt").textContent = cs.modo === "caixa" ? "Adicionar tipo de caixa" : "Adicionar trecho";
+  const tb = $("#cTubo");
+  if(cs.modo === "vala"){
+    tb.innerHTML = `<div class="cg cg3" style="margin:0 0 12px">
+      <div class="f"><label for="cDe">Tubo (diâmetro externo)</label><select class="in" id="cDe"><option value="">Sem tubo na camada</option>${TUBOS.map(d => `<option value="${d}" ${String(d)===String(cs.de)?"selected":""}>DE ${d} mm</option>`).join("")}<option value="outro" ${cs.de==="outro"?"selected":""}>Outro</option></select></div>
+      <div class="f ${cs.de==="outro"?"":"hidden"}" id="cDeOF"><label for="cDeO">DE (mm)</label><input class="in num" id="cDeO" inputmode="decimal" value="${esc(cs.deOutro)}"></div>
+      <div class="f ${cs.de?"":"hidden"}" id="cDescF"><span class="lbl">Desconto</span><label class="opt"><input type="checkbox" id="cDesconta" ${cs.desconta?"checked":""}><span>Descontar o tubo</span></label></div>
+    </div>`;
+    $("#cDe").onchange = e => { cs.de = e.target.value; $("#cDeOF").classList.toggle("hidden", cs.de !== "outro"); $("#cDescF").classList.toggle("hidden", !cs.de); renderCubRes(); };
+    const o = $("#cDeO"); o.oninput = e => { cs.deOutro = e.target.value; renderCubRes(); };
+    $("#cDesconta").onchange = e => { cs.desconta = e.target.checked; renderCubRes(); };
+  } else tb.innerHTML = "";
+  const del = k => cs.linhas.length > 1 ? `<button type="button" class="btn btn-g btn-sm rm" data-rm="${k}" aria-label="Remover linha">${ico(IC.x)}</button>` : "";
+  const inp = (k, c, lab, ph) => `<div class="f"><label>${lab}</label><input class="in num" data-r="${k}" data-c="${c}" inputmode="decimal" value="${esc(cs.linhas[k][c])}" placeholder="${ph}"></div>`;
+  $("#cLinhas").innerHTML = cs.linhas.map((r, k) => {
+    if(cs.modo === "caixa") return `<div class="crow cx">
+      <div class="f full"><label>Formato</label><select class="in" data-r="${k}" data-c="tipo"><option value="ret" ${r.tipo==="ret"?"selected":""}>Retangular</option><option value="circ" ${r.tipo==="circ"?"selected":""}>Circular (PV)</option></select></div>
+      ${inp(k,"q","Quantidade","0")}${inp(k,"a", r.tipo==="circ" ? "Diâmetro (m)" : "Comprimento (m)","0,80")}
+      ${r.tipo==="circ" ? `<div class="f"><label>&nbsp;</label><span class="hint" style="padding-top:10px">—</span></div>` : inp(k,"b","Largura (m)","0,80")}${inp(k,"h","Altura da camada (m)","0,10")}
+      <div class="sub-r num" data-v="${k}"></div>${del(k)}</div>`;
+    const hl = cs.modo === "area" ? ["Espessura (cm)","15"] : ["Altura da camada (m)","0,30"];
+    return `<div class="crow">
+      <div class="f full"><label>${cs.modo==="area"?"Local":"Trecho / rua"}</label><input class="in" data-r="${k}" data-c="desc" value="${esc(r.desc)}" placeholder="${k===0 ? esc($("#rua").value || "Opcional") : "Opcional"}"></div>
+      ${inp(k,"c","Comprimento (m)","0")}${inp(k,"l","Largura (m)", cs.modo==="area" ? "1,50" : "0,60")}${inp(k,"h",hl[0],hl[1])}
+      <div class="sub-r num" data-v="${k}"></div>${del(k)}</div>`;
+  }).join("");
+}
+document.addEventListener("input", e => {
+  if(!cs || !e.target.closest("#cLinhas")) return;
+  const k = +e.target.dataset.r, c = e.target.dataset.c; if(isNaN(k) || !c) return;
+  if(c === "tipo") return;
+  cs.linhas[k][c] = e.target.value; renderCubRes();
+});
+document.addEventListener("change", e => { if(cs && e.target.closest("#cLinhas") && e.target.dataset.c === "tipo"){ cs.linhas[+e.target.dataset.r].tipo = e.target.value; renderCubForm(); renderCubRes(); } });
+document.addEventListener("click", e => { const b = cs && e.target.closest("#cLinhas [data-rm]"); if(b){ cs.linhas.splice(+b.dataset.rm, 1); renderCubForm(); renderCubRes(); } });
+function renderCubRes(){
+  const r = calcCub(cs), cap = VEIC[val("veic") || "truck"], m = matDe(items[cs.i].mat);
+  r.vols.forEach((v, k) => { const el = $(`[data-v="${k}"]`); if(el) el.textContent = v ? `${f2(v)} m³` : ""; });
+  const via = r.pedir ? Math.ceil(r.pedir / cap.cap - 1e-9) : 0;
+  const tub = cs.modo === "vala" && r.de ? `<div class="ln"><span>Tubo descontado (DE ${fmt(r.de,0)} mm)</span><span>− ${f2(Math.PI * Math.pow(r.de/1000,2)/4 * r.ext)} m³</span></div>` : "";
+  $("#cRes").innerHTML = `
+    ${tub}
+    <div class="ln"><span>Volume na obra (compactado)</span><span>${f2(r.geom)} m³</span></div>
+    <div class="ln"><span>× empolamento ${f2(r.fator)} · + perdas ${fmt(r.perdas)}%</span><span>${f2(r.bruto)} m³</span></div>
+    <div class="ln tot"><span>A pedir</span><span>${fmt(r.pedir)} m³</span></div>
+    <div class="ln"><span>Peso estimado · viagens de ${cap.n.toLowerCase()}</span><span>${r.pedir ? `≈ ${fmt(r.pedir * m.d)} t · ${via}` : "—"}</span></div>`;
+  $("#cUsarTxt").textContent = r.pedir ? `Usar ${fmt(r.pedir)} m³ no pedido` : "Usar no pedido";
+}
+$("#btnAddItem").onclick = () => { items.push(novoItem()); renderItems(); salvaRascunho(); const last = $$(".item").pop(); last && last.querySelector("select").focus(); };
+
+function val(name){ const el = document.querySelector(`input[name="${name}"]:checked`); return el ? el.value : ""; }
+function setRadio(name, v){ const el = document.querySelector(`input[name="${name}"][value="${CSS.escape(v||"")}"]`); if(el) el.checked = true; }
+
+/* ===== preenchimento inicial ===== */
+$("#emp").innerHTML = `<option value="">Selecione</option>` + EMPREITEIROS.map(e => `<option>${esc(e)}</option>`).join("") + `<option value="__outro">Outro</option>`;
+$("#dlNuc").innerHTML = NUCLEOS.map(n => `<option value="${esc(n)}">`).join("");
+function hoje(off=0){ const d = new Date(); d.setDate(d.getDate()+off); return d.toISOString().slice(0,10); }
+$("#data").min = hoje(0);
+
+function lerForm(){
+  const c = parseCoord($("#coord").value);
+  return {
+    emp: $("#emp").value === "__outro" ? $("#empOutro").value.trim() : $("#emp").value,
+    empOutro: $("#emp").value === "__outro",
+    resp: $("#resp").value.trim(), tel: $("#tel").value.trim(), equipe: $("#equipe").value.trim(),
+    mun: $("#mun").value, nuc: $("#nuc").value.trim(), rua: $("#rua").value.trim(), numr: $("#numr").value.trim(),
+    frente: $("#frente").value.trim(), ref: $("#ref").value.trim(),
+    coordTxt: $("#coord").value.trim(), prec: gps.txt && gps.txt === $("#coord").value.trim() ? gps.prec : null, lat: c && c.lat != null ? c.lat : null, lon: c && c.lon != null ? c.lon : null, gms: c && c.gms || "", link: c && c.link || "",
+    itens: items.map(it => { const m = matDe(it.mat); const k = itemCalc(it); return {mat: it.mat, nome: it.mat==="outro" ? (it.outro||"Outro") : (m ? m.nome : ""), outro: it.outro, qtd: it.qtd, un: it.un, fin: it.fin, m3:+k.m3.toFixed(2), t:+k.t.toFixed(2), ...(it.calc ? {calc: it.calc} : {})}; }),
+    data: $("#data").value, periodo: val("periodo"), veic: val("veic"), desc: val("desc"),
+    restr: $$("#restr input:checked").map(x => x.value), contLocal: $("#contLocal").value.trim(),
+    prio: val("prio"), just: $("#just").value.trim(), obs: $("#obs").value.trim()
+  };
+}
+function aplicaForm(p){
+  if(EMPREITEIROS.includes(p.emp)) $("#emp").value = p.emp; else if(p.emp){ $("#emp").value = "__outro"; $("#empOutro").value = p.emp; }
+  ["resp","tel","equipe","mun","nuc","rua","numr","frente","ref","contLocal","just","obs"].forEach(k => { if(p[k] != null) $("#"+k).value = p[k]; });
+  $("#coord").value = p.coordTxt || "";
+  if(p.data && p.data >= hoje(0)) $("#data").value = p.data;
+  setRadio("periodo", p.periodo); setRadio("veic", p.veic); setRadio("desc", p.desc); setRadio("prio", p.prio);
+  $$("#restr input").forEach(x => x.checked = (p.restr||[]).includes(x.value));
+  items = (p.itens && p.itens.length) ? p.itens.map(i => ({mat:i.mat, outro:i.outro||"", qtd:String(i.qtd||""), un:i.un||"m3", fin:i.fin||FINALIDADES[0], ...(i.calc ? {calc:i.calc} : {})})) : [novoItem()];
+  syncUI(); renderItems();
+}
+function syncUI(){
+  $("#empOutroF").classList.toggle("hidden", $("#emp").value !== "__outro");
+  $("#justF").classList.toggle("hidden", val("prio") !== "Urgente");
+  updCoord(); updData(); updRuas();
+}
+function updCoord(){
+  const c = parseCoord($("#coord").value), h = $("#coordHint"), lk = $("#coordLinks");
+  h.className = "hint"; lk.innerHTML = "";
+  if(!c){ h.textContent = "Aceita -23.6543, -47.2345 · 23°39'15.5\"S 47°14'04.2\"W · link do Google Maps."; return; }
+  if(c.erro){ h.className = "hint bad"; h.textContent = c.erro + " Cole como aparece no Google Maps."; return; }
+  if(c.lat == null){ h.className = "hint warn"; h.textContent = "Link guardado, mas sem coordenada legível (links curtos não trazem o ponto). Se puder, cole a coordenada."; lk.innerHTML = `<a class="btn btn-g btn-sm" href="${esc(c.link)}" target="_blank" rel="noopener">${ico(IC.pin)}Abrir link</a>`; return; }
+  h.className = c.fora ? "hint warn" : "hint ok";
+  h.textContent = (c.fora ? "Ponto fora da região do Lote 18 — confira. " : "Ponto lido: ") + c.gms;
+  lk.innerHTML = `<a class="btn btn-g btn-sm" href="${mapsUrl(c)}" target="_blank" rel="noopener">${ico(IC.pin)}Conferir no Google Maps</a>`;
+}
+function updData(){
+  const d = $("#data").value, h = $("#dataHint"); h.className = "hint"; h.textContent = "";
+  if(!d) return;
+  const dt = new Date(d + "T12:00:00"), dow = dt.getDay();
+  const dias = Math.round((dt - new Date(hoje(0) + "T12:00:00")) / 864e5);
+  if(dow === 0){ h.className = "hint warn"; h.textContent = "Domingo — confirme se haverá recebimento."; }
+  else if(dias < 1){ h.className = "hint warn"; h.textContent = "Entrega no mesmo dia depende de disponibilidade da pedreira."; }
+  else h.textContent = dias === 1 ? "Amanhã." : `Em ${dias} dias.`;
+}
+function updRuas(){
+  const hist = store.get("ruas", {}); const n = $("#nuc").value.trim();
+  $("#dlRua").innerHTML = (hist[n] || []).map(r => `<option value="${esc(r)}">`).join("");
+}
+$("#frm").addEventListener("input", e => { if(e.target.closest("#items")) return; if(e.target.id === "coord") updCoord(); if(e.target.id === "data") updData(); if(e.target.id === "nuc") updRuas(); if(e.target.name === "veic") updCalc(); syncUI(); salvaRascunho(); });
+$("#frm").addEventListener("change", e => { if(e.target.closest("#items")) return; if(e.target.name === "veic") updCalc(); syncUI(); salvaRascunho(); });
+$("#frm").addEventListener("submit", e => e.preventDefault());
+
+let tRasc;
+function salvaRascunho(){ clearTimeout(tRasc); tRasc = setTimeout(() => store.set("rascunho", lerForm()), 400); }
+$("#btnLimpar").onclick = () => { limparForm(); $("#draftNote").classList.add("hidden"); };
+function limparForm(manterSolicitante=true){
+  const s = store.get("solicitante", {});
+  $("#frm").reset(); $("#coord").value = "";
+  if(manterSolicitante) aplicaForm({...s, itens:[]}); else { items = [novoItem()]; renderItems(); syncUI(); }
+  store.set("rascunho", null);
+  fotosAtual.forEach(f => URL.revokeObjectURL(f.url)); fotosAtual = []; renderFotos(); idb.del("rascunho").catch(() => {});
+}
+
+/* ===== validação ===== */
+function validar(p){
+  const erros = [];
+  const marca = (id, ok, msg) => { const el = $("#"+id); if(el) el.classList.toggle("err", !ok); if(!ok) erros.push({id, msg}); };
+  $$(".in.err").forEach(x => x.classList.remove("err"));
+  marca("emp", !!$("#emp").value, "Escolha o empreiteiro.");
+  if($("#emp").value === "__outro") marca("empOutro", !!p.emp, "Informe o nome do empreiteiro.");
+  marca("resp", !!p.resp, "Informe o responsável.");
+  marca("tel", p.tel.replace(/\D/g,"").length >= 10, "Informe um telefone com DDD.");
+  marca("mun", !!p.mun, "Escolha o município.");
+  marca("nuc", !!p.nuc, "Informe o núcleo ou bairro.");
+  marca("rua", !!p.rua, "Informe o logradouro.");
+  const c = parseCoord(p.coordTxt);
+  marca("coord", !!(c && !c.erro && (c.lat != null || (c.link && p.ref))), c && c.link && c.lat == null ? "Com link curto, preencha também o ponto de referência." : "Informe a localização do ponto de descarga.");
+  marca("data", !!p.data && p.data >= hoje(0), "Escolha a data de entrega (hoje ou depois).");
+  if(p.prio === "Urgente") marca("just", !!p.just, "Explique o motivo da urgência.");
+  items.forEach((it, i) => {
+    const box = $(`.item[data-i="${i}"]`);
+    const okM = !!it.mat, okO = it.mat !== "outro" || !!it.outro.trim(), q = parseFloat(String(it.qtd).replace(",", "."));
+    const okQ = q > 0 && q <= 500;
+    box.querySelector('[data-k="mat"]').classList.toggle("err", !okM);
+    box.querySelector('[data-k="outro"]').classList.toggle("err", !okO);
+    box.querySelector('[data-k="qtd"]').classList.toggle("err", !okQ);
+    if(!okM || !okO) erros.push({el: box.querySelector('[data-k="mat"]'), msg:`Material ${i+1}: escolha o tipo.`});
+    if(!okQ) erros.push({el: box.querySelector('[data-k="qtd"]'), msg:`Material ${i+1}: quantidade entre 0 e 500.`});
+  });
+  return erros;
+}
+
+/* ===== protocolo, texto e código ===== */
+function protocolo(){
+  const d = new Date(), p = n => String(n).padStart(2,"0");
+  const r = Math.random().toString(36).slice(2,5).toUpperCase();
+  return `AGR-${String(d.getFullYear()).slice(2)}${p(d.getMonth()+1)}${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}-${r}`;
+}
+function b64e(obj){ const b = new TextEncoder().encode(JSON.stringify(obj)); let s = ""; b.forEach(x => s += String.fromCharCode(x)); return btoa(s).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,""); }
+function b64d(str){ str = str.replace(/-/g,"+").replace(/_/g,"/"); while(str.length % 4) str += "="; const s = atob(str); const b = new Uint8Array(s.length); for(let i=0;i<s.length;i++) b[i] = s.charCodeAt(i); return JSON.parse(new TextDecoder().decode(b)); }
+function totais(p){ const cap = VEIC[p.veic||"truck"].cap; let m3=0,t=0,v=0; (p.itens||[]).forEach(i => { m3 += i.m3||0; t += i.t||0; v += i.m3 ? Math.ceil(i.m3/cap - 1e-9) : 0; }); return {m3, t, v}; }
+function qtdTxt(i){ return i.un === "t" ? `${fmt(+String(i.qtd).replace(",","."))} t (≈ ${fmt(i.m3)} m³)` : `${fmt(+String(i.qtd).replace(",","."))} m³ (≈ ${fmt(i.t)} t)`; }
+function textoPedido(p){
+  const T = totais(p);
+  const L = [];
+  L.push(`*PEDIDO DE AGREGADOS · Lote 18*`);
+  L.push(`Protocolo: ${p.id}`);
+  if(p.prio === "Urgente") L.push(`*URGENTE* — ${p.just}`);
+  L.push(``);
+  L.push(`*Solicitante:* ${p.emp}${p.equipe ? " · " + p.equipe : ""}`);
+  L.push(`${p.resp} · ${p.tel}`);
+  L.push(``);
+  L.push(`*Destino:* ${p.nuc} · ${p.mun}`);
+  L.push(`${p.rua}${p.numr ? ", " + p.numr : ""}${p.frente ? " (item " + p.frente + ")" : ""}`);
+  if(p.ref) L.push(`Ref.: ${p.ref}`);
+  if(p.gms) L.push(`Coordenada: ${p.gms}${p.prec ? ` (GPS ±${p.prec} m)` : ""}`);
+  const mu = mapsUrl(p); if(mu) L.push(`Mapa: ${mu}`);
+  L.push(``);
+  L.push(`*Materiais:*`);
+  p.itens.forEach(i => { L.push(`• ${i.nome} — ${qtdTxt(i)} · ${i.fin}`); if(i.calc) L.push(`   _Cubagem: ${memoCalc(i.calc)}_`); });
+  L.push(`Total ≈ ${fmt(T.m3)} m³ · ${fmt(T.t)} t · ${T.v} ${T.v===1?"viagem":"viagens"}`);
+  L.push(``);
+  L.push(`*Entrega:* ${fdata(p.data)} · ${p.periodo}`);
+  L.push(`Veículo máx.: ${VEIC[p.veic||"nsei"].n} · Descarga: ${p.desc}`);
+  if(p.restr && p.restr.length) L.push(`Acesso: ${p.restr.join(", ")}`);
+  if(p.contLocal) L.push(`Recebe no local: ${p.contLocal}`);
+  if(p.obs) L.push(`Obs.: ${p.obs}`);
+  L.push(``);
+  L.push(`#AGR1:${b64e(compacto(p))}`);
+  return L.join("\n");
+}
+function compacto(p){ const o = {...p}; delete o.local; delete o.coordTxt; delete o.empOutro; return o; }
+
+/* ===== meus pedidos (aparelho) ===== */
+let meus = store.get("meus", []);
+function salvaMeus(){ store.set("meus", meus); renderMeus(); }
+function renderMeus(){
+  const fila = meus.filter(p => p.local === "fila").length;
+  $("#cntMeus").textContent = meus.length;
+  const q = $("#qChip"); q.classList.toggle("hidden", !fila); q.textContent = `${fila} na fila`;
+  const box = $("#listaMeus");
+  renderAvisos();
+  if(!meus.length){ box.innerHTML = `<div class="empty">Nenhum pedido feito neste aparelho ainda.</div>`; return; }
+  box.innerHTML = meus.slice().sort((a,b) => b.criadoEm - a.criadoEm).map(p => {
+    const st = LOCAL_ST[p.local] || LOCAL_ST.fila, T = totais(p);
+    return `<div class="ped">
+      <div class="ped-h"><span class="ped-t">${esc(p.nuc)} · ${esc(p.rua)}</span><span class="badge ${st.t ? "b-"+st.t : ""}">${st.n}</span></div>
+      <div class="ped-m"><span class="mono">${esc(p.id)}</span> · entrega ${fdata(p.data)} ${esc(p.periodo||"")} · feito em ${fdh(p.criadoEm)}</div>
+      <ul>${p.itens.map(i => `<li>${esc(i.nome)} — ${esc(qtdTxt(i))}</li>`).join("")}</ul>
+      ${p.nFotos ? `<p class="hint" style="margin:0 0 10px">${p.nFotos} ${p.nFotos===1?"foto":"fotos"} · ${p.fotosEnv ? "enviadas" : "ainda não enviadas"}</p>` : ""}
+      <div class="row">
+        <button class="btn btn-sm ${p.local==="fila"?"btn-wa":""}" data-act="enviar" data-id="${esc(p.id)}">${ico(IC.wa)}${p.local==="fila"?"Enviar":"Reenviar"}</button>
+        <button class="btn btn-sm" data-act="repetir" data-id="${esc(p.id)}">${ico(IC.rep)}Repetir pedido</button>
+        <button class="btn btn-g btn-sm" data-act="excluir" data-id="${esc(p.id)}">${ico(IC.trash)}Excluir</button>
+      </div></div>`;
+  }).join("");
+}
+$("#listaMeus").addEventListener("click", e => {
+  const b = e.target.closest("[data-act]"); if(!b) return;
+  const p = meus.find(x => x.id === b.dataset.id); if(!p) return;
+  if(b.dataset.act === "enviar") abrirEnvio(p);
+  if(b.dataset.act === "repetir"){ aplicaForm({...p, data:"", coordTxt:p.coordTxt}); setTab("novo"); window.scrollTo(0,0); toast("Dados copiados. Ajuste a data e revise."); }
+  if(b.dataset.act === "excluir") confirmar(`Excluir o pedido ${p.id} deste aparelho?`, "Excluir", () => { meus = meus.filter(x => x.id !== p.id); salvaMeus(); idb.del("p:" + p.id).catch(() => {}); });
+});
+
+/* ===== revisão e envio ===== */
+$("#btnRev").onclick = () => {
+  const p = lerForm(); const erros = validar(p);
+  if(erros.length){
+    const e0 = erros[0]; const el = e0.el || $("#"+e0.id);
+    toast(e0.msg + (erros.length > 1 ? ` (+${erros.length-1})` : ""));
+    if(el){ el.scrollIntoView({behavior:"smooth", block:"center"}); setTimeout(() => el.focus({preventScroll:true}), 350); }
+    return;
+  }
+  p.id = protocolo(); p.criadoEm = Date.now(); p.v = CONFIG.versao; p.local = "fila";
+  abrirRevisao(p);
+};
+function abrirRevisao(p){
+  const txt = textoPedido(p).replace(/\n#AGR1:.*$/, "\n(código do pedido anexado ao final)");
+  modal(`<h3>Revisar pedido</h3><p class="muted mono" style="margin:0">${esc(p.id)}</p>
+    <div class="pre">${esc(txt)}</div>
+    <div class="actions">
+      <button class="btn btn-p" id="mConf">${ico('<path d="M5 12l5 5 9-10"/>')}Confirmar pedido</button>
+      <button class="btn" id="mVolta">Voltar e corrigir</button>
+    </div>`);
+  $("#mVolta").onclick = fecharModal;
+  $("#mConf").onclick = async () => {
+    p.nFotos = fotosAtual.length; p.fotosEnv = false;
+    if(p.nFotos){ try{ await idb.set("p:" + p.id, fotosAtual.map(f => f.blob)); }catch(e){ p.nFotos = 0; toast("Não foi possível guardar as fotos neste celular."); } }
+    meus.push(p); salvaMeus();
+    const s = {emp:p.emp, resp:p.resp, tel:p.tel, equipe:p.equipe, mun:p.mun, nuc:p.nuc};
+    store.set("solicitante", s);
+    const hist = store.get("ruas", {}); hist[p.nuc] = [...new Set([p.rua, ...(hist[p.nuc]||[])])].slice(0, 30); store.set("ruas", hist);
+    limparForm(true); $("#draftNote").classList.add("hidden");
+    abrirEnvio(p);
+  };
+}
+function abrirEnvio(p){
+  const texto = textoPedido(p);
+  const wa = `https://wa.me/${CONFIG.whatsDestino.replace(/\D/g,"")}?text=${encodeURIComponent(texto)}`;
+  const online = navigator.onLine, nf = p.nFotos || 0;
+  modal(`<h3>Enviar pedido</h3><p class="muted mono" style="margin:0 0 12px">${esc(p.id)}</p>
+    ${online ? "" : `<div class="callout warn">${ico('<path d="M12 9v4m0 4h.01M10.3 3.9 2 18a2 2 0 0 0 1.7 3h16.6a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>')}<p><b>Sem sinal agora.</b> O pedido já está salvo neste celular. Você pode deixar na fila e enviar quando o sinal voltar — o aplicativo avisa — ou tocar em Enviar mesmo assim: o WhatsApp guarda a mensagem e manda sozinho quando conectar.</p></div>`}
+    <p style="margin:0 0 12px;font-size:14px">O pedido vai para o WhatsApp do José Arimateia (coordenação). Não apague a última linha da mensagem: é o código que registra o pedido.</p>
+    <div class="actions">
+      <a class="btn btn-wa" id="mWa" href="${wa}" target="_blank" rel="noopener">${ico(IC.wa)}${nf ? '<span class="step-n">1</span>' : ""}Enviar pedido pelo WhatsApp</a>
+      ${nf ? `<button class="btn" id="mFotos">${ico('<rect x="3" y="6" width="18" height="14" rx="2"/><circle cx="12" cy="13" r="3.5"/><path d="M8 6l1.5-2h5L16 6"/>')}<span class="step-n">2</span>Enviar ${nf} ${nf===1?"foto":"fotos"}</button>` : ""}
+      <button class="btn" id="mCopy">${ico(IC.copy)}Copiar texto</button>
+      <button class="btn btn-g" id="mFecha">${p.local === "fila" ? "Deixar na fila" : "Fechar"}</button>
+    </div>
+    ${nf ? `<p class="hint" style="margin-top:12px">Depois de enviar o pedido, volte aqui e toque em "Enviar fotos": escolha o WhatsApp e a conversa do José.</p>` : ""}
+    <p class="hint" style="margin-top:8px">Destino: José Arimateia · +55 11 94154-3604</p>`);
+  $("#mWa").onclick = () => { marcaLocal(p.id, "whats"); if(!nf) setTimeout(fecharModal, 300); };
+  $("#mCopy").onclick = async () => { try{ await navigator.clipboard.writeText(texto); toast("Texto copiado. Cole na conversa do José."); marcaLocal(p.id, "whats"); }catch(e){ toast("Não foi possível copiar. Use o botão do WhatsApp."); } };
+  $("#mFecha").onclick = () => { fecharModal(); setTab("meus"); };
+  const bf = $("#mFotos"); if(bf) bf.onclick = () => enviarFotos(p);
+}
+async function enviarFotos(p){
+  let blobs = [];
+  try{ blobs = (await idb.get("p:" + p.id)) || []; }catch(e){}
+  if(!blobs.length){ toast("As fotos deste pedido não estão mais no celular."); return; }
+  const files = blobs.map((b, k) => new File([b], `${p.id}-foto${k+1}.jpg`, {type:"image/jpeg"}));
+  if(!(navigator.canShare && navigator.canShare({files}))){ toast("Este celular não permite enviar fotos pelo aplicativo. Envie pela galeria para o José."); return; }
+  try{
+    await navigator.share({files, text:`Fotos do pedido ${p.id} — ${p.nuc}, ${p.rua}`});
+    const q = meus.find(x => x.id === p.id); if(q){ q.fotosEnv = true; salvaMeus(); }
+    toast("Fotos enviadas.");
+  }catch(e){ if(e && e.name !== "AbortError") toast("Não foi possível compartilhar as fotos."); }
+}
+function marcaLocal(id, st){ const p = meus.find(x => x.id === id); if(p && p.local !== "registrado"){ p.local = st; p.enviadoEm = Date.now(); salvaMeus(); } }
+
+/* ===== diálogo ===== */
+function modal(html){ $("#sheet").innerHTML = html; $("#modal").classList.remove("hidden"); document.body.style.overflow = "hidden"; }
+function fecharModal(){ cs = null; $("#modal").classList.add("hidden"); document.body.style.overflow = ""; }
+$("#modal").addEventListener("click", e => { if(e.target.id === "modal") fecharModal(); });
+document.addEventListener("keydown", e => { if(e.key === "Escape") fecharModal(); });
+function confirmar(msg, ok, fn){ modal(`<h3>Confirmar</h3><p>${esc(msg)}</p><div class="actions"><button class="btn btn-d" id="cOk">${esc(ok)}</button><button class="btn" id="cNo">Cancelar</button></div>`); $("#cOk").onclick = () => { fecharModal(); fn(); }; $("#cNo").onclick = fecharModal; }
+
+/* ===== abas ===== */
+function setTab(t){
+  if(t === "gestao" && !gestor) t = "novo";
+  $$("#tabs button").forEach(b => b.setAttribute("aria-pressed", b.dataset.tab === t));
+  ["novo","meus"].forEach(v => $("#v-"+v).classList.toggle("hidden", v !== t));
+  $("#bar").classList.toggle("hidden", t !== "novo");
+  try{ history.replaceState(null, "", t === "novo" ? location.pathname : "#" + t); }catch(e){}
+}
+$("#tabs").addEventListener("click", e => { const b = e.target.closest("button[data-tab]"); if(b) setTab(b.dataset.tab); });
+
+/* ===== conexão ===== */
+function updNet(){
+  const on = navigator.onLine; $("#netChip").classList.toggle("off", !on); $("#netTxt").textContent = on ? "Online" : "Sem sinal";
+  if(on){ const fila = meus.filter(p => p.local === "fila").length; if(fila) toast(`Sinal de volta — ${fila} ${fila===1?"pedido":"pedidos"} na fila para enviar.`); }
+  renderAvisos();
+}
+window.addEventListener("online", updNet); window.addEventListener("offline", updNet);
+
+let dbPode = false, gestor = false;
+
+/* ===== aplicativo: fotos (IndexedDB) ===== */
+const idb = (() => {
+  let dbp;
+  const open = () => dbp || (dbp = new Promise((res, rej) => { const r = indexedDB.open("agr18", 1); r.onupgradeneeded = () => r.result.createObjectStore("fotos"); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); }));
+  const tx = async (mode, fn) => { const db = await open(); return new Promise((res, rej) => { const t = db.transaction("fotos", mode); const req = fn(t.objectStore("fotos")); t.oncomplete = () => res(req && req.result); t.onerror = () => rej(t.error); }); };
+  return { get: k => tx("readonly", s => s.get(k)), set: (k, v) => tx("readwrite", s => s.put(v, k)), del: k => tx("readwrite", s => s.delete(k)) };
+})();
+let fotosAtual = [];
+function comprimir(file){
+  return new Promise((res, rej) => {
+    const url = URL.createObjectURL(file), img = new Image();
+    img.onload = () => {
+      const M = 1280, k = Math.min(1, M / Math.max(img.width, img.height));
+      const c = document.createElement("canvas"); c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+      c.getContext("2d").drawImage(img, 0, 0, c.width, c.height); URL.revokeObjectURL(url);
+      c.toBlob(b => b ? res(b) : rej(new Error("foto")), "image/jpeg", 0.72);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); rej(new Error("foto")); };
+    img.src = url;
+  });
+}
+function renderFotos(){
+  const box = $("#fotos"); if(!box) return;
+  box.innerHTML = fotosAtual.map((f, k) => `<div class="foto"><img src="${f.url}" alt="Foto ${k+1} do local"><button type="button" data-rmf="${k}" aria-label="Remover foto">${ico(IC.x)}</button></div>`).join("")
+    + (fotosAtual.length < 3 ? `<label class="addfoto">${ico('<rect x="3" y="6" width="18" height="14" rx="2"/><circle cx="12" cy="13" r="3.5"/><path d="M8 6l1.5-2h5L16 6"/>')}Adicionar foto<input type="file" accept="image/*" id="inFoto"></label>` : "");
+}
+$("#fotos").addEventListener("change", async e => {
+  if(e.target.id !== "inFoto" || !e.target.files.length) return;
+  try{ const b = await comprimir(e.target.files[0]); fotosAtual.push({blob:b, url:URL.createObjectURL(b)}); renderFotos(); idb.set("rascunho", fotosAtual.map(f => f.blob)).catch(() => {}); }
+  catch(err){ toast("Não foi possível ler essa foto."); }
+});
+$("#fotos").addEventListener("click", e => {
+  const b = e.target.closest("[data-rmf]"); if(!b) return;
+  const [f] = fotosAtual.splice(+b.dataset.rmf, 1); URL.revokeObjectURL(f.url); renderFotos(); idb.set("rascunho", fotosAtual.map(f => f.blob)).catch(() => {});
+});
+async function carregaFotosRascunho(){ try{ const bl = (await idb.get("rascunho")) || []; fotosAtual = bl.map(b => ({blob:b, url:URL.createObjectURL(b)})); }catch(e){ fotosAtual = []; } renderFotos(); }
+
+/* ===== aplicativo: GPS ===== */
+const gps = {txt:"", prec:null};
+$("#btnGps").onclick = () => {
+  if(!navigator.geolocation){ toast("Este celular não oferece localização ao aplicativo. Cole a coordenada do Google Maps."); return; }
+  const bt = $("#btnGps"), tx = $("#gpsTxt"); bt.disabled = true; tx.textContent = "Buscando sinal de GPS…";
+  navigator.geolocation.getCurrentPosition(pos => {
+    const {latitude, longitude, accuracy} = pos.coords;
+    const v = `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
+    $("#coord").value = v; gps.txt = v; gps.prec = Math.round(accuracy);
+    bt.disabled = false; tx.textContent = "Atualizar localização (GPS)";
+    updCoord(); salvaRascunho();
+    toast(gps.prec > 50 ? `Precisão baixa (±${gps.prec} m). Vá para céu aberto e tente de novo.` : `Localização capturada (±${gps.prec} m).`);
+  }, err => {
+    bt.disabled = false; tx.textContent = "Usar minha localização (GPS)";
+    toast(err.code === 1 ? "Permita o acesso à localização nas configurações do celular." : err.code === 3 ? "O GPS demorou a responder. Tente em céu aberto." : "Não foi possível obter a localização.");
+  }, {enableHighAccuracy:true, timeout:25000, maximumAge:0});
+};
+
+/* ===== aplicativo: avisos, instalação e atualização ===== */
+let promptInstalar = null, novaVersao = null, recarregar = false;
+const standalone = () => window.matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+const ehIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); promptInstalar = e; renderAvisos(); });
+window.addEventListener("appinstalled", () => { promptInstalar = null; renderAvisos(); toast("Aplicativo instalado."); });
+function renderAvisos(){
+  const box = $("#avisos"); if(!box) return;
+  const H = [];
+  if(novaVersao) H.push(`<div class="notice"><span><b>Nova versão do aplicativo.</b> Atualize para receber as melhorias.</span><button class="btn btn-p btn-sm" id="avAtual">Atualizar</button></div>`);
+  const fila = meus.filter(p => p.local === "fila").length;
+  if(fila) H.push(`<div class="notice q"><span><b>${fila} ${fila===1?"pedido":"pedidos"} na fila.</b> ${navigator.onLine ? "Há sinal: envie agora." : "Envie quando houver sinal."}</span><button class="btn btn-sm ${navigator.onLine ? "btn-wa" : ""}" id="avFila">Ver pedidos</button></div>`);
+  if(!standalone() && (promptInstalar || ehIOS())) H.push(`<div class="notice"><span><b>Instale o aplicativo</b> para abrir pelo ícone e usar sem sinal.</span><button class="btn btn-sm" id="avInst">${promptInstalar ? "Instalar" : "Como instalar"}</button></div>`);
+  box.innerHTML = H.join("");
+  const a = $("#avAtual"); if(a) a.onclick = () => { recarregar = true; novaVersao.postMessage("skipWaiting"); };
+  const f = $("#avFila"); if(f) f.onclick = () => { setTab("meus"); window.scrollTo(0, 0); };
+  const i = $("#avInst"); if(i) i.onclick = async () => {
+    if(promptInstalar){ promptInstalar.prompt(); try{ await promptInstalar.userChoice; }catch(e){} promptInstalar = null; renderAvisos(); return; }
+    modal(`<h3>Instalar no iPhone</h3><ol style="padding-left:20px;font-size:15px;line-height:24px">
+      <li>Abra este endereço no <b>Safari</b>.</li>
+      <li>Toque no botão <b>Compartilhar</b> (quadrado com seta para cima).</li>
+      <li>Escolha <b>Adicionar à Tela de Início</b> e toque em <b>Adicionar</b>.</li>
+      <li>Abra pelo ícone <b>Agregados L18</b>. Na primeira vez, abra com sinal; depois funciona sem.</li></ol>
+      <div class="actions"><button class="btn btn-p" id="iOk">Entendi</button></div>`);
+    $("#iOk").onclick = fecharModal;
+  };
+}
+if("serviceWorker" in navigator && location.protocol !== "file:"){
+  navigator.serviceWorker.register("sw.js").then(reg => {
+    const vigia = w => w && w.addEventListener("statechange", () => { if(w.state === "installed" && navigator.serviceWorker.controller){ novaVersao = w; renderAvisos(); } });
+    if(reg.waiting && navigator.serviceWorker.controller){ novaVersao = reg.waiting; renderAvisos(); }
+    reg.addEventListener("updatefound", () => vigia(reg.installing));
+    document.addEventListener("visibilitychange", () => { if(document.visibilityState === "visible") reg.update().catch(() => {}); });
+  }).catch(() => {});
+  navigator.serviceWorker.addEventListener("controllerchange", () => { if(recarregar){ recarregar = false; location.reload(); } });
+}
+
+/* ===== início ===== */
+(function init(){
+  const r = store.get("rascunho", null), s = store.get("solicitante", {});
+  if(r && (r.rua || (r.itens||[]).some(i => i.mat))){ aplicaForm(r); $("#draftNote").classList.remove("hidden"); }
+  else aplicaForm({...s, itens:[]});
+  carregaFotosRascunho();
+  renderMeus(); updNet();
+  if(location.hash === "#meus") setTab("meus");
+  $("#appVer").textContent = APP_VERSION;
+})();
+</script>
+</body>
+</html>
