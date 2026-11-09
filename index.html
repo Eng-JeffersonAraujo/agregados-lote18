@@ -234,6 +234,25 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums}
 details.help{font-size:13px;line-height:20px;color:var(--ink-muted)}
 details.help summary{cursor:pointer;color:var(--accent-ink);font-weight:600}
 details.help ol{margin:var(--space-2) 0 0;padding-left:20px}
+
+/* engenheiro de campo */
+.eng-top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:var(--space-3);margin-bottom:var(--space-3)}
+.eng-quem{font-size:14px;line-height:20px}
+.eng-quem .mono{font-size:12px;color:var(--ink-muted)}
+.eng-filtros{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-2);margin-bottom:var(--space-3)}
+.eng-filtros .span2{grid-column:span 2}
+@media (min-width:700px){.eng-filtros{grid-template-columns:repeat(4,minmax(0,1fr))}.eng-filtros .span2{grid-column:span 4}}
+.eng-res{margin-bottom:var(--space-4)}
+.eng-res h3,.eng-sec{font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-muted);font-weight:500;margin:var(--space-4) 0 var(--space-2)}
+.eng-res td.n,.eng-res th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.eng-res td,.eng-res th{padding:8px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+.eng-res th{font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-muted);font-weight:500;text-align:left;background:var(--surface-sunken)}
+.eng-res tr.emp td{font-weight:600;background:var(--accent-soft);color:var(--accent-ink)}
+.ped .urg{color:var(--danger);font-weight:600}
+.ped .nota{font-size:13px;color:var(--ink-muted);border-left:3px solid var(--accent);padding-left:8px;margin:0 0 var(--space-3)}
+.ped dl{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;margin:0 0 var(--space-3);font-size:13px;line-height:19px}
+.ped dt{color:var(--ink-muted)}.ped dd{margin:0}
+.eng-link{background:none;border:0;padding:0;color:var(--accent-ink);font:inherit;font-weight:600;text-decoration:underline;cursor:pointer}
 </style>
 </head>
 <body>
@@ -406,6 +425,49 @@ details.help ol{margin:var(--space-2) 0 0;padding-left:20px}
     <div id="listaMeus"></div>
   </section>
 
+
+  <!-- ============ ENGENHEIRO DE CAMPO ============ -->
+  <section id="v-englog" class="hidden">
+    <div class="card">
+      <div class="card-h"><span class="step">EC</span><h2>Acesso do engenheiro de campo</h2></div>
+      <p class="hint" style="margin:0">Consulta dos pedidos de agregados feitos pelos empreiteiros. O usuário e a senha são fornecidos pela coordenação do Lote 18. Precisa de internet para entrar.</p>
+      <div class="grid g2" style="margin-top:16px">
+        <div class="f"><label for="engLogin">Usuário</label>
+          <input class="in mono" id="engLogin" autocapitalize="none" autocomplete="username" spellcheck="false" placeholder="ex.: carlos.mendes"></div>
+        <div class="f"><label for="engSenha">Senha</label>
+          <input class="in" id="engSenha" type="password" autocomplete="current-password"></div>
+      </div>
+      <p class="hint" id="engHint" style="margin:10px 0 0"></p>
+      <div class="row" style="margin-top:14px">
+        <button class="btn btn-p" id="btnEngEntrar" type="button">Entrar</button>
+        <button class="btn btn-g" id="btnEngVoltar" type="button">Voltar</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="v-eng" class="hidden">
+    <div class="eng-top">
+      <div class="eng-quem"><b id="engNome"></b><div class="mono" id="engCorte"></div></div>
+      <div class="row">
+        <button class="btn btn-sm" id="btnEngAtu" type="button"><svg class="i" viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 14-5.3L20 9M20 4v5h-5M20 12a8 8 0 0 1-14 5.3L4 15m0 5v-5h5"/></svg>Atualizar</button>
+        <button class="btn btn-g btn-sm" id="btnEngSair" type="button">Sair</button>
+      </div>
+    </div>
+    <div class="callout warn hidden" id="engOff"><svg class="i" viewBox="0 0 24 24"><path d="M12 9v4m0 4h.01M10.3 3.9 2 18a2 2 0 0 0 1.7 3h16.6a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg><p id="engOffTxt"></p></div>
+    <div class="eng-filtros">
+      <select class="in" id="engFStatus"><option value="_abertos">Em aberto</option><option value="_todos">Todos os status</option><option value="recebido">Recebido</option><option value="aprovado">Aprovado</option><option value="programado">Programado</option><option value="entregue">Entregue</option><option value="recusado">Recusado</option></select>
+      <select class="in" id="engFEmp"></select>
+      <select class="in" id="engFNuc"></select>
+      <select class="in" id="engFData"><option value="_todas">Qualquer data</option><option value="hoje">Entrega hoje</option><option value="7d">Próximos 7 dias</option><option value="vencida">Data vencida</option></select>
+      <input class="in span2" id="engBusca" type="search" placeholder="Buscar: rua, protocolo, item da PST, material…">
+    </div>
+    <div class="kpis" id="engKpis"></div>
+    <div id="engRes" class="eng-res"></div>
+    <h3 class="eng-sec" id="engListaTit">Pedidos</h3>
+    <div id="engLista"></div>
+  </section>
+
+  <p class="hint" id="engAcesso" style="text-align:center;margin:28px 0 0">É engenheiro de campo? <button class="eng-link" id="engAcessoBtn" type="button">Entrar com usuário e senha</button></p>
   <!-- ============ GESTÃO ============ -->
 
   <footer class="foot">
@@ -430,7 +492,7 @@ details.help ol{margin:var(--space-2) 0 0;padding-left:20px}
 <script src="qrcode.js"></script>
 <script>
 /* ===== configuração ===== */
-const APP_VERSION = "1.4.0";
+const APP_VERSION = "1.5.0";
 const CONFIG = {
   // número que recebe os pedidos (só dígitos, com 55 + DDD). Vazio = o WhatsApp pergunta o contato.
   whatsDestino: "5511941543604",   // José Arimateia — +55 11 94154-3604
@@ -1213,6 +1275,7 @@ function confirmar(msg, ok, fn){ modal(`<h3>Confirmar</h3><p>${esc(msg)}</p><div
 /* ===== abas ===== */
 function temCadastro(){ return !!(cad && cad.empresa && cad.codigo && !cad.bloqueado); }
 function aplicaCadastro(){
+  if(modoEng()) return;
   const ok = temCadastro();
   $("#v-cad").classList.toggle("hidden", ok);
   $("#cadBloq").classList.toggle("hidden", !(cad && cad.bloqueado));
@@ -1224,6 +1287,7 @@ function aplicaCadastro(){
   setTab(location.hash === "#meus" ? "meus" : "novo");
 }
 function setTab(t){
+  if(engAtivo()) return;
   if(!temCadastro()){ aplicaCadastro(); return; }
   if(t === "gestao" && !gestor) t = "novo";
   $$("#tabs button").forEach(b => b.setAttribute("aria-pressed", b.dataset.tab === t));
@@ -1568,6 +1632,170 @@ if("serviceWorker" in navigator && location.protocol !== "file:"){
   navigator.serviceWorker.addEventListener("controllerchange", () => { if(recarregar){ recarregar = false; location.reload(); } else setTimeout(() => { checaOffline(); renderAvisos(); }, 1500); });
 }
 
+
+/* ===== engenheiro de campo (consulta) ===== */
+const ST_ENG = { recebido:{n:"Recebido",t:"info"}, aprovado:{n:"Aprovado",t:"accent"}, programado:{n:"Programado",t:"warning"}, entregue:{n:"Entregue",t:"success"}, recusado:{n:"Recusado",t:"danger"} };
+const ABERTOS_ENG = ["recebido","aprovado","programado"];
+let eng = store.get("engenheiro", null);          // {token, nome, login, expiraEm}
+let engDados = store.get("engCache", null);       // {geradoEm, pedidos}
+let engTela = false;                              // tela de login aberta
+const engAtivo = () => !!(eng && eng.token && new Date(eng.expiraEm) > new Date());
+const hojeLocal = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; };
+const somaDiasIso = (iso, n) => { const d = new Date(iso + "T12:00:00"); d.setDate(d.getDate() + n); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; };
+
+// o app fala com o serviço do Google, que repassa ao painel (o painel é interno e não aceita chamadas de outros sites)
+async function campo(rota, corpo){
+  const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), 30000);
+  try{
+    const r = await fetch(CONFIG.emailUrl, { method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, redirect:"follow", cache:"no-store", signal:ctl.signal,
+      body: JSON.stringify({ chave:CONFIG.emailChave, acao:"campo", rota, ...corpo }) });
+    let j = null; try{ j = await r.json(); }catch(e){}
+    return { status:r.status, j: j || {ok:false, erro:"servidor"} };
+  } finally { clearTimeout(t); }
+}
+
+function modoEng(){
+  const ativo = engAtivo(), log = !ativo && engTela;
+  $("#v-eng").classList.toggle("hidden", !ativo);
+  $("#v-englog").classList.toggle("hidden", !log);
+  $("#engAcesso").classList.toggle("hidden", ativo || log);
+  const ph = $(".ph h1"), pp = $(".ph > p:not(.eyebrow):not(.okoff)");
+  if(ativo || log){
+    ["cad","novo","meus"].forEach(v => $("#v-"+v).classList.add("hidden"));
+    $("#tabsBox").classList.add("hidden"); $("#bar").classList.add("hidden");
+    ph.textContent = "Pedidos dos empreiteiros"; pp.textContent = "Consulta do engenheiro de campo: o que cada empreiteiro pediu, para onde, quanto e quando. Somente leitura.";
+    if(ativo) renderEng();
+    return true;
+  }
+  ph.textContent = "Solicitação de agregados";
+  pp.textContent = "Preencha o destino, o material e a data de entrega. O pedido fica salvo neste celular, mesmo sem sinal, e sai pelo WhatsApp da coordenação quando houver conexão.";
+  return false;
+}
+
+function abrirLoginEng(){ engTela = true; aplicaCadastro(); $("#engHint").textContent = ""; $("#engHint").className = "hint"; setTimeout(() => $("#engLogin").focus(), 50); window.scrollTo(0,0); }
+
+async function entrarEng(){
+  const login = $("#engLogin").value.trim().toLowerCase(), senha = $("#engSenha").value;
+  const h = $("#engHint");
+  if(!login || !senha){ h.textContent = "Preencha usuário e senha."; h.className = "hint bad"; return; }
+  if(!navigator.onLine){ h.textContent = "Sem sinal. Para entrar é preciso internet."; h.className = "hint bad"; return; }
+  const b = $("#btnEngEntrar"); b.disabled = true; h.textContent = "Entrando…"; h.className = "hint";
+  try{
+    const { j } = await campo("login", { login, senha });
+    if(!j.ok){
+      h.textContent = { senha:"Usuário ou senha incorretos.", bloqueado:"Muitas tentativas. Espere 15 minutos e tente de novo.", inativo:"Acesso desativado. Fale com a coordenação.", dados:"Preencha usuário e senha." }[j.erro] || "Não foi possível entrar agora. Tente de novo.";
+      h.className = "hint bad"; return;
+    }
+    eng = { token:j.token, nome:j.nome, login, expiraEm:j.expiraEm }; store.set("engenheiro", eng);
+    $("#engSenha").value = ""; engTela = false; engDados = null; store.set("engCache", null);
+    aplicaCadastro(); toast(`Bem-vindo, ${j.nome.split(" ")[0]}.`);
+    carregaEng();
+  }catch(e){ h.textContent = "Sem resposta do servidor. Confira o sinal e tente de novo."; h.className = "hint bad"; }
+  finally{ b.disabled = false; }
+}
+
+function sairEng(local){
+  const tk = eng && eng.token;
+  eng = null; engDados = null; store.set("engenheiro", null); store.set("engCache", null);
+  if(tk && !local && navigator.onLine) campo("sair", { token:tk }).catch(() => {});
+  engTela = false; aplicaCadastro();
+}
+
+async function carregaEng(){
+  if(!engAtivo()) return;
+  if(!navigator.onLine){ renderEng(); return; }
+  const b = $("#btnEngAtu"); b.disabled = true;
+  try{
+    const { j } = await campo("pedidos", { token:eng.token });
+    if(!j.ok){
+      if(j.erro === "sessao"){ sairEng(true); engTela = true; aplicaCadastro(); $("#engHint").textContent = "Sua sessão terminou (senha trocada ou acesso desativado). Entre de novo."; $("#engHint").className = "hint warn"; return; }
+      toast("Não foi possível atualizar agora."); return;
+    }
+    engDados = { geradoEm:j.geradoEm, pedidos:j.pedidos }; store.set("engCache", engDados);
+    if(j.nome && j.nome !== eng.nome){ eng.nome = j.nome; store.set("engenheiro", eng); }
+  }catch(e){ toast("Sem resposta do servidor. Mostrando a última consulta."); }
+  finally{ b.disabled = false; renderEng(); }
+}
+
+function opcoesEng(sel, vals, todos){
+  const atual = sel.value;
+  sel.innerHTML = `<option value="_todos">${todos}</option>` + vals.map(v => `<option ${v===atual?"selected":""}>${esc(v)}</option>`).join("");
+  if(atual && !vals.includes(atual)) sel.value = "_todos";
+}
+
+function renderEng(){
+  $("#engNome").textContent = `Engenheiro de campo · ${eng ? eng.nome : ""}`;
+  const P = (engDados && engDados.pedidos) || [];
+  $("#engCorte").textContent = engDados ? `Consulta de ${fdh(engDados.geradoEm)} · ${P.length} pedidos` : "Carregando…";
+  const off = $("#engOff"); off.classList.toggle("hidden", navigator.onLine || !engDados);
+  $("#engOffTxt").innerHTML = `<b>Sem sinal.</b> Mostrando a última consulta, de ${engDados ? fdh(engDados.geradoEm) : "—"}.`;
+  opcoesEng($("#engFEmp"), [...new Set(P.map(p => p.empresa))].sort((a,b) => a.localeCompare(b,"pt-BR")), "Todos os empreiteiros");
+  opcoesEng($("#engFNuc"), [...new Set(P.map(p => p.nucleo).filter(Boolean))].sort((a,b) => a.localeCompare(b,"pt-BR")), "Todos os núcleos");
+
+  const fs = $("#engFStatus").value, fe = $("#engFEmp").value, fn = $("#engFNuc").value, fd = $("#engFData").value;
+  const q = $("#engBusca").value.trim().toLowerCase(), hoje = hojeLocal(), d7 = somaDiasIso(hoje, 7);
+  const L = P.filter(p =>
+    (fs === "_todos" || (fs === "_abertos" ? ABERTOS_ENG.includes(p.status) : p.status === fs)) &&
+    (fe === "_todos" || p.empresa === fe) && (fn === "_todos" || p.nucleo === fn) &&
+    (fd === "_todas" || (fd === "hoje" ? p.dataEntrega === hoje : fd === "7d" ? (p.dataEntrega && p.dataEntrega >= hoje && p.dataEntrega <= d7) : (p.dataEntrega && p.dataEntrega < hoje && ABERTOS_ENG.includes(p.status)))) &&
+    (!q || [p.protocolo,p.empresa,p.nucleo,p.municipio,p.logradouro,p.numeroTrecho,p.itemPst,p.referencia,p.materiaisTexto,p.responsavel,...(p.materiais||[]).map(m => m.nome)].some(x => x && String(x).toLowerCase().includes(q)))
+  ).sort((a,b) => (b.urgente - a.urgente) || String(a.dataEntrega||"9").localeCompare(String(b.dataEntrega||"9")) || b.recebidoEm.localeCompare(a.recebidoEm));
+
+  const vol = L.reduce((s,p) => s + (p.volumeM3||0), 0), via = L.reduce((s,p) => s + (p.viagens||0), 0);
+  $("#engKpis").innerHTML = [
+    ["Pedidos", L.length, ""], ["Volume", fmt(vol), "m³"], ["Viagens", via, ""],
+    ["Urgentes", L.filter(p => p.urgente).length, ""]
+  ].map((k,i) => `<div class="kpi ${i===0?"f1":""}"><div class="kpi-l">${k[0]}</div><div class="kpi-v num">${k[1]} <small>${k[2]}</small></div></div>`).join("");
+
+  // resumo: por empreiteiro, cada material com o total pedido
+  const porEmp = {};
+  L.forEach(p => (p.materiais && p.materiais.length ? p.materiais : [{nome:p.materiaisTexto || "—", m3:p.volumeM3, t:null}]).forEach(m => {
+    const e = porEmp[p.empresa] = porEmp[p.empresa] || { m3:0, mats:{} };
+    const k = m.nome || "—", x = e.mats[k] = e.mats[k] || { m3:0, t:0, n:0 };
+    x.m3 += m.m3 || 0; x.t += m.t || 0; x.n++; e.m3 += m.m3 || 0;
+  }));
+  const emps = Object.keys(porEmp).sort((a,b) => porEmp[b].m3 - porEmp[a].m3);
+  $("#engRes").innerHTML = emps.length ? `<h3>Materiais por empreiteiro</h3><div class="tw"><table><thead><tr><th>Empreiteiro / material</th><th class="n">Pedidos</th><th class="n">m³</th><th class="n">t</th></tr></thead><tbody>` +
+    emps.map(e => `<tr class="emp"><td>${esc(e)}</td><td></td><td class="n">${fmt(porEmp[e].m3)}</td><td></td></tr>` +
+      Object.entries(porEmp[e].mats).sort((a,b) => b[1].m3 - a[1].m3).map(([n,x]) => `<tr><td>${esc(n)}</td><td class="n">${x.n}</td><td class="n">${fmt(x.m3)}</td><td class="n">${x.t ? fmt(x.t) : "—"}</td></tr>`).join("")).join("") +
+    `</tbody></table></div>` : "";
+
+  $("#engListaTit").textContent = `Pedidos (${L.length})`;
+  const box = $("#engLista");
+  if(!engDados){ box.innerHTML = `<div class="empty">Carregando os pedidos…</div>`; return; }
+  if(!L.length){ box.innerHTML = `<div class="empty">${P.length ? "Nenhum pedido com esses filtros." : "Nenhum pedido registrado ainda."}</div>`; return; }
+  box.innerHTML = L.map(p => {
+    const st = ST_ENG[p.status] || ST_ENG.recebido;
+    const venc = p.dataEntrega && p.dataEntrega < hoje && ABERTOS_ENG.includes(p.status);
+    const dest = [p.logradouro, p.numeroTrecho].filter(Boolean).join(", ");
+    const ev = p.ultimoEvento;
+    const tel = String(p.telefone || "").replace(/\D/g, "");
+    const linhas = [["Destino", dest + (p.referencia ? ` — ${p.referencia}` : "")], ["Item PST", p.itemPst], ["Veículo", p.veiculo], ["Descarga", p.descarga],
+      ["Restrições", p.restricoes], ["Recebe", p.recebeNoLocal], ["Pedido por", [p.responsavel, p.equipe].filter(Boolean).join(" · ")], ["Obs.", p.observacoes]].filter(x => x[1]);
+    return `<div class="ped">
+      <div class="ped-h"><span class="ped-t">${esc(p.empresa)} · ${esc(p.nucleo || p.municipio || "")}</span><span class="row" style="gap:6px">${p.urgente ? `<span class="badge b-danger">Urgente</span>` : ""}<span class="badge b-${st.t}">${st.n}</span></span></div>
+      <div class="ped-m"><span class="mono">${esc(p.protocolo)}</span> · entrega <b class="${venc ? "urg" : ""}">${fdata(p.dataEntrega)}</b> ${esc(p.periodo || "")} · ${fmt(p.volumeM3)} m³ · ${p.viagens} ${p.viagens === 1 ? "viagem" : "viagens"}</div>
+      ${p.urgente && p.motivoUrgencia ? `<p class="hint bad" style="margin:0 0 8px">Urgência: ${esc(p.motivoUrgencia)}</p>` : ""}
+      <ul>${(p.materiais && p.materiais.length ? p.materiais : [{nome:p.materiaisTexto}]).map(m => `<li><b>${esc(m.nome)}</b>${m.m3 != null ? ` — ${fmt(m.m3)} m³` : ""}${m.t ? ` (≈ ${fmt(m.t)} t)` : ""}${m.uso ? ` · ${esc(m.uso)}` : ""}</li>`).join("")}</ul>
+      <dl>${linhas.map(([k,v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join("")}</dl>
+      ${ev && ev.status !== "recebido" ? `<p class="nota">${esc(ST_ENG[ev.status] ? ST_ENG[ev.status].n : ev.status)} em ${fdh(ev.em)}${ev.nota ? ` — ${esc(ev.nota)}` : ""}</p>` : ""}
+      <div class="row">
+        ${p.mapaUrl ? `<a class="btn btn-sm" href="${esc(p.mapaUrl)}" target="_blank" rel="noopener">${ico(IC.pin)}Mapa</a>` : ""}
+        ${tel ? `<a class="btn btn-sm btn-wa" href="https://wa.me/55${tel.replace(/^55/, "")}" target="_blank" rel="noopener">${ico(IC.wa)}Falar com o solicitante</a>` : ""}
+      </div></div>`;
+  }).join("");
+}
+
+["#engFStatus","#engFEmp","#engFNuc","#engFData"].forEach(s => $(s).addEventListener("change", renderEng));
+$("#engBusca").addEventListener("input", renderEng);
+$("#btnEngEntrar").onclick = entrarEng;
+$("#engSenha").addEventListener("keydown", e => { if(e.key === "Enter") entrarEng(); });
+$("#btnEngVoltar").onclick = () => { engTela = false; aplicaCadastro(); };
+$("#btnEngAtu").onclick = carregaEng;
+$("#btnEngSair").onclick = () => confirmar("Sair do acesso de engenheiro neste celular?", "Sair", () => sairEng(false));
+$("#engAcessoBtn").onclick = abrirLoginEng;
+window.addEventListener("online", () => { if(engAtivo()) carregaEng(); });
+document.addEventListener("visibilitychange", () => { if(document.visibilityState === "visible" && engAtivo() && engDados && Date.now() - new Date(engDados.geradoEm) > 5*60*1000) carregaEng(); });
 /* ===== início ===== */
 (function init(){
   const r = store.get("rascunho", null), s = store.get("solicitante", {});
@@ -1578,6 +1806,7 @@ if("serviceWorker" in navigator && location.protocol !== "file:"){
   if(standalone()) pedePersistencia();
   renderMeus(); updNet();
   aplicaCadastro();
+  if(engAtivo()) carregaEng();
   $("#appVer").textContent = APP_VERSION;
 })();
 </script>
