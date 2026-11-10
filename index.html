@@ -252,6 +252,9 @@ details.help ol{margin:var(--space-2) 0 0;padding-left:20px}
 .ped .nota{font-size:13px;color:var(--ink-muted);border-left:3px solid var(--accent);padding-left:8px;margin:0 0 var(--space-3)}
 .ped dl{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;margin:0 0 var(--space-3);font-size:13px;line-height:19px}
 .ped dt{color:var(--ink-muted)}.ped dd{margin:0}
+.ped .rev{font-size:13px;line-height:19px;border-left:3px solid var(--warning);padding-left:8px;margin:0 0 var(--space-3)}
+.ped .rev b{color:var(--warning)}
+.ped .riscado{color:var(--ink-muted)}
 .eng-link{background:none;border:0;padding:0;color:var(--accent-ink);font:inherit;font-weight:600;text-decoration:underline;cursor:pointer}
 </style>
 </head>
@@ -492,7 +495,7 @@ details.help ol{margin:var(--space-2) 0 0;padding-left:20px}
 <script src="qrcode.js"></script>
 <script>
 /* ===== configuração ===== */
-const APP_VERSION = "1.5.0";
+const APP_VERSION = "1.5.1";
 const CONFIG = {
   // número que recebe os pedidos (só dígitos, com 55 + DDD). Vazio = o WhatsApp pergunta o contato.
   whatsDestino: "5511941543604",   // José Arimateia — +55 11 94154-3604
@@ -1773,12 +1776,13 @@ function renderEng(){
     const linhas = [["Destino", dest + (p.referencia ? ` — ${p.referencia}` : "")], ["Item PST", p.itemPst], ["Veículo", p.veiculo], ["Descarga", p.descarga],
       ["Restrições", p.restricoes], ["Recebe", p.recebeNoLocal], ["Pedido por", [p.responsavel, p.equipe].filter(Boolean).join(" · ")], ["Obs.", p.observacoes]].filter(x => x[1]);
     return `<div class="ped">
-      <div class="ped-h"><span class="ped-t">${esc(p.empresa)} · ${esc(p.nucleo || p.municipio || "")}</span><span class="row" style="gap:6px">${p.urgente ? `<span class="badge b-danger">Urgente</span>` : ""}<span class="badge b-${st.t}">${st.n}</span></span></div>
+      <div class="ped-h"><span class="ped-t">${esc(p.empresa)} · ${esc(p.nucleo || p.municipio || "")}</span><span class="row" style="gap:6px">${p.urgente ? `<span class="badge b-danger">Urgente</span>` : ""}${p.revisado ? `<span class="badge b-warning">Revisado</span>` : ""}<span class="badge b-${st.t}">${st.n}</span></span></div>
       <div class="ped-m"><span class="mono">${esc(p.protocolo)}</span> · entrega <b class="${venc ? "urg" : ""}">${fdata(p.dataEntrega)}</b> ${esc(p.periodo || "")} · ${fmt(p.volumeM3)} m³ · ${p.viagens} ${p.viagens === 1 ? "viagem" : "viagens"}</div>
       ${p.urgente && p.motivoUrgencia ? `<p class="hint bad" style="margin:0 0 8px">Urgência: ${esc(p.motivoUrgencia)}</p>` : ""}
-      <ul>${(p.materiais && p.materiais.length ? p.materiais : [{nome:p.materiaisTexto}]).map(m => `<li><b>${esc(m.nome)}</b>${m.m3 != null ? ` — ${fmt(m.m3)} m³` : ""}${m.t ? ` (≈ ${fmt(m.t)} t)` : ""}${m.uso ? ` · ${esc(m.uso)}` : ""}</li>`).join("")}</ul>
+      <ul>${(p.materiais && p.materiais.length ? p.materiais : [{nome:p.materiaisTexto}]).map((m, i) => { const o = p.revisado && p.materiaisOriginal && p.materiaisOriginal[i]; const mudou = o && o.m3 != null && o.m3 !== m.m3; return `<li><b>${esc(m.nome)}</b>${m.m3 != null ? ` — ${mudou ? `<s class="riscado">${fmt(o.m3)}</s> ` : ""}${fmt(m.m3)} m³` : ""}${m.t ? ` (≈ ${fmt(m.t)} t)` : ""}${m.uso ? ` · ${esc(m.uso)}` : ""}</li>`; }).join("")}</ul>
+      ${p.revisado ? `<p class="rev"><b>Quantidade revisada pela coordenação</b>${p.revisadoEm ? ` em ${fdh(p.revisadoEm)}` : ""} — pedido do empreiteiro: ${fmt(p.volumeOriginal)} m³${p.viagensOriginal != null ? `, ${p.viagensOriginal} ${p.viagensOriginal === 1 ? "viagem" : "viagens"}` : ""}.<br>Justificativa: ${esc(p.revisaoJustificativa || "—")}</p>` : ""}
       <dl>${linhas.map(([k,v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join("")}</dl>
-      ${ev && ev.status !== "recebido" ? `<p class="nota">${esc(ST_ENG[ev.status] ? ST_ENG[ev.status].n : ev.status)} em ${fdh(ev.em)}${ev.nota ? ` — ${esc(ev.nota)}` : ""}</p>` : ""}
+      ${ev && ev.status !== "recebido" && ev.tipo !== "revisao" ? `<p class="nota">${esc(ST_ENG[ev.status] ? ST_ENG[ev.status].n : ev.status)} em ${fdh(ev.em)}${ev.nota ? ` — ${esc(ev.nota)}` : ""}</p>` : ""}
       <div class="row">
         ${p.mapaUrl ? `<a class="btn btn-sm" href="${esc(p.mapaUrl)}" target="_blank" rel="noopener">${ico(IC.pin)}Mapa</a>` : ""}
         ${tel ? `<a class="btn btn-sm btn-wa" href="https://wa.me/55${tel.replace(/^55/, "")}" target="_blank" rel="noopener">${ico(IC.wa)}Falar com o solicitante</a>` : ""}
