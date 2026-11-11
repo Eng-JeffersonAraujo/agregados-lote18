@@ -1,6 +1,6 @@
 /* Agregados · Lote 18 — service worker
    A cada publicação, aumente VERSAO (e APP_VERSION no index.html) para os celulares receberem a atualização. */
-const VERSAO = "1.5.1";
+const VERSAO = "1.5.2";
 const CACHE = "agr18-app-" + VERSAO;
 const FONTES = "agr18-fontes";
 const ARQUIVOS = ["./", "index.html", "qrcode.js", "manifest.webmanifest", "icons/icon-192.png", "icons/icon-512.png", "icons/maskable-512.png", "icons/apple-touch-icon.png"];

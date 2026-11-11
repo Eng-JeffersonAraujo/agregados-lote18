@@ -388,6 +388,8 @@ details.help ol{margin:var(--space-2) 0 0;padding-left:20px}
             <div class="opts" id="veic">
               <label class="opt"><input type="radio" name="veic" value="toco"><span>Toco · até 6 m³</span></label>
               <label class="opt"><input type="radio" name="veic" value="truck" checked><span>Truck · até 12 m³</span></label>
+              <label class="opt"><input type="radio" name="veic" value="truck16"><span>Truck · 16 m³</span></label>
+              <label class="opt"><input type="radio" name="veic" value="truck18"><span>Truck · 18 m³</span></label>
               <label class="opt"><input type="radio" name="veic" value="carreta"><span>Carreta · até 20 m³</span></label>
               <label class="opt"><input type="radio" name="veic" value="nsei"><span>Não sei</span></label>
             </div></div>
@@ -495,7 +497,7 @@ details.help ol{margin:var(--space-2) 0 0;padding-left:20px}
 <script src="qrcode.js"></script>
 <script>
 /* ===== configuração ===== */
-const APP_VERSION = "1.5.1";
+const APP_VERSION = "1.5.2";
 const CONFIG = {
   // número que recebe os pedidos (só dígitos, com 55 + DDD). Vazio = o WhatsApp pergunta o contato.
   whatsDestino: "5511941543604",   // José Arimateia — +55 11 94154-3604
@@ -529,7 +531,7 @@ const MATERIAIS = [
 const EMPOL = {"areia-media":1.20,"areia-fina":1.20,"po-pedra":1.25,"pedrisco":1.10,"brita1":1.10,"brita2":1.10,"brita3":1.10,"brita4":1.10,"bgs":1.30,"bica":1.30,"rachao":1.15,"pedra-mao":1.15,"solo":1.35,"rcd":1.30,"outro":1.20};
 const TUBOS = [63,90,110,160,200,250,315];
 const FINALIDADES = ["Berço e envoltória da tubulação","Reaterro de vala","Base / sub-base de pavimento","Recomposição de calçada","Caixas, PVs e ligações","Acesso / canteiro","Outra"];
-const VEIC = {toco:{n:"Toco",cap:6},truck:{n:"Truck",cap:12},carreta:{n:"Carreta",cap:20},nsei:{n:"Não informado",cap:12}};
+const VEIC = {toco:{n:"Toco",cap:6},truck:{n:"Truck",cap:12},truck16:{n:"Truck 16 m³",cap:16},truck18:{n:"Truck 18 m³",cap:18},carreta:{n:"Carreta",cap:20},nsei:{n:"Não informado",cap:12}};
 const STATUS = [
   {id:"recebido",n:"Recebido",t:"info"},
   {id:"aprovado",n:"Aprovado",t:"accent"},
@@ -1086,7 +1088,7 @@ function textoResumo(p){
 const COD_T = {
   mun: ["Ibiúna","Alumínio","Piedade","Salto de Pirapora"],
   per: ["Manhã","Tarde","Qualquer horário"],
-  vei: ["toco","truck","carreta","nsei"],
+  vei: ["toco","truck","carreta","nsei","truck16","truck18"],
   des: ["Monte em ponto fixo","Espalhado ao longo da rua","Direto na vala"],
   res: ["Rua estreita","Sem espaço para manobra","Rampa forte","Estrada de terra","Fiação baixa","Restrição de horário"],
   fin: ["Berço e envoltória da tubulação","Reaterro de vala","Base / sub-base de pavimento","Recomposição de calçada","Caixas, PVs e ligações","Acesso / canteiro","Outra"],
@@ -1235,7 +1237,7 @@ async function gerarImagem(p, comoCanvas){
 
   y = campos("Entrega e acesso", [
     {l:"Data desejada", v: `${fdata(p.data)} · ${p.periodo || ""}`, font:`600 26px ${FS}`},
-    {l:"Maior veículo no local", v: `${cap.n}${p.veic !== "nsei" ? ` · até ${cap.cap} m³` : ""}`},
+    {l:"Maior veículo no local", v: `${cap.n}${p.veic !== "nsei" && !/m³/.test(cap.n) ? ` · até ${cap.cap} m³` : ""}`},
     {l:"Descarga", v: p.desc},
     {l:"Quem recebe", v: p.contLocal},
     {l:"Restrições de acesso", v: (p.restr || []).join(" · "), full:true},
@@ -1402,7 +1404,7 @@ function linhaPlanilha(p){
     "Latitude":p.lat ?? "", "Longitude":p.lon ?? "", "Coordenada (GMS)":p.gms || "", "Precisão GPS (m)":p.prec || "", "Mapa":mapsUrl(p),
     "Materiais":p.itens.map(i => `${i.nome}: ${qtdTxt(i)} · ${i.fin}${i.calc ? " · cubagem " + memoCalc(i.calc) : ""}`).join(" | "),
     "Volume total (m³)":+T.m3.toFixed(2), "Peso estimado (t)":+T.t.toFixed(2), "Viagens":T.v,
-    "Data de entrega":fdata(p.data), "Período":p.periodo || "", "Veículo máximo":c.n, "Descarga":p.desc || "", "Restrições":(p.restr || []).join(", "),
+    "Data de entrega":fdata(p.data), "Período":p.periodo || "", "Veículo máximo":c.n + (p.veic && p.veic !== "nsei" && !/m³/.test(c.n) ? ` (até ${c.cap} m³)` : ""), "Descarga":p.desc || "", "Restrições":(p.restr || []).join(", "),
     "Recebe no local":p.contLocal || "", "Observações":p.obs || "", "Fotos":p.nFotos || 0, "App":APP_VERSION};
 }
 async function prepararEmail(p){
